@@ -7,7 +7,7 @@ public interface AuctionsService {
 
     Auction create(AuctionCreationRequest request);
 
-    Auction get(String auctionId);
+    Auction get(String auctionSignature);
 
     Auction save(Auction auction);
 

@@ -38,8 +38,8 @@ public class AuctionsServiceImpl implements AuctionsService {
     }
 
     @Override
-    public Auction get(String auctionId) {
-        return auctionsRepository.findBySignature(auctionId).get();
+    public Auction get(String auctionSignature) {
+        return auctionsRepository.findBySignature(auctionSignature).get();
     }
 
     @Override

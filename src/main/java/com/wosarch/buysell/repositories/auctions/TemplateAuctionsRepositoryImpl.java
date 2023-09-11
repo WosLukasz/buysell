@@ -4,6 +4,8 @@ import com.mongodb.client.result.UpdateResult;
 import com.wosarch.buysell.model.auctions.Auction;
 import com.wosarch.buysell.model.auctions.AuctionStatus;
 import com.wosarch.buysell.model.auctions.requests.AuctionFinishRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class TemplateAuctionsRepositoryImpl implements TemplateAuctionsRepository {
+
+    Logger logger = LoggerFactory.getLogger(TemplateAuctionsRepositoryImpl.class);
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -26,10 +30,11 @@ public class TemplateAuctionsRepositoryImpl implements TemplateAuctionsRepositor
 
         UpdateResult result = mongoTemplate.updateFirst(query, update, Auction.class);
 
-        if(result == null)
-            System.out.println("No documents updated");
-        else
-            System.out.println(result.getModifiedCount() + " document(s) updated..");
+        if (result == null) {
+            logger.debug("No documents updated");
+        } else {
+            logger.debug("{} document(s) updated..", result.getModifiedCount());
+        }
 
         return result;
 
