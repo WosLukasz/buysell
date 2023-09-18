@@ -14,10 +14,12 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("users")
+@Document(User.COLLECTION_NAME)
 public class User extends MongoObject {
     @Transient
     public static final String SEQUENCE_NAME = "users";
+    @Transient
+    public static final String COLLECTION_NAME = "users";
 
     @MongoId
     private ObjectId mongoId;

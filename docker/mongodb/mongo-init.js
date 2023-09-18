@@ -10,6 +10,7 @@ db.createUser({
 
 // creating collections
 db.createCollection('auctions')
+db.createCollection('views')
 
 ///////////////////////////////////////////////////////
 

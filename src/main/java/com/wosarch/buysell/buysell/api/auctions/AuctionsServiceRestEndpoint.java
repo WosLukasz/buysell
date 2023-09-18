@@ -4,6 +4,8 @@ import com.wosarch.buysell.buysell.model.auctions.Auction;
 import com.wosarch.buysell.buysell.model.auctions.AuctionsService;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionCreationRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionFinishRequest;
+import com.wosarch.buysell.common.model.exception.BuysellException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +24,7 @@ public class AuctionsServiceRestEndpoint {
     private AuctionsService auctionsService;
 
     @RequestMapping(method = RequestMethod.GET, path = "/{signature}")
-    public ResponseEntity<Auction> get(@PathVariable String signature) {
+    public ResponseEntity<Auction> get(@PathVariable String signature) throws BuysellException {
         logger.debug("Getting auction with signature {}", signature);
 
         return new ResponseEntity<>(auctionsService.get(signature), HttpStatus.OK);
@@ -33,14 +35,26 @@ public class AuctionsServiceRestEndpoint {
         return new ResponseEntity<>(auctionsService.create(request), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.PATCH, path = "/{id}")
+    @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
     public ResponseEntity<Auction> save(@RequestBody Auction auction) {
         return new ResponseEntity<>(auctionsService.save(auction), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.PATCH, path = "/{id}/finish")
-    public ResponseEntity<Auction> finish(@PathVariable String id, @RequestBody AuctionFinishRequest request) {
-        return new ResponseEntity<>(auctionsService.finish(id, request), HttpStatus.OK);
+    @RequestMapping(method = RequestMethod.PUT, path = "/{signature}/finish")
+    public ResponseEntity<Auction> finish(@PathVariable String signature, @RequestBody AuctionFinishRequest request) throws BuysellException {
+        return new ResponseEntity<>(auctionsService.finish(signature, request), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/{signature}/views")
+    public ResponseEntity<Integer> getViews(@PathVariable String signature) throws BuysellException {
+        logger.debug("Getting auction views with signature {}", signature);
+
+        return new ResponseEntity<>(auctionsService.getViews(signature), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, path = "/{signature}/views/increment")
+    public ResponseEntity<Integer> incrementViews(@PathVariable String signature, HttpServletRequest request) {
+        return new ResponseEntity<>(auctionsService.incrementViews(signature, request.getRemoteAddr()), HttpStatus.OK);
     }
 
 }

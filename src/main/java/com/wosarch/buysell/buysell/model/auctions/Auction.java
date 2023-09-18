@@ -19,11 +19,13 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("auctions")
+@Document(Auction.COLLECTION_NAME)
 public class Auction extends MongoObject {
 
     @Transient
     public static final String SEQUENCE_NAME = "auctions";
+    @Transient
+    public static final String COLLECTION_NAME = "auctions";
 
     @MongoId
     private ObjectId mongoId;
@@ -46,14 +48,12 @@ public class Auction extends MongoObject {
 
     private String ownerId;
 
-    private Long views;
-
     private AuctionFinishReason finishReason;
 
 
     @UtilityClass
     public static class Fields {
-        public static final String ID = "id";
+        public static final String SIGNATURE = "signature";
         public static final String TITLE = "title";
         public static final String STATUS = "status";
         public static final String FINISH_REASON = "finishReason";

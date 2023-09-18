@@ -14,25 +14,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class TemplateAuctionsRepositoryImpl extends BuysellRepository implements TemplateAuctionsRepository {
-
-    Logger logger = LoggerFactory.getLogger(TemplateAuctionsRepositoryImpl.class);
-
-    @Override
-    public UpdateResult finish(String auctionId, AuctionFinishRequest request) {
-        Query query = new Query(Criteria.where(Auction.Fields.ID).is(auctionId));
-        Update update = new Update();
-        update.set(Auction.Fields.STATUS, AuctionStatus.CLOSED);
-        update.set(Auction.Fields.FINISH_REASON, request.getReason());
-
-        UpdateResult result = mongoTemplate.updateFirst(query, update, Auction.class);
-
-        if (result == null) {
-            logger.debug("No documents updated");
-        } else {
-            logger.debug("{} document(s) updated..", result.getModifiedCount());
-        }
-
-        return result;
-
-    }
 }
