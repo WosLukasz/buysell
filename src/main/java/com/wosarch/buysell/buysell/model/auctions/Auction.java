@@ -1,6 +1,6 @@
 package com.wosarch.buysell.buysell.model.auctions;
 
-import com.wosarch.buysell.buysell.model.common.Attachment;
+import com.wosarch.buysell.common.model.attachments.Attachment;
 import com.wosarch.buysell.buysell.model.common.ContactInformation;
 import com.wosarch.buysell.buysell.model.common.MongoObject;
 import lombok.AllArgsConstructor;
@@ -45,6 +45,8 @@ public class Auction extends MongoObject {
     private String location;
 
     private List<ContactInformation> contactInformation;
+
+    private List<AuctionReport> reports;
 
     private String ownerId;
 

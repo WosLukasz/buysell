@@ -1,10 +1,10 @@
 package com.wosarch.buysell.buysell.model.auctions.requests;
 
-import com.wosarch.buysell.buysell.model.common.Attachment;
 import com.wosarch.buysell.buysell.model.common.ContactInformation;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,8 +17,7 @@ public class AuctionCreationRequest {
     @NotNull
     private String categoryId;
     @NotNull
-    @Max(12)
-    private List<Attachment> attachments;
+    private List<MultipartFile> attachments;
     @NotNull
     private String location;
     @NotNull

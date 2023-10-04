@@ -1,18 +1,18 @@
 package com.wosarch.buysell.buysell.services.auctions;
 
-import com.mongodb.client.result.UpdateResult;
-import com.wosarch.buysell.buysell.model.auctions.Auction;
-import com.wosarch.buysell.buysell.model.auctions.AuctionStatus;
-import com.wosarch.buysell.buysell.model.auctions.AuctionsService;
+import com.wosarch.buysell.buysell.model.auctions.*;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionCreationRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionFinishRequest;
+import com.wosarch.buysell.buysell.model.auctions.requests.AuctionReportRequest;
+import com.wosarch.buysell.buysell.repositories.auctions.AuctionsRepository;
 import com.wosarch.buysell.buysell.repositories.views.AuctionsViewsRepository;
 import com.wosarch.buysell.common.model.exception.BuysellException;
 import com.wosarch.buysell.common.model.sequence.SequenceService;
-import com.wosarch.buysell.buysell.repositories.auctions.AuctionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -27,6 +27,9 @@ public class AuctionsServiceImpl implements AuctionsService {
     @Autowired
     private SequenceService sequenceService;
 
+    @Autowired
+    private AuctionAttachmentsService auctionAttachmentsService;
+
     @Override
     public Auction create(AuctionCreationRequest request) {
         Auction auction = new Auction();
@@ -38,7 +41,7 @@ public class AuctionsServiceImpl implements AuctionsService {
         auction.setLocation(request.getLocation());
         auction.setContactInformation(request.getContactInformation());
         auction.setOwnerId(request.getOwnerId());
-        auction.setAttachments(request.getAttachments());
+        auction.setAttachments(auctionAttachmentsService.saveAuctionAttachments(request, auction));
 
         return auctionsRepository.save(auction);
     }
@@ -65,6 +68,26 @@ public class AuctionsServiceImpl implements AuctionsService {
         auction.setFinishReason(request.getReason());
 
         return auctionsRepository.save(auction);
+    }
+
+    @Override
+    public Auction report(String signature, AuctionReportRequest request) throws BuysellException {
+        Auction auction = get(signature);
+        if (CollectionUtils.isEmpty(auction.getReports())) {
+            auction.setReports(new ArrayList<>());
+        }
+        auction.getReports().add(prepareReport(request));
+
+        return auctionsRepository.save(auction);
+    }
+
+    private AuctionReport prepareReport(AuctionReportRequest request) {
+        AuctionReport report = new AuctionReport();
+        report.setMessage(request.getMessage());
+        report.setReason(request.getReason());
+        report.setUserId(null); //TODO: Add user who reported Auction
+
+        return report;
     }
 
     @Override
