@@ -10,6 +10,8 @@ db.createUser({
 
 // creating collections
 db.createCollection('auctions')
+db.createCollection('auctions_HI')
+db.auctions.createIndex({ signature : "hashed" })
 db.createCollection('views')
 
 ///////////////////////////////////////////////////////

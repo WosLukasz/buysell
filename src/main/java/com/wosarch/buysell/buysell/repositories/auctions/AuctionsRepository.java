@@ -10,4 +10,8 @@ import java.util.Optional;
 public interface AuctionsRepository extends MongoRepository<Auction, String>, TemplateAuctionsRepository {
 
     Optional<Auction> findBySignature(String signature);
+
+    default Auction save(Auction auction) {
+        return daoSave(auction);
+    }
 }

@@ -13,6 +13,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -27,9 +28,6 @@ public class Auction extends MongoObject {
     @Transient
     public static final String COLLECTION_NAME = "auctions";
 
-    @MongoId
-    private ObjectId mongoId;
-
     private String signature;
 
     private String title;
@@ -39,6 +37,10 @@ public class Auction extends MongoObject {
     private String category;
 
     private AuctionStatus status;
+
+    private Date statusChangeDate;
+
+    private Date endDate;
 
     private List<Attachment> attachments;
 
