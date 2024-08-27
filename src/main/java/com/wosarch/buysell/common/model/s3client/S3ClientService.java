@@ -1,6 +1,8 @@
 package com.wosarch.buysell.common.model.s3client;
 
 import io.minio.ObjectWriteResponse;
+import io.minio.Result;
+import io.minio.messages.Item;
 
 import java.io.InputStream;
 
@@ -12,9 +14,9 @@ public interface S3ClientService {
 
     ObjectWriteResponse saveObject(String bucket, String path, String contentType, InputStream content) throws RuntimeException;
 
-    void removeObject(String bucket, String objectName);
+    void removeObject(String bucket, String path);
 
-    InputStream getObjectByName(String bucket, String objectName);
+    InputStream getObjectByPath(String bucket, String path);
 
-    InputStream getObjectByETag(String bucket, String etag);
+    Iterable<Result<Item>> listObjectsByPath(String bucket, String objectPath);
 }

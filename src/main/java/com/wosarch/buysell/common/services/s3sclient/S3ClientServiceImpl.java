@@ -4,6 +4,7 @@ import com.wosarch.buysell.admin.api.users.UsersServiceRestEndpoint;
 import com.wosarch.buysell.common.config.AppConfig;
 import com.wosarch.buysell.common.model.s3client.S3ClientService;
 import io.minio.*;
+import io.minio.messages.Item;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +92,7 @@ public class S3ClientServiceImpl implements S3ClientService {
                 .build();
 
         try {
-            logger.debug("Removing file {} from bucket ", objectPath, bucket);
+            logger.debug("Removing file {} from bucket {}", objectPath, bucket);
             client.removeObject(objectRemoveArgs);
         } catch (Exception e) {
             logger.error("Object saving failed: [{}, {}]", bucket, objectPath, e);
@@ -100,31 +101,31 @@ public class S3ClientServiceImpl implements S3ClientService {
     }
 
     @Override
-    public InputStream getObjectByName(String bucket, String objectName) {
+    public InputStream getObjectByPath(String bucket, String objectPath) {
         GetObjectArgs getArgs = GetObjectArgs.builder()
                 .bucket(bucket)
-                .object(objectName)
+                .object(objectPath)
                 .build();
 
         try {
             return client.getObject(getArgs);
         } catch (Exception e) {
-            logger.error("Object fetching failed: [{}, {}]", bucket, objectName, e);
+            logger.error("Object fetching failed: [{}, {}]", bucket, objectPath, e);
             return null;
         }
     }
 
     @Override
-    public InputStream getObjectByETag(String bucket, String etag) {
-        GetObjectArgs getArgs = GetObjectArgs.builder()
+    public Iterable<Result<Item>> listObjectsByPath(String bucket, String objectPath) {
+        ListObjectsArgs listArgs = ListObjectsArgs.builder()
                 .bucket(bucket)
-                .matchETag(etag)
+                .prefix(objectPath)
                 .build();
 
         try {
-            return client.getObject(getArgs);
+            return client.listObjects(listArgs);
         } catch (Exception e) {
-            logger.error("Object fetching failed: [{}, {}]", bucket, etag, e);
+            logger.error("Object fetching failed: [{}, {}]", bucket, objectPath, e);
             return null;
         }
     }

@@ -1,18 +1,23 @@
 package com.wosarch.buysell.buysell.services.auctions;
 
 import com.wosarch.buysell.buysell.model.auctions.*;
+import com.wosarch.buysell.buysell.model.auctions.requests.AuctionAttachmentsChangeRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionCreationRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionFinishRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionReportRequest;
 import com.wosarch.buysell.buysell.repositories.auctions.AuctionsRepository;
 import com.wosarch.buysell.buysell.repositories.views.AuctionsViewsRepository;
+import com.wosarch.buysell.common.model.attachments.Attachment;
+import com.wosarch.buysell.common.model.attachments.AttachmentWithContent;
 import com.wosarch.buysell.common.model.exception.BuysellException;
 import com.wosarch.buysell.common.model.sequence.SequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,7 +46,7 @@ public class AuctionsServiceImpl implements AuctionsService {
         auction.setLocation(request.getLocation());
         auction.setContactInformation(request.getContactInformation());
         auction.setOwnerId(request.getOwnerId());
-        auction.setAttachments(auctionAttachmentsService.saveAuctionAttachments(request, auction));
+        auction.setAttachments(auctionAttachmentsService.saveAuctionAttachments(request, auction.getSignature()));
 
         return auctionsRepository.save(auction);
     }
@@ -68,6 +73,31 @@ public class AuctionsServiceImpl implements AuctionsService {
         auction.setFinishReason(request.getReason());
 
         return auctionsRepository.save(auction);
+    }
+
+    @Override
+    public List<AttachmentWithContent> getAuctionAttachmentsWithContent(String signature) throws BuysellException {
+        Auction auction = get(signature);
+
+        return auctionAttachmentsService.getAuctionAttachmentsWithContent(auction);
+    }
+
+    @Override
+    public Auction removeAuctionAttachments(String signature) throws BuysellException {
+        Auction auction = get(signature);
+        auctionAttachmentsService.removeAuctionAttachments(auction);
+
+        return save(auction);
+    }
+
+    @Override
+    @Transactional
+    public Auction changeAuctionAttachments(AuctionAttachmentsChangeRequest request) throws BuysellException {
+        Auction auction = get(request.getSignature());
+        List<Attachment> newAttachments = auctionAttachmentsService.changeAuctionAttachments(auction.getAttachments(), request.getNewFiles(), auction.getSignature());
+        auction.setAttachments(newAttachments);
+
+        return save(auction);
     }
 
     @Override

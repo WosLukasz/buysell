@@ -2,8 +2,10 @@ package com.wosarch.buysell.buysell.api.auctions;
 
 import com.wosarch.buysell.buysell.model.auctions.Auction;
 import com.wosarch.buysell.buysell.model.auctions.AuctionsService;
+import com.wosarch.buysell.buysell.model.auctions.requests.AuctionAttachmentsChangeRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionCreationRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionFinishRequest;
+import com.wosarch.buysell.common.model.attachments.AttachmentWithContent;
 import com.wosarch.buysell.common.model.exception.BuysellException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -14,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auctions")
@@ -33,21 +37,48 @@ public class AuctionsServiceRestEndpoint {
 
     @RequestMapping(method = RequestMethod.POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<Auction> create(@ModelAttribute @Valid AuctionCreationRequest request) {
+        logger.debug("Creating new auction with title {}", request.getTitle());
+
         return new ResponseEntity<>(auctionsService.create(request), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
     public ResponseEntity<Auction> save(@RequestBody Auction auction) {
+        logger.debug("Saving auction with signature {}", auction.getSignature());
+
         return new ResponseEntity<>(auctionsService.save(auction), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{signature}/finish")
     public ResponseEntity<Auction> finish(@PathVariable String signature, @RequestBody AuctionFinishRequest request) throws BuysellException {
+        logger.debug("Finishing auction with signature {}", signature);
+
         return new ResponseEntity<>(auctionsService.finish(signature, request), HttpStatus.OK);
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/{signature}/files")
+    public ResponseEntity<List<AttachmentWithContent>> getAuctionAttachmentsWithContent(@PathVariable String signature) throws BuysellException {
+        logger.debug("Getting auction attachments for auction with signature {}", signature);
+
+        return new ResponseEntity<>(auctionsService.getAuctionAttachmentsWithContent(signature), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, path = "/{signature}/files")
+    public ResponseEntity<Auction> removeAuctionAttachments(@PathVariable String signature) throws BuysellException {
+        logger.debug("Removing auction attachments for auction with signature {}", signature);
+
+        return new ResponseEntity<>(auctionsService.removeAuctionAttachments(signature), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, path = "/{signature}/files", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Auction> changeAuctionAttachments(@ModelAttribute AuctionAttachmentsChangeRequest request) throws BuysellException {
+        logger.debug("Changing auction attachments for auction with signature {}", request.getSignature());
+
+        return new ResponseEntity<>(auctionsService.changeAuctionAttachments(request), HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.GET, path = "/{signature}/views")
-    public ResponseEntity<Integer> getViews(@PathVariable String signature) throws BuysellException {
+    public ResponseEntity<Integer> getViews(@PathVariable String signature) {
         logger.debug("Getting auction views with signature {}", signature);
 
         return new ResponseEntity<>(auctionsService.getViews(signature), HttpStatus.OK);

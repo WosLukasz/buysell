@@ -1,16 +1,48 @@
 version: '2.2'
 
 services:
-  mongodb:
-    image: mongo
+  mongodb-primary:
+    image: docker.io/bitnami/mongodb:latest
     ports:
-      - 27017:27017
+      - 30001:27017
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=rootuser
-      - MONGO_INITDB_ROOT_PASSWORD=rootpass
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-primary
+      - MONGODB_REPLICA_SET_NAME=replicasetName
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_ROOT_USER=root
+      - MONGODB_ROOT_PASSWORD=rootpass
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
     volumes:
       - ./../mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-#      - mongodb-data:/data/db
+      - mongodb-data:/data/db
+
+  mongodb-secondary:
+    image: docker.io/bitnami/mongodb:latest
+    ports:
+      - 30002:27017
+    depends_on:
+      - mongodb-primary
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-secondary
+      - MONGODB_REPLICA_SET_NAME=replicasetName
+      - MONGODB_REPLICA_SET_MODE=secondary
+      - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
+      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=rootpass
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+
+  mongodb-arbiter:
+    image: docker.io/bitnami/mongodb:latest
+    ports:
+      - 30003:27017
+    depends_on:
+      - mongodb-primary
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-arbiter
+      - MONGODB_REPLICA_SET_NAME=replicasetName
+      - MONGODB_REPLICA_SET_MODE=arbiter
+      - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
+      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=rootpass
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
 
   minio:
     image: docker.io/bitnami/minio:latest
@@ -29,9 +61,3 @@ volumes:
     driver: local
   minio_data:
     driver: local
-
-#networks:
-#  default:
-#    name: mongodb_network
-
-
