@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 public class BuysellSequenceServiceImpl extends SequenceServiceImpl {
 
     @Autowired
-    private MongoTemplate adminMongoTemplate;
+    private MongoTemplate mongoTemplate;
 
     @Override
     protected MongoTemplate getProperMongoTemplate() {
-        return adminMongoTemplate;
+        return mongoTemplate;
     }
 }

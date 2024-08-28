@@ -33,8 +33,9 @@ public class BuySellMongoConfig {
     }
 
     @Bean(name = "buysellMongoClient")
-    public MongoClient mongoClient(@Qualifier("buysellProperties") MongoProperties mongoProperties) {
-
+    public MongoClient mongoClient(@Qualifier("buysellProperties") MongoProperties mongoProperties) throws Exception {
+        //  REPLICASET CONNECTION
+        //        return MongoClients.create(mongoProperties.getUri());
         MongoCredential credential = MongoCredential
                 .createCredential(mongoProperties.getUsername(), mongoProperties.getAuthenticationDatabase(), mongoProperties.getPassword());
 

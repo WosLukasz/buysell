@@ -44,6 +44,8 @@ services:
       - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=rootpass
       - MONGODB_REPLICA_SET_KEY=replicasetkey123
 
+#      - MONGODB_ADVERTISED_HOSTNAME=localhost #localhost docker hack
+
   minio:
     image: docker.io/bitnami/minio:latest
     ports:
