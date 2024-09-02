@@ -28,3 +28,5 @@ db.createUser({
 
 // creating collections
 db.createCollection('users')
+db.createCollection('roles')
+db.createCollection('patches')

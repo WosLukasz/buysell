@@ -19,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class AuctionsServiceImpl implements AuctionsService {
@@ -96,6 +97,15 @@ public class AuctionsServiceImpl implements AuctionsService {
         Auction auction = get(request.getSignature());
         List<Attachment> newAttachments = auctionAttachmentsService.changeAuctionAttachments(auction.getAttachments(), request.getNewFiles(), auction.getSignature());
         auction.setAttachments(newAttachments);
+        // test
+        Random random = new Random();
+        final int MAX = 2;
+        final int MIN = 1;
+        Integer randInt = random.nextInt((MAX - MIN) + 1) + MIN;
+        if (randInt.equals(1) || randInt.equals(2)) {
+            throw new RuntimeException();
+        }
+        // test
 
         return save(auction);
     }
