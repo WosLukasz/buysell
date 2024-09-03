@@ -5,6 +5,7 @@ import com.wosarch.buysell.admin.model.patches.PatchItem;
 import com.wosarch.buysell.admin.model.patches.PatchStatus;
 import com.wosarch.buysell.admin.repositories.patches.PatchesRepository;
 import com.wosarch.buysell.buysell.api.auctions.AuctionsServiceRestEndpoint;
+import com.wosarch.buysell.common.model.appstate.AppStateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,14 @@ public class PatchMasterServiceImpl {
     PatchesRepository patchesRepository;
 
     @Autowired
+    AppStateService appStateService;
+
+    @Autowired
     private List<Patch> patches;
 
     @EventListener(ApplicationReadyEvent.class)
     private void runPatches() {
-        //block everything
+        appStateService.setMaintenanceMode();
 
         try {
             List<String> finishedPatches = patchesRepository.getPatchesIdsByStatus(PatchStatus.SUCCESS);
@@ -43,7 +47,7 @@ public class PatchMasterServiceImpl {
             throw e;
         }
 
-        //unblock everything
+        appStateService.setActiveMode();
     }
 
     private void runPatch(Patch patch) {
