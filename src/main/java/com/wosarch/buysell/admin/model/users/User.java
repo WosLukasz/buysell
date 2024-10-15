@@ -25,9 +25,5 @@ public class User extends MongoObject {
 
     private String name;
 
-    private String login;
-
-    private String password;
-
-    private List<String> roles;
+    private String email;
 }

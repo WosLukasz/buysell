@@ -4,5 +4,10 @@ import lombok.Data;
 
 @Data
 public class UserCreationRequest {
+
     private String name;
+
+    private String password;
+
+    private String email;
 }
