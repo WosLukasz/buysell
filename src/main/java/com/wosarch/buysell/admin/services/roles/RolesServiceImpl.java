@@ -1,12 +1,14 @@
 package com.wosarch.buysell.admin.services.roles;
 
 import com.wosarch.buysell.admin.model.auth.AuthServerRolesService;
+import com.wosarch.buysell.admin.model.roles.Role;
 import com.wosarch.buysell.admin.model.roles.RolesService;
 import com.wosarch.buysell.admin.repositories.roles.RolesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RolesServiceImpl implements RolesService {
@@ -16,6 +18,17 @@ public class RolesServiceImpl implements RolesService {
 
     @Autowired
     AuthServerRolesService authServerRolesService;
+
+    // add cache
+    @Override
+    public Optional<Role> getRole(String code) {
+        return rolesRepository.findById(code);
+    }
+
+    // add cache
+    public List<Role> getAllRoles() {
+        return rolesRepository.findAll();
+    }
 
     @Override
     public void createRole(String code, List<String> rights) {

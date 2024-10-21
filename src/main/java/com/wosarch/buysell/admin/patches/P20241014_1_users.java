@@ -33,7 +33,11 @@ public class P20241014_1_users implements Patch {
         request.setPassword("bobspassword");
         request.setEmail("bob@buysell.com");
 
-        usersService.create(request, List.of(SystemRolesCodes.ADMIN.name(), SystemRolesCodes.SUPERVISOR.name()));
+        usersService.create(request, List.of(
+                SystemRolesCodes.USER.name(),
+                SystemRolesCodes.ADMIN.name(),
+                SystemRolesCodes.SUPERVISOR.name()
+        ));
 
         logger.info("[{}] Finished...", getPatchId());
     }

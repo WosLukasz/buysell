@@ -6,14 +6,13 @@ import com.wosarch.buysell.admin.model.users.User;
 import com.wosarch.buysell.admin.model.users.UsersService;
 import com.wosarch.buysell.admin.model.users.requests.UserCreationRequest;
 import com.wosarch.buysell.admin.repositories.users.UsersRepository;
-import com.wosarch.buysell.common.model.sequence.SequenceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsersServiceImpl implements UsersService {
@@ -26,13 +25,20 @@ public class UsersServiceImpl implements UsersService {
     private UsersRepository usersRepository;
 
     @Autowired
-    @Qualifier("adminSequence")
-    private SequenceService sequenceService;
-
-    @Autowired
     private AuthServerUsersService authServerUsersService;
 
-//    TODO: Handle case when user exists
+    @Override
+    public User get(String id) {
+        Optional<User> userOptional = usersRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            logger.error("User with id {} not found", id);
+            throw new RuntimeException("User not found");
+        }
+
+        return userOptional.get();
+    }
+
+    //    TODO: Handle case when user exists
     @Override
     public User create(UserCreationRequest request, List<String> roles) {
         try {
@@ -43,7 +49,7 @@ public class UsersServiceImpl implements UsersService {
             user.setEmail(request.getEmail());
 
             return usersRepository.save(user);
-        } catch(Exception e) {
+        } catch (Exception e) {
             logger.error("Unable to create user {}", request.getEmail());
             throw e;
         }
@@ -59,7 +65,7 @@ public class UsersServiceImpl implements UsersService {
         try {
             authServerUsersService.removeUser(userId);
             usersRepository.deleteById(userId);
-        } catch(Exception e) {
+        } catch (Exception e) {
             logger.error("Unable to remove user {}", userId);
             throw e;
         }

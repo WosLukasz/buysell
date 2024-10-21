@@ -1,6 +1,5 @@
 package com.wosarch.buysell.admin.model.auth;
 
-import com.wosarch.buysell.admin.model.users.User;
 import com.wosarch.buysell.admin.model.users.requests.UserCreationRequest;
 import jakarta.ws.rs.core.Response;
 

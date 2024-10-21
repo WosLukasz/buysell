@@ -2,7 +2,7 @@ version: '2.2'
 
 services:
   mongodb-primary:
-    image: docker.io/bitnami/mongodb:latest
+    image: docker.io/bitnami/mongodb:8.0
     ports:
       - 30001:27017
     environment:
@@ -17,7 +17,7 @@ services:
       - mongodb-data:/data/db
 
   mongodb-secondary:
-    image: docker.io/bitnami/mongodb:latest
+    image: docker.io/bitnami/mongodb:8.0
     ports:
       - 30002:27017
     depends_on:
@@ -31,7 +31,7 @@ services:
       - MONGODB_REPLICA_SET_KEY=replicasetkey123
 
   mongodb-arbiter:
-    image: docker.io/bitnami/mongodb:latest
+    image: docker.io/bitnami/mongodb:8.0
     ports:
       - 30003:27017
     depends_on:
@@ -64,8 +64,8 @@ services:
       - POSTGRESQL_USERNAME=keycloak
       - POSTGRESQL_PASSWORD=keycloak_pwd
       - POSTGRESQL_DATABASE=keycloak
-#    volumes:
-#      - 'postgresql_data:/bitnami/postgresql'
+    volumes:
+      - 'postgresql_data:/bitnami/postgresql'
 
   #https://hub.docker.com/r/bitnami/keycloak
   keycloak:
