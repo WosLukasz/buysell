@@ -13,6 +13,8 @@ public class CacheCustomizer
 
     @Override
     public void customize(ConcurrentMapCacheManager cacheManager) {
-        cacheManager.setCacheNames(List.of(BuysellCaches.USERS.getCode(), BuysellCaches.RIGHTS.getCode()));
+        cacheManager.setCacheNames(List.of(
+                BuysellCaches.ROLE.getCode(),
+                BuysellCaches.ROLES.getCode()));
     }
 }

@@ -38,7 +38,7 @@ public class UsersServiceImpl implements UsersService {
         return userOptional.get();
     }
 
-    //    TODO: Handle case when user exists
+    //    TODO: Handle case when user exists, password to weak etc.
     @Override
     public User create(UserCreationRequest request, List<String> roles) {
         try {

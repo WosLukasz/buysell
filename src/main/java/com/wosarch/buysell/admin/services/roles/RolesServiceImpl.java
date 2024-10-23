@@ -4,7 +4,10 @@ import com.wosarch.buysell.admin.model.auth.AuthServerRolesService;
 import com.wosarch.buysell.admin.model.roles.Role;
 import com.wosarch.buysell.admin.model.roles.RolesService;
 import com.wosarch.buysell.admin.repositories.roles.RolesRepository;
+import com.wosarch.buysell.admin.services.cache.RoleCacheManager;
+import com.wosarch.buysell.admin.services.cache.RolesCacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,13 +22,20 @@ public class RolesServiceImpl implements RolesService {
     @Autowired
     AuthServerRolesService authServerRolesService;
 
-    // add cache
+    @Autowired
+    RoleCacheManager roleCacheManager;
+
+    @Autowired
+    RolesCacheManager rolesCacheManager;
+
     @Override
+    @Cacheable("role")
     public Optional<Role> getRole(String code) {
         return rolesRepository.findById(code);
     }
 
-    // add cache
+    @Override
+    @Cacheable("roles")
     public List<Role> getAllRoles() {
         return rolesRepository.findAll();
     }
@@ -44,11 +54,15 @@ public class RolesServiceImpl implements RolesService {
 
     @Override
     public void addRightsToRole(String code, List<String> rightsToAdd) {
-        //TODO: TO IMPLEMENT
+        rolesRepository.addRightsToRole(code, rightsToAdd);
+        roleCacheManager.cacheEvict(code);
+        rolesCacheManager.cacheEvict();
     }
 
     @Override
     public void removeRightsFromRole(String code, List<String> rightsToRemove) {
-        //TODO: TO IMPLEMENT
+        rolesRepository.removeRightsFromRole(code, rightsToRemove);
+        roleCacheManager.cacheEvict(code);
+        rolesCacheManager.cacheEvict();
     }
 }
