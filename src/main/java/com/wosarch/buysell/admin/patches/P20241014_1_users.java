@@ -29,7 +29,8 @@ public class P20241014_1_users implements Patch {
         logger.info("[{}] Starts...", getPatchId());
 
         UserCreationRequest request = new UserCreationRequest();
-        request.setName("bob");
+        request.setFirstName("Robert");
+        request.setName("Edler");
         request.setPassword("bobspassword");
         request.setEmail("bob@buysell.com");
 

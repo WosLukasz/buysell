@@ -1,6 +1,8 @@
-package com.wosarch.buysell.admin.config;
+package com.wosarch.buysell.admin.config.security;
 
-import com.wosarch.buysell.admin.config.security.KeycloakRoleConverter;
+import com.wosarch.buysell.admin.filters.CsrfCookieFilter;
+import com.wosarch.buysell.admin.filters.UserCreationFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -9,6 +11,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
@@ -33,11 +37,26 @@ public class SecurityConfig {
                 .csrf(csrfConfig -> csrfConfig.csrfTokenRequestHandler(csrfTokenRequestAttributeHandler)
                         .ignoringRequestMatchers("/users") // for tests
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+                .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(userCreationFilter(), AuthorizationFilter.class)
                 .requiresChannel(rcc -> rcc.anyRequest().requiresInsecure());// Only HTTP
         http.oauth2ResourceServer(rsc -> rsc.jwt(jwtConfigurer ->
                 jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter)));
 
         return http.build();
+    }
+
+    @Bean
+    public UserCreationFilter userCreationFilter() {
+        return new UserCreationFilter();
+    }
+
+    @Bean
+    public FilterRegistrationBean<UserCreationFilter> userCreationFilterRegistrationBean() {
+        FilterRegistrationBean<UserCreationFilter> filterRegistrationBean = new FilterRegistrationBean(userCreationFilter());
+        filterRegistrationBean.setEnabled(false);
+
+        return filterRegistrationBean;
     }
 
     private CorsConfigurationSource getCorsConfigurationSource() {

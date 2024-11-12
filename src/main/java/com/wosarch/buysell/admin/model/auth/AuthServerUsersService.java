@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface AuthServerUsersService {
 
+    UserAuthServerRepresentation getUser(String id);
+
     String createUser(UserCreationRequest request, List<String> roles);
 
     Optional<String> getUserIdFromResponse(Response response);

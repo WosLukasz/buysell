@@ -1,6 +1,7 @@
 package com.wosarch.buysell.admin.model.cache;
 
 public enum BuysellCaches {
+    USER("user"),
     ROLE("role"),
     ROLES("roles");
 

@@ -97,7 +97,15 @@ public class RequestContextServiceImpl implements RequestContextService {
                 .toList();
     }
 
-    private Authentication getCurrentUserContext() {
+    @Override
+    public Authentication getCurrentUserContext() {
         return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    @Override
+    public String getCurrentUserId() {
+        return SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
     }
 }

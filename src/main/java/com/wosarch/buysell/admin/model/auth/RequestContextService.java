@@ -1,5 +1,7 @@
 package com.wosarch.buysell.admin.model.auth;
 
+import org.springframework.security.core.Authentication;
+
 import java.util.List;
 
 public interface RequestContextService {
@@ -15,5 +17,9 @@ public interface RequestContextService {
     List<String> getCurrentUserRoles();
 
     List<String> getCurrentUserRights();
+
+    Authentication getCurrentUserContext();
+
+    String getCurrentUserId();
 
 }

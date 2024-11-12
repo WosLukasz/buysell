@@ -12,6 +12,8 @@ public interface UsersService {
 
     User create(UserCreationRequest request);
 
+    User createLocalUserIfNotExists(String userId);
+
     void remove(String userId);
 
     void assignRoles(String userId, List<String> roles);

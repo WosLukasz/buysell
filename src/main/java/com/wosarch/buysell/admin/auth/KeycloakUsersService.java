@@ -2,9 +2,11 @@ package com.wosarch.buysell.admin.auth;
 
 import com.wosarch.buysell.admin.model.auth.AuthServerRolesService;
 import com.wosarch.buysell.admin.model.auth.AuthServerUsersService;
+import com.wosarch.buysell.admin.model.auth.UserAuthServerRepresentation;
 import com.wosarch.buysell.admin.model.users.requests.UserCreationRequest;
 import jakarta.ws.rs.core.Response;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -31,6 +33,19 @@ public class KeycloakUsersService implements AuthServerUsersService {
 
     @Value("${keycloak.realm}")
     private String realm;
+
+    public UserAuthServerRepresentation getUser(String id) {
+        UserResource response = keycloak
+                .realm(realm)
+                .users()
+                .get(id);
+
+        if (Objects.isNull(response)) {
+            throw new RuntimeException("No user fount in Keycloak");
+        }
+
+        return convertToRepresentation(response.toRepresentation());
+    }
 
     public String createUser(UserCreationRequest request, List<String> roles) {
         CredentialRepresentation password = preparePasswordRepresentation(request.getPassword());
@@ -108,12 +123,23 @@ public class KeycloakUsersService implements AuthServerUsersService {
             CredentialRepresentation credentialRepresentation
     ) {
         UserRepresentation newUser = new UserRepresentation();
-        newUser.setUsername(request.getName());
+        newUser.setUsername(request.getEmail());
         newUser.setEmail(request.getEmail());
+        newUser.setFirstName(request.getFirstName());
+        newUser.setLastName(request.getName());
         newUser.setCredentials(List.of(credentialRepresentation));
         newUser.setEnabled(true);
 
         return newUser;
+    }
+
+    private UserAuthServerRepresentation convertToRepresentation(UserRepresentation userRepresentation) {
+        UserAuthServerRepresentation userAuthServerRepresentation = new UserAuthServerRepresentation();
+        userAuthServerRepresentation.setEmail(userRepresentation.getEmail());
+        userAuthServerRepresentation.setFirstName(userRepresentation.getFirstName());
+        userAuthServerRepresentation.setName(userRepresentation.getLastName());
+
+        return userAuthServerRepresentation;
     }
 
 }

@@ -20,8 +20,15 @@ public class CachingConfig {
     @Bean
     public CacheManager cacheManager() {
         return new ConcurrentMapCacheManager(
+                BuysellCaches.USER.getCode(),
                 BuysellCaches.ROLE.getCode(),
                 BuysellCaches.ROLES.getCode());
+    }
+
+    @CacheEvict(allEntries = true, value = "user")
+    @Scheduled(fixedDelay = 10 * 60 * 10000 ,  initialDelay = 500)
+    public void userCacheEvict() {
+        logger.info("Invalidating cache {}", BuysellCaches.USER.getCode());
     }
 
     @CacheEvict(allEntries = true, value = "roles")
