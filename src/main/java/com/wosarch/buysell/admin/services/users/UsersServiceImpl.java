@@ -1,6 +1,7 @@
 package com.wosarch.buysell.admin.services.users;
 
 import com.wosarch.buysell.admin.model.auth.AuthServerUsersService;
+import com.wosarch.buysell.admin.model.auth.RequestContextService;
 import com.wosarch.buysell.admin.model.auth.UserAuthServerRepresentation;
 import com.wosarch.buysell.admin.model.roles.SystemRolesCodes;
 import com.wosarch.buysell.admin.model.users.User;
@@ -30,6 +31,9 @@ public class UsersServiceImpl implements UsersService {
     @Autowired
     private UserCacheManager userCacheManager;
 
+    @Autowired
+    private RequestContextService requestContextService;
+
     @Override
     public User get(String id) {
         Optional<User> userOptional = usersRepository.findById(id);
@@ -39,6 +43,13 @@ public class UsersServiceImpl implements UsersService {
         }
 
         return userOptional.get();
+    }
+
+    @Override
+    public User getCurrentUser() {
+        String id = requestContextService.getCurrentUserId();
+
+        return get(id);
     }
 
     @Override

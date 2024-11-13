@@ -17,4 +17,6 @@ public interface UsersService {
     void remove(String userId);
 
     void assignRoles(String userId, List<String> roles);
+
+    User getCurrentUser();
 }
