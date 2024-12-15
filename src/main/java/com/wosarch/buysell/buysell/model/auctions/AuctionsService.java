@@ -1,6 +1,5 @@
 package com.wosarch.buysell.buysell.model.auctions;
 
-import com.wosarch.buysell.buysell.model.auctions.requests.AuctionAttachmentsChangeRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionFinishRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionCreationRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionReportRequest;
@@ -23,12 +22,9 @@ public interface AuctionsService {
 
     Auction removeAuctionAttachments(String signature) throws BuysellException;
 
-    Auction changeAuctionAttachments(AuctionAttachmentsChangeRequest request) throws BuysellException;
-
     Auction report(String signature, AuctionReportRequest request) throws BuysellException;
 
     Integer getViews(String signature);
 
     Integer incrementViews(String signature, String remoteAddress);
-
 }

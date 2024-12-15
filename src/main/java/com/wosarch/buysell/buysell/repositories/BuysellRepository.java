@@ -2,7 +2,9 @@ package com.wosarch.buysell.buysell.repositories;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wosarch.buysell.admin.model.auth.RequestContextService;
 import com.wosarch.buysell.buysell.model.common.MongoObject;
+import io.micrometer.common.util.StringUtils;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -12,7 +14,6 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -33,6 +34,9 @@ public class BuysellRepository {
 
     @Autowired
     protected MongoTemplate mongoTemplate;
+
+    @Autowired
+    protected RequestContextService requestContextService;
 
     public <T extends MongoObject> T versionedSave(T mongoObject, String collection, Class<T> clazz) {
         addAuditData(mongoObject);
@@ -67,13 +71,15 @@ public class BuysellRepository {
 
     private <T extends MongoObject> void addAuditData(T mongoObject) {
         Date now = new Date();
+        String userId = requestContextService.getCurrentUserId();
+        String modifier = StringUtils.isNotEmpty(userId) ? userId : SYSTEM_USER;
         if (mongoObject.getCreationDate() == null) {
             mongoObject.setCreationDate(now);
-            mongoObject.setCreatedBy(SYSTEM_USER); // To change when we will have user context
+            mongoObject.setCreatedBy(modifier);
         }
 
         mongoObject.setModificationDate(now);
-        mongoObject.setModifiedBy(SYSTEM_USER); // To change when we will have user context
+        mongoObject.setModifiedBy(modifier);
     }
 
     private <T extends MongoObject> void saveHistoryDocument(T mongoObject, String collection) {

@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface RequestContextService {
 
+    boolean currentUserLoggedIn();
+
     boolean currentUserHasAssignedRole(String role);
 
     boolean currentUserHasAssignedAnyRole(List<String> roles);

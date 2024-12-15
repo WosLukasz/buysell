@@ -1,8 +1,8 @@
 package com.wosarch.buysell.buysell.api.auctions;
 
 import com.wosarch.buysell.buysell.model.auctions.Auction;
+import com.wosarch.buysell.buysell.model.auctions.AuctionAttachmentsService;
 import com.wosarch.buysell.buysell.model.auctions.AuctionsService;
-import com.wosarch.buysell.buysell.model.auctions.requests.AuctionAttachmentsChangeRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionCreationRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionFinishRequest;
 import com.wosarch.buysell.common.model.attachments.AttachmentWithContent;
@@ -13,8 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +28,9 @@ public class AuctionsServiceRestEndpoint {
     @Autowired
     private AuctionsService auctionsService;
 
+    @Autowired
+    private AuctionAttachmentsService auctionAttachmentsService;
+
     @RequestMapping(method = RequestMethod.GET, path = "/{signature}")
     public ResponseEntity<Auction> get(@PathVariable String signature) throws BuysellException {
         logger.debug("Getting auction with signature {}", signature);
@@ -35,13 +38,15 @@ public class AuctionsServiceRestEndpoint {
         return new ResponseEntity<>(auctionsService.get(signature), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<Auction> create(@ModelAttribute @Valid AuctionCreationRequest request) {
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Auction> create(@RequestBody @Valid AuctionCreationRequest request) {
         logger.debug("Creating new auction with title {}", request.getTitle());
 
         return new ResponseEntity<>(auctionsService.create(request), HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.PUT, path = "/{id}")
     public ResponseEntity<Auction> save(@RequestBody Auction auction) {
         logger.debug("Saving auction with signature {}", auction.getSignature());
@@ -49,6 +54,7 @@ public class AuctionsServiceRestEndpoint {
         return new ResponseEntity<>(auctionsService.save(auction), HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.PUT, path = "/{signature}/finish")
     public ResponseEntity<Auction> finish(@PathVariable String signature, @RequestBody AuctionFinishRequest request) throws BuysellException {
         logger.debug("Finishing auction with signature {}", signature);
@@ -56,26 +62,13 @@ public class AuctionsServiceRestEndpoint {
         return new ResponseEntity<>(auctionsService.finish(signature, request), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/{signature}/files")
+    @RequestMapping(method = RequestMethod.GET, path = "/{signature}/attachments")
     public ResponseEntity<List<AttachmentWithContent>> getAuctionAttachmentsWithContent(@PathVariable String signature) throws BuysellException {
         logger.debug("Getting auction attachments for auction with signature {}", signature);
 
         return new ResponseEntity<>(auctionsService.getAuctionAttachmentsWithContent(signature), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, path = "/{signature}/files")
-    public ResponseEntity<Auction> removeAuctionAttachments(@PathVariable String signature) throws BuysellException {
-        logger.debug("Removing auction attachments for auction with signature {}", signature);
-
-        return new ResponseEntity<>(auctionsService.removeAuctionAttachments(signature), HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.PUT, path = "/{signature}/files", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<Auction> changeAuctionAttachments(@ModelAttribute AuctionAttachmentsChangeRequest request) throws BuysellException {
-        logger.debug("Changing auction attachments for auction with signature {}", request.getSignature());
-
-        return new ResponseEntity<>(auctionsService.changeAuctionAttachments(request), HttpStatus.OK);
-    }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{signature}/views")
     public ResponseEntity<Integer> getViews(@PathVariable String signature) {

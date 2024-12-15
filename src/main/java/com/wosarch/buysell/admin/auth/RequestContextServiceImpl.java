@@ -17,8 +17,17 @@ import static com.wosarch.buysell.admin.config.security.KeycloakRoleConverter.SP
 @Service
 public class RequestContextServiceImpl implements RequestContextService {
 
+    private static final String ANONYMOUS_USER = "anonymousUser";
+
     @Autowired
     RolesService rolesService;
+
+    @Override
+    public boolean currentUserLoggedIn() {
+        Authentication authentication = getCurrentUserContext();
+
+        return null != authentication && !(ANONYMOUS_USER).equals(authentication.getName());
+    }
 
     @Override
     public boolean currentUserHasAssignedRole(String role) {

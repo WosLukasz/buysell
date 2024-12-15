@@ -1,10 +1,12 @@
 package com.wosarch.buysell.common.services.attachments;
 
+import com.wosarch.buysell.common.model.attachments.AttachmentSaveRequest;
 import com.wosarch.buysell.common.config.AppConfig;
 import com.wosarch.buysell.common.model.attachments.Attachment;
 import com.wosarch.buysell.common.model.attachments.AttachmentWithContent;
 import com.wosarch.buysell.common.model.attachments.AttachmentsService;
 import com.wosarch.buysell.common.model.s3client.S3ClientService;
+import com.wosarch.buysell.common.utils.CommonUtils;
 import io.micrometer.common.util.StringUtils;
 import io.minio.ObjectWriteResponse;
 import org.apache.commons.compress.utils.IOUtils;
@@ -13,11 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,10 @@ public class AttachmentsServiceImpl implements AttachmentsService {
 
     Logger logger = LoggerFactory.getLogger(AttachmentsServiceImpl.class);
 
+    private static final String FILENAME_DATE_PATTERN = "yyyy_MM_dd_HH_mm_ss";
+    private static final String DAY_PATTERN = "yyyy_MM_dd";
+    private static final Integer FILENAME_RANDOM_PART_LENGTH = 7;
+
     @Autowired
     private S3ClientService s3ClientService;
 
@@ -33,13 +39,23 @@ public class AttachmentsServiceImpl implements AttachmentsService {
     private AppConfig appConfig;
 
     @Override
-    public Attachment saveAttachment(String path, MultipartFile multipartFile) {
-        try {
-            InputStream content = multipartFile.getInputStream();
-            String contentType = multipartFile.getContentType();
-            String originalFilename = multipartFile.getOriginalFilename();
+    public Attachment saveAttachment(AttachmentSaveRequest request) {
+        String path = preparePathForAuctionFile(prepareFileName(), request.getContext());
 
-            return saveAttachment(path, originalFilename, contentType, content);
+        return saveAttachment(path, request);
+    }
+
+    @Override
+    public Attachment saveAttachment(String path, AttachmentSaveRequest file) {
+        try {
+            InputStream content = file.getContent().getInputStream();
+            String contentType = file.getContent().getContentType();
+            String originalFilename = file.getContent().getOriginalFilename();
+            Attachment attachment = saveAttachment(path, originalFilename, contentType, content);
+            attachment.setMain(file.isMain());
+            attachment.setOrder(file.getOrder());
+
+            return attachment;
         } catch (Exception e) {
             logger.error("Error during attachment saving {}", path, e);
             throw new RuntimeException(e);
@@ -107,5 +123,18 @@ public class AttachmentsServiceImpl implements AttachmentsService {
         }
 
         attachments.forEach(this::removeAttachment);
+    }
+
+    private String prepareFileName() {
+        String datePart = CommonUtils.getDateAsString(new Date(), FILENAME_DATE_PATTERN);
+        String randomPart = CommonUtils.generateRandomString(FILENAME_RANDOM_PART_LENGTH);
+
+        return String.format("%s_%s", randomPart, datePart);
+    }
+
+    private String preparePathForAuctionFile(String fileName, String context) {
+        String dayDirectory = CommonUtils.getDateAsString(new Date(), DAY_PATTERN);
+
+        return String.format("%s/%s/%s", context, dayDirectory, fileName);
     }
 }
