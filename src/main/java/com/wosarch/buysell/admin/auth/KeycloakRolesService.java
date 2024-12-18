@@ -2,6 +2,7 @@ package com.wosarch.buysell.admin.auth;
 
 import com.wosarch.buysell.admin.model.auth.AuthServerRolesService;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.RoleResource;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,10 @@ public class KeycloakRolesService implements AuthServerRolesService {
     private String realm;
 
     public void createRole(String name) {
+        if (roleExists(name)) {
+            return;
+        }
+
         RoleRepresentation role = new RoleRepresentation();
         role.setName(name);
         keycloak.realm(realm)
@@ -38,4 +43,15 @@ public class KeycloakRolesService implements AuthServerRolesService {
                 .roles()
                 .list();
     }
+
+    @Override
+    public boolean roleExists(String name) {
+        List<RoleRepresentation> roleRepresentations = findAll();
+
+        return roleRepresentations.stream()
+                .map(roleRepresentation -> roleRepresentation.getName())
+                .anyMatch(roleName -> roleName.equals(name));
+    }
+
+
 }

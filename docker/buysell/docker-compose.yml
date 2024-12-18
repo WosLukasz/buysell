@@ -59,7 +59,7 @@ services:
       - 'minio_data:/bitnami/minio/data'
 
   postgresql:
-    image: docker.io/bitnami/postgresql:latest
+    image: docker.io/bitnami/postgresql:17
     environment:
       - POSTGRESQL_USERNAME=keycloak
       - POSTGRESQL_PASSWORD=keycloak_pwd
@@ -69,7 +69,7 @@ services:
 
   #https://hub.docker.com/r/bitnami/keycloak
   keycloak:
-    image: docker.io/bitnami/keycloak:latest
+    image: docker.io/bitnami/keycloak:25.0.6
     ports:
       - "8180:8080"
     environment:

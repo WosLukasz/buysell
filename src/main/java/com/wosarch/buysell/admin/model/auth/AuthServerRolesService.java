@@ -11,4 +11,6 @@ public interface AuthServerRolesService {
     void removeRole(String name);
 
     List<RoleRepresentation> findAll();
+
+    boolean roleExists(String name);
 }

@@ -39,6 +39,21 @@ public class S3ClientServiceImpl implements S3ClientService {
     }
 
     @Override
+    public void setBucketPolicy(String bucket, String policy) {
+        SetBucketPolicyArgs args = SetBucketPolicyArgs.builder()
+                .bucket(bucket)
+                .config(policy)
+                .build();
+
+        try {
+            client.setBucketPolicy(args);
+        } catch (Exception e) {
+            logger.error("Bucket {} policy set failed: ", bucket, e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void createBucket(String bucket) {
         MakeBucketArgs bucketCreateArgs = MakeBucketArgs.builder()
                 .bucket(bucket)

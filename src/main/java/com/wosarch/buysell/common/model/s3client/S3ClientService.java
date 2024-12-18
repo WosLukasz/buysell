@@ -8,6 +8,8 @@ import java.io.InputStream;
 
 public interface S3ClientService {
 
+    void setBucketPolicy(String bucket, String policy);
+
     void createBucket(String bucket);
 
     void removeBucket(String bucket);
