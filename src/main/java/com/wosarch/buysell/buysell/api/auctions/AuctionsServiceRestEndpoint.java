@@ -1,8 +1,6 @@
 package com.wosarch.buysell.buysell.api.auctions;
 
-import com.wosarch.buysell.buysell.model.auctions.Auction;
-import com.wosarch.buysell.buysell.model.auctions.AuctionAttachmentsService;
-import com.wosarch.buysell.buysell.model.auctions.AuctionsService;
+import com.wosarch.buysell.buysell.model.auctions.*;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionCreationRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionFinishRequest;
 import com.wosarch.buysell.common.model.attachments.AttachmentWithContent;
@@ -69,7 +67,6 @@ public class AuctionsServiceRestEndpoint {
         return new ResponseEntity<>(auctionsService.getAuctionAttachmentsWithContent(signature), HttpStatus.OK);
     }
 
-
     @RequestMapping(method = RequestMethod.GET, path = "/{signature}/views")
     public ResponseEntity<Integer> getViews(@PathVariable String signature) {
         logger.debug("Getting auction views with signature {}", signature);
@@ -81,5 +78,4 @@ public class AuctionsServiceRestEndpoint {
     public ResponseEntity<Integer> incrementViews(@PathVariable String signature, HttpServletRequest request) {
         return new ResponseEntity<>(auctionsService.incrementViews(signature, request.getRemoteAddr()), HttpStatus.OK);
     }
-
 }

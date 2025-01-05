@@ -14,6 +14,8 @@ public interface AuctionsService {
 
     Auction get(String signature) throws BuysellException;
 
+    Auction nullableGet(String signature);
+
     Auction save(Auction auction);
 
     Auction finish(String signature, AuctionFinishRequest request) throws BuysellException;
@@ -27,4 +29,6 @@ public interface AuctionsService {
     Integer getViews(String signature);
 
     Integer incrementViews(String signature, String remoteAddress);
+
+    boolean auctionActive(String auctionSignature);
 }

@@ -16,6 +16,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -55,8 +56,18 @@ public class AuctionsServiceImpl implements AuctionsService {
     @Override
     public Auction get(String signature) throws BuysellException {
         Optional<Auction> optionalAuction = auctionsRepository.findBySignature(signature);
-        if (!optionalAuction.isPresent()) {
+        if (optionalAuction.isEmpty()) {
             throw new BuysellException("Auction not found");
+        }
+
+        return optionalAuction.get();
+    }
+
+    @Override
+    public Auction nullableGet(String signature) {
+        Optional<Auction> optionalAuction = auctionsRepository.findBySignature(signature);
+        if (optionalAuction.isEmpty()) {
+            return null;
         }
 
         return optionalAuction.get();
@@ -119,5 +130,12 @@ public class AuctionsServiceImpl implements AuctionsService {
     @Override
     public Integer incrementViews(String signature, String remoteAddress) {
         return auctionsViewsRepository.incrementViews(signature, remoteAddress);
+    }
+
+    @Override
+    public boolean auctionActive(String auctionSignature) {
+        Auction auction = nullableGet(auctionSignature);
+
+        return Objects.nonNull(auction) && AuctionStatus.ACTIVE.equals(auction.getStatus());
     }
 }
