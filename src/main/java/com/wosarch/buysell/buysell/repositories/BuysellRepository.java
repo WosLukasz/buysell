@@ -74,8 +74,7 @@ public class BuysellRepository {
 
     private <T extends MongoObject> void addAuditData(T mongoObject) {
         Date now = new Date();
-        String userId = requestContextService.getCurrentUserId();
-        String modifier = StringUtils.isNotEmpty(userId) ? userId : SYSTEM_USER;
+        String modifier = getUserId();
         if (mongoObject.getCreationDate() == null) {
             mongoObject.setCreationDate(now);
             mongoObject.setCreatedBy(modifier);
@@ -132,5 +131,16 @@ public class BuysellRepository {
         }
 
         return Document.parse(json);
+    }
+
+    private String getUserId() {
+        String userId;
+        try {
+            userId = requestContextService.getCurrentUserId();
+        } catch (NullPointerException e) {
+            return SYSTEM_USER;
+        }
+
+        return StringUtils.isNotEmpty(userId) ? userId : SYSTEM_USER;
     }
 }

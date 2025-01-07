@@ -17,7 +17,6 @@ public class AuctionAttachmentsServiceImpl implements AuctionAttachmentsService 
     @Autowired
     private AttachmentsService attachmentsService;
 
-
     @Override
     public List<AttachmentWithContent> getAuctionAttachmentsWithContent(Auction auction) {
         return attachmentsService.getAttachmentsWithContent(auction.getAttachments());

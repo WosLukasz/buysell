@@ -13,6 +13,10 @@ db.createCollection('auctions')
 db.createCollection('auctions_HI')
 db.auctions.createIndex({ signature : "hashed" })
 db.createCollection('views')
+db.createCollection('usersFavourites')
+db.createCollection('usersFavourites_HI')
+db.createCollection('categories')
+db.createCollection('categories_HI')
 
 ///////////////////////////////////////////////////////
 
@@ -30,3 +34,4 @@ db.createUser({
 db.createCollection('users')
 db.createCollection('roles')
 db.createCollection('patches')
+db.createCollection('dictionaries')

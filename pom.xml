@@ -94,7 +94,13 @@
 			<optional>true</optional>
 		</dependency>
 
-<!--		AWS 3S-->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20241224</version>
+		</dependency>
+
+		<!--		AWS 3S-->
 		<dependency>
 			<groupId>io.minio</groupId>
 			<artifactId>minio</artifactId>
