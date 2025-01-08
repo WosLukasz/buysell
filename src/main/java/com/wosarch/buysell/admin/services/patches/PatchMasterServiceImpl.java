@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 public class PatchMasterServiceImpl {
 
-    Logger logger = LoggerFactory.getLogger(AuctionsServiceRestEndpoint.class);
+    Logger logger = LoggerFactory.getLogger(PatchMasterServiceImpl.class);
 
     @Autowired
     PatchesRepository patchesRepository;
