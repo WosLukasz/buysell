@@ -39,7 +39,7 @@ public class BuysellRepository {
     @Autowired
     protected RequestContextService requestContextService;
 
-    public <T extends MongoObject> T versionedSave(T mongoObject, String collection, Class<T> clazz) {
+    public <T extends MongoObject> T versionedSave(T mongoObject, String collection) {
         addAuditData(mongoObject);
         ObjectId mongoId = mongoObject.getMongoId();
         Long version = mongoObject.getVersion();

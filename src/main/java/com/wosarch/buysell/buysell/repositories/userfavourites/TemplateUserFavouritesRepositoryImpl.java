@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 public class TemplateUserFavouritesRepositoryImpl extends BuysellRepository implements TemplateUserFavouritesRepository {
 
     public UserFavourites daoSave(UserFavourites userFavourites) {
-        return versionedSave(userFavourites, UserFavourites.COLLECTION_NAME, UserFavourites.class);
+        return versionedSave(userFavourites, UserFavourites.COLLECTION_NAME);
     }
 
 }
