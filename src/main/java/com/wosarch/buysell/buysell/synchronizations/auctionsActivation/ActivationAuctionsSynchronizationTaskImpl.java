@@ -1,4 +1,4 @@
-package com.wosarch.buysell.buysell.synchronizations.auctions;
+package com.wosarch.buysell.buysell.synchronizations.auctionsActivation;
 
 import com.wosarch.buysell.admin.services.synchronizations.BaseSynchronization;
 import com.wosarch.buysell.admin.services.synchronizations.BaseSynchronizationTask;
@@ -8,24 +8,24 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FinishAuctionsSynchronizationTaskImpl extends BaseSynchronizationTask {
+public class ActivationAuctionsSynchronizationTaskImpl extends BaseSynchronizationTask {
 
     @Autowired
-    private FinishAuctionsSynchronizationServiceImpl finishAuctionsSynchronizationServiceImpl;
+    private ActivationAuctionsSynchronizationServiceImpl activationAuctionsSynchronizationServiceImpl;
 
     @Override
-    @Scheduled(cron = "${synchronizations.finishAuctions.cron}")
+    @Scheduled(cron = "${synchronizations.activationAuctions.cron}")
     public void triggerSynchronization() {
         super.triggerSynchronization();
     }
 
     @Override
     public BaseSynchronization getSynchronizationService() {
-        return finishAuctionsSynchronizationServiceImpl;
+        return activationAuctionsSynchronizationServiceImpl;
     }
 
     @Override
     public String getCode() {
-        return SynchronizationsCodes.FINISH_AUCTIONS_SYNCHRONIZATION;
+        return SynchronizationsCodes.ACTIVATION_AUCTIONS_SYNCHRONIZATION;
     }
 }

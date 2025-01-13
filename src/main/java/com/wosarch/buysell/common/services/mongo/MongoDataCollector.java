@@ -20,7 +20,7 @@ import java.util.Objects;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 
-public class MongoDataCollector <T extends MongoObject> {
+public class MongoDataCollector<T extends MongoObject> {
 
     Logger logger = LoggerFactory.getLogger(MongoDataCollector.class);
 
@@ -40,8 +40,6 @@ public class MongoDataCollector <T extends MongoObject> {
 
     private final Fields projection;
 
-    private final int offset;
-
     private Criteria chunkFilter;
 
     public MongoDataCollector(MongoDataCollectorConfig config) {
@@ -51,25 +49,18 @@ public class MongoDataCollector <T extends MongoObject> {
         this.chunkFilter = config.getFilter();
         this.projection = config.getProjection();
         this.pageSize = config.getPageSize();
-        this.offset = 0;
         this.total = getTotalDocuments();
     }
 
     public List<T> getData() {
-        if(fetchedDocuments > total) {
+        if (fetchedDocuments >= total) {
             fetchedDocuments = 0;
             return Collections.emptyList();
         }
 
         logger.info("[{}/{}] Fetching data...", fetchedDocuments, total);
 
-        final Aggregation agg = newAggregation(
-                match(chunkFilter),
-                project(projection),
-                limit(pageSize),
-                sort(Sort.by(Sort.Direction.ASC, MongoObject.Fields.OBJECT_ID))
-        );
-
+        final Aggregation agg = prepareAggregation(chunkFilter, projection, pageSize);
         List<T> data = mongoTemplate.aggregate(agg, clazz, clazz).getMappedResults();
         chunkFilter = getFilter(getLastObjectId(data));
         fetchedDocuments += data.size();
@@ -78,13 +69,30 @@ public class MongoDataCollector <T extends MongoObject> {
         return data;
     }
 
+    private Aggregation prepareAggregation(Criteria chunkFilter, Fields projection, int pageSize) {
+        if (Objects.nonNull(projection)) {
+            return newAggregation(
+                    match(chunkFilter),
+                    project(projection),
+                    limit(pageSize),
+                    sort(Sort.by(Sort.Direction.ASC, MongoObject.Fields.OBJECT_ID))
+            );
+        }
+
+        return newAggregation(
+                match(chunkFilter),
+                limit(pageSize),
+                sort(Sort.by(Sort.Direction.ASC, MongoObject.Fields.OBJECT_ID))
+        );
+    }
+
     private long getTotalDocuments() {
-        return  mongoTemplate.count(Query.query(filter), clazz);
+        return mongoTemplate.count(Query.query(filter), clazz);
     }
 
     private Criteria getFilter(ObjectId lastObjectId) {
         return Objects.isNull(lastObjectId) ? filter : new Criteria().andOperator(
-                Criteria.where(MongoObject.Fields.OBJECT_ID).gte(lastObjectId),
+                Criteria.where(MongoObject.Fields.OBJECT_ID).gt(lastObjectId),
                 filter
         );
     }

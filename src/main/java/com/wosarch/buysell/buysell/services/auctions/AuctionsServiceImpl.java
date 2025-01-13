@@ -11,16 +11,17 @@ import com.wosarch.buysell.common.model.attachments.AttachmentWithContent;
 import com.wosarch.buysell.common.model.exception.BuysellException;
 import com.wosarch.buysell.common.model.sequence.SequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AuctionsServiceImpl implements AuctionsService {
+
+    @Value("${buySell.config.auctionDurationDays}")
+    private String auctionDurationDays;
 
     @Autowired
     private AuctionsRepository auctionsRepository;
@@ -80,9 +81,22 @@ public class AuctionsServiceImpl implements AuctionsService {
 
     @Override
     public Auction finish(String signature, AuctionFinishRequest request) throws BuysellException {
+        //check rights to this auction (RLS)
         Auction auction = get(signature);
         auction.setStatus(AuctionStatus.CLOSED);
         auction.setFinishReason(request.getReason());
+
+        return auctionsRepository.save(auction);
+    }
+
+    @Override
+    public Auction refresh(String signature) {
+        //check rights to this auction (RLS)
+        Auction auction = get(signature);
+        auction.setStatus(AuctionStatus.ACTIVE);
+        auction.setLastRefreshmentDate(new Date());
+        auction.setExpiryDate(getExpiryDate(auction.getLastRefreshmentDate()));
+        auction.setEndDate(null);
 
         return auctionsRepository.save(auction);
     }
@@ -137,5 +151,14 @@ public class AuctionsServiceImpl implements AuctionsService {
         Auction auction = nullableGet(auctionSignature);
 
         return Objects.nonNull(auction) && AuctionStatus.ACTIVE.equals(auction.getStatus());
+    }
+
+    @Override
+    public Date getExpiryDate(Date startDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        calendar.add(Calendar.DATE, Integer.parseInt(auctionDurationDays));
+
+        return calendar.getTime();
     }
 }

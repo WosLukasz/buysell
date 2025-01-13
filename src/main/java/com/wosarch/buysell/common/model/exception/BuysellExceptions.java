@@ -28,5 +28,6 @@ public class BuysellExceptions extends RuntimeException {
                     ExceptionUtils.getStackTrace(error)));
         });
 
+        return builder.toString();
     }
 }

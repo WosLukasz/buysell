@@ -6,6 +6,7 @@ import com.wosarch.buysell.buysell.model.auctions.requests.AuctionReportRequest;
 import com.wosarch.buysell.common.model.attachments.AttachmentWithContent;
 import com.wosarch.buysell.common.model.exception.BuysellException;
 
+import java.util.Date;
 import java.util.List;
 
 public interface AuctionsService {
@@ -20,6 +21,8 @@ public interface AuctionsService {
 
     Auction finish(String signature, AuctionFinishRequest request) throws BuysellException;
 
+    Auction refresh(String signature);
+
     List<AttachmentWithContent> getAuctionAttachmentsWithContent(String signature) throws BuysellException;
 
     Auction removeAuctionAttachments(String signature) throws BuysellException;
@@ -31,4 +34,6 @@ public interface AuctionsService {
     Integer incrementViews(String signature, String remoteAddress);
 
     boolean auctionActive(String auctionSignature);
+
+    Date getExpiryDate(Date startDate);
 }

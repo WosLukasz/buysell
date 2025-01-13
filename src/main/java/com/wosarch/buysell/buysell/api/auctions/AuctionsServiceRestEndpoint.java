@@ -60,6 +60,14 @@ public class AuctionsServiceRestEndpoint {
         return new ResponseEntity<>(auctionsService.finish(signature, request), HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(method = RequestMethod.PUT, path = "/{signature}/refresh")
+    public ResponseEntity<Auction> refresh(@PathVariable String signature) {
+        logger.debug("Refreshing auction with signature {}", signature);
+
+        return new ResponseEntity<>(auctionsService.refresh(signature), HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.GET, path = "/{signature}/attachments")
     public ResponseEntity<List<AttachmentWithContent>> getAuctionAttachmentsWithContent(@PathVariable String signature) throws BuysellException {
         logger.debug("Getting auction attachments for auction with signature {}", signature);

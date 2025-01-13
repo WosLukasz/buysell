@@ -38,9 +38,9 @@ public class Auction extends MongoObject {
 
     private AuctionStatus status;
 
-    private Date statusChangeDate;
+    private Boolean toCheckManually;
 
-    private Date endDate;
+    private Date statusChangeDate;
 
     private List<Attachment> attachments;
 
@@ -52,12 +52,21 @@ public class Auction extends MongoObject {
 
     private AuctionFinishReason finishReason;
 
+    private Date startDate;
+
+    private Date lastRefreshmentDate;
+
+    private Date expiryDate;
+
+    private Date endDate;
 
     @UtilityClass
     public static class Fields {
         public static final String SIGNATURE = "signature";
         public static final String TITLE = "title";
         public static final String STATUS = "status";
+        public static final String EXPIRY_DATE = "expiryDate";
+        public static final String END_DATE = "endDate";
         public static final String FINISH_REASON = "finishReason";
     }
 }
