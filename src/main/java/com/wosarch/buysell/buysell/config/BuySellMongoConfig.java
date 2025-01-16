@@ -1,8 +1,5 @@
 package com.wosarch.buysell.buysell.config;
 
-import com.mongodb.MongoClientSettings;
-import com.mongodb.MongoCredential;
-import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,16 +11,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
+import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-import static java.util.Collections.singletonList;
-
 @Configuration
 @EnableMongoRepositories(basePackages = "com.wosarch.buysell.buysell.repositories", mongoTemplateRef = "buysellMongoTemplate")
 @EnableConfigurationProperties
-public class BuySellMongoConfig {
+public class BuySellMongoConfig extends AbstractMongoClientConfiguration {
 
     @Bean(name = "buysellProperties")
     @ConfigurationProperties(prefix = "mongodb.buysell")
@@ -32,18 +28,22 @@ public class BuySellMongoConfig {
         return new MongoProperties();
     }
 
+    @Override
+    protected String getDatabaseName() {
+        return buysellProperties().getDatabase();
+    }
+
     @Bean(name = "buysellMongoClient")
     public MongoClient mongoClient(@Qualifier("buysellProperties") MongoProperties mongoProperties) throws Exception {
-        //  REPLICASET CONNECTION
-        //        return MongoClients.create(mongoProperties.getUri());
-        MongoCredential credential = MongoCredential
-                .createCredential(mongoProperties.getUsername(), mongoProperties.getAuthenticationDatabase(), mongoProperties.getPassword());
-
-        return MongoClients.create(MongoClientSettings.builder()
-                .applyToClusterSettings(builder -> builder
-                        .hosts(singletonList(new ServerAddress(mongoProperties.getHost(), mongoProperties.getPort()))))
-                .credential(credential)
-                .build());
+                return MongoClients.create(mongoProperties.getUri());
+//        MongoCredential credential = MongoCredential
+//                .createCredential(mongoProperties.getUsername(), mongoProperties.getAuthenticationDatabase(), mongoProperties.getPassword());
+//
+//        return MongoClients.create(MongoClientSettings.builder()
+//                .applyToClusterSettings(builder -> builder
+//                        .hosts(singletonList(new ServerAddress(mongoProperties.getHost(), mongoProperties.getPort()))))
+//                .credential(credential)
+//                .build());
     }
 
     @Primary
@@ -64,5 +64,4 @@ public class BuySellMongoConfig {
     MongoTransactionManager transactionManager(@Qualifier("buysellMongoDBFactory") MongoDatabaseFactory mongoDatabaseFactory) {
         return new MongoTransactionManager(mongoDatabaseFactory);
     }
-
 }
