@@ -1,0 +1,10 @@
+{
+  "properties": {
+    "signature": {
+      "type": "keyword"
+    },
+    "title": {
+      "type": "text"
+    }
+  }
+}

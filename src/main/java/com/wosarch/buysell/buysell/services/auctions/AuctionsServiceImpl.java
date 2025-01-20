@@ -6,6 +6,7 @@ import com.wosarch.buysell.buysell.model.auctions.requests.AuctionCreationReques
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionFinishRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionReportRequest;
 import com.wosarch.buysell.buysell.repositories.auctions.AuctionsRepository;
+import com.wosarch.buysell.buysell.repositories.auctions.elastisearch.AuctionsElasticSearchRepository;
 import com.wosarch.buysell.buysell.repositories.views.AuctionsViewsRepository;
 import com.wosarch.buysell.common.model.attachments.AttachmentWithContent;
 import com.wosarch.buysell.common.model.exception.BuysellException;
@@ -25,6 +26,9 @@ public class AuctionsServiceImpl implements AuctionsService {
 
     @Autowired
     private AuctionsRepository auctionsRepository;
+
+    @Autowired
+    private AuctionsElasticSearchRepository auctionsElasticSearchRepository;
 
     @Autowired
     private AuctionsViewsRepository auctionsViewsRepository;
@@ -51,7 +55,7 @@ public class AuctionsServiceImpl implements AuctionsService {
         auction.setOwnerId(requestContextService.getCurrentUserId());
         auction.setAttachments(request.getAttachments());
 
-        return auctionsRepository.save(auction);
+        return save(auction);
     }
 
     @Override
@@ -76,7 +80,10 @@ public class AuctionsServiceImpl implements AuctionsService {
 
     @Override
     public Auction save(Auction auction) {
-        return auctionsRepository.save(auction);
+        Auction savedAuction = auctionsRepository.save(auction);
+        auctionsElasticSearchRepository.save(savedAuction);
+
+        return savedAuction;
     }
 
     @Override
@@ -86,7 +93,7 @@ public class AuctionsServiceImpl implements AuctionsService {
         auction.setStatus(AuctionStatus.CLOSED);
         auction.setFinishReason(request.getReason());
 
-        return auctionsRepository.save(auction);
+        return save(auction);
     }
 
     @Override
@@ -98,7 +105,7 @@ public class AuctionsServiceImpl implements AuctionsService {
         auction.setExpiryDate(getExpiryDate(auction.getLastRefreshmentDate()));
         auction.setEndDate(null);
 
-        return auctionsRepository.save(auction);
+        return save(auction);
     }
 
     @Override
@@ -124,7 +131,7 @@ public class AuctionsServiceImpl implements AuctionsService {
         }
         auction.getReports().add(prepareReport(request));
 
-        return auctionsRepository.save(auction);
+        return save(auction);
     }
 
     private AuctionReport prepareReport(AuctionReportRequest request) {

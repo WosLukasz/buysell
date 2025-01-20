@@ -55,6 +55,16 @@ services:
       - MONGODB_ADVERTISED_PORT_NUMBER=30003
       - MONGODB_INITIAL_PRIMARY_PORT_NUMBER=30001
 
+  elasticsearch:
+    image: docker.io/bitnami/elasticsearch:8
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+    environment:
+      - ELASTICSEARCH_PASSWORD=esPassword
+    volumes:
+      - 'elasticsearch_data:/bitnami/elasticsearch/data'
+
   minio:
     image: docker.io/bitnami/minio:latest
     ports:
@@ -100,6 +110,8 @@ services:
 
 volumes:
   mongodb-data:
+    driver: local
+  elasticsearch_data:
     driver: local
   minio_data:
     driver: local
