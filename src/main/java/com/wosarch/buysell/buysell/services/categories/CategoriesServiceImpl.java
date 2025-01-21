@@ -2,7 +2,7 @@ package com.wosarch.buysell.buysell.services.categories;
 
 import com.wosarch.buysell.buysell.model.categories.CategoriesService;
 import com.wosarch.buysell.buysell.model.categories.Category;
-import com.wosarch.buysell.buysell.repositories.categories.CategoriesRepository;
+import com.wosarch.buysell.buysell.repositories.mongo.categories.CategoriesRepository;
 import com.wosarch.buysell.common.model.sequence.SequenceService;
 import org.json.JSONArray;
 import org.json.JSONObject;

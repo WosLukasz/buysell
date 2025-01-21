@@ -18,7 +18,7 @@ public class ElasticSearchIndexService {
 
     Logger logger = LoggerFactory.getLogger(ElasticSearchIndexService.class);
 
-    private static final String DEFAULT_BASE_PACKAGE = "com.wosarch.buysell.buysell.repositories";
+    private static final String DEFAULT_BASE_PACKAGE = "com.wosarch.buysell";
 
     @Autowired
     private ElasticsearchClient elasticsearchClient;
@@ -33,7 +33,7 @@ public class ElasticSearchIndexService {
         logger.info("Upserting all indexes ...");
 
         final Map<String, String> elasticSearchDocuments = elasticSearchDocumentsService.getElasticSearchDocumentsInfo(DEFAULT_BASE_PACKAGE);
-        for(Map.Entry<String, String> document : elasticSearchDocuments.entrySet()) {
+        for (Map.Entry<String, String> document : elasticSearchDocuments.entrySet()) {
             final String indexName = document.getKey();
             final String mappingPath = document.getValue();
 

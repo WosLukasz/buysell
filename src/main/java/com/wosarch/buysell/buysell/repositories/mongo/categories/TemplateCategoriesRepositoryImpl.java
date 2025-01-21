@@ -1,7 +1,7 @@
-package com.wosarch.buysell.buysell.repositories.categories;
+package com.wosarch.buysell.buysell.repositories.mongo.categories;
 
 import com.wosarch.buysell.buysell.model.categories.Category;
-import com.wosarch.buysell.buysell.repositories.BuysellRepository;
+import com.wosarch.buysell.buysell.repositories.mongo.BuysellRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

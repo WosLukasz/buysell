@@ -1,7 +1,7 @@
-package com.wosarch.buysell.buysell.repositories.historicalauctions;
+package com.wosarch.buysell.buysell.repositories.mongo.historicalauctions;
 
 import com.wosarch.buysell.buysell.model.auctions.HistoricalAuction;
-import com.wosarch.buysell.buysell.repositories.BuysellRepository;
+import com.wosarch.buysell.buysell.repositories.mongo.BuysellRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

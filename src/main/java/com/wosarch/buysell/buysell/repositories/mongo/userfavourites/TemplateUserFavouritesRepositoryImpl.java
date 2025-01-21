@@ -1,7 +1,7 @@
-package com.wosarch.buysell.buysell.repositories.userfavourites;
+package com.wosarch.buysell.buysell.repositories.mongo.userfavourites;
 
 import com.wosarch.buysell.buysell.model.auctions.UserFavourites;
-import com.wosarch.buysell.buysell.repositories.BuysellRepository;
+import com.wosarch.buysell.buysell.repositories.mongo.BuysellRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

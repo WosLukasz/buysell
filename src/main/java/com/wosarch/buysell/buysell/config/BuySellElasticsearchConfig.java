@@ -11,7 +11,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 import javax.net.ssl.SSLContext;
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "com.wosarch.buysell.buysell.repositories")
+@EnableElasticsearchRepositories(basePackages = "com.wosarch.buysell.buysell.repositories.elastic")
 public class BuySellElasticsearchConfig extends ElasticsearchConfiguration {
 
     @Value( "${elasticSearch.buysell.uri}" )
@@ -27,7 +27,7 @@ public class BuySellElasticsearchConfig extends ElasticsearchConfiguration {
     public ClientConfiguration clientConfiguration() {
         return ClientConfiguration.builder()
                 .connectedTo(esUri)
-                .usingSsl(buildSSLContext())
+//                .usingSsl(buildSSLContext())
                 .withBasicAuth(user, password)
                 .build();
     }

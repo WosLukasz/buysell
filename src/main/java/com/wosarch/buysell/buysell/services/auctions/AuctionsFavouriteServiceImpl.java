@@ -4,7 +4,7 @@ import com.wosarch.buysell.admin.model.auth.RequestContextService;
 import com.wosarch.buysell.buysell.model.auctions.AuctionsFavouriteService;
 import com.wosarch.buysell.buysell.model.auctions.AuctionsService;
 import com.wosarch.buysell.buysell.model.auctions.UserFavourites;
-import com.wosarch.buysell.buysell.repositories.userfavourites.UserFavouritesRepository;
+import com.wosarch.buysell.buysell.repositories.mongo.userfavourites.UserFavouritesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;

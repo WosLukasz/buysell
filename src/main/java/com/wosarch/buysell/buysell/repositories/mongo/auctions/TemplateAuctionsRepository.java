@@ -1,4 +1,4 @@
-package com.wosarch.buysell.buysell.repositories.auctions;
+package com.wosarch.buysell.buysell.repositories.mongo.auctions;
 
 import com.wosarch.buysell.buysell.model.auctions.Auction;
 

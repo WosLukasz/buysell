@@ -1,4 +1,4 @@
-package com.wosarch.buysell.buysell.repositories.views;
+package com.wosarch.buysell.buysell.repositories.mongo.views;
 
 public interface TemplateAuctionsViewsRepository {
 

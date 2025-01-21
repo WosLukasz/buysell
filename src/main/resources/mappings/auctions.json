@@ -4,7 +4,198 @@
       "type": "keyword"
     },
     "title": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      }
+    },
+    "price": {
+      "type": "nested",
+      "properties": {
+        "value": {
+          "type": "double"
+        },
+        "currency": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    },
+    "description": {
       "type": "text"
+    },
+    "category": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      }
+    },
+    "status": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      }
+    },
+    "toCheckManually": {
+      "type": "boolean"
+    },
+    "statusChangeDate": {
+      "type": "date"
+    },
+    "attachments": {
+      "type": "nested",
+      "properties": {
+        "id": {
+          "type": "keyword"
+        },
+        "path": {
+          "type": "keyword"
+        },
+        "originalFilename": {
+          "type": "keyword"
+        },
+        "contentType": {
+          "type": "keyword"
+        },
+        "main": {
+          "type": "boolean"
+        },
+        "order": {
+          "type": "long"
+        }
+      }
+    },
+    "seller": {
+      "type": "nested",
+      "properties": {
+        "firstname": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        },
+        "name": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        },
+        "location": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        },
+        "contactInformation": {
+          "type": "nested",
+          "properties": {
+            "type": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "value": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "reports": {
+      "type": "nested",
+      "properties": {
+        "reason": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        },
+        "message": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        },
+        "userId": {
+          "type": "keyword"
+        }
+      }
+    },
+    "ownerId": {
+      "type": "keyword"
+    },
+    "finishReason": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      }
+    },
+    "startDate": {
+      "type": "date"
+    },
+    "lastRefreshmentDate": {
+      "type": "date"
+    },
+    "expiryDate": {
+      "type": "date"
+    },
+    "endDate": {
+      "type": "date"
+    },
+    "version": {
+      "type": "long"
+    },
+    "creationDate": {
+      "type": "date"
+    },
+    "createdBy": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      }
+    },
+    "modificationDate": {
+      "type": "date"
+    },
+    "modifiedBy": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword"
+        }
+      }
     }
   }
 }

@@ -4,7 +4,7 @@ import com.wosarch.buysell.buysell.model.auctions.Auction;
 import com.wosarch.buysell.buysell.model.auctions.AuctionsSearchService;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionsSearchRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionsSearchResponse;
-import com.wosarch.buysell.buysell.repositories.auctions.AuctionsRepository;
+import com.wosarch.buysell.buysell.repositories.mongo.auctions.AuctionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

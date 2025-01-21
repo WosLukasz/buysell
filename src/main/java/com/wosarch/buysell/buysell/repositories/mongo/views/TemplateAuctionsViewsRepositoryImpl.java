@@ -1,7 +1,7 @@
-package com.wosarch.buysell.buysell.repositories.views;
+package com.wosarch.buysell.buysell.repositories.mongo.views;
 
 import com.wosarch.buysell.buysell.model.auctions.AuctionView;
-import com.wosarch.buysell.buysell.repositories.BuysellRepository;
+import com.wosarch.buysell.buysell.repositories.mongo.BuysellRepository;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
