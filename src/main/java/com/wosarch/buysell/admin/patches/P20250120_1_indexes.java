@@ -17,7 +17,7 @@ public class P20250120_1_indexes implements Patch {
 
     @Override
     public String getPatchId() {
-        return "P20250120_1_indexessddsfssaaaaa";
+        return "P20250120_1_index";
     }
 
     @Override

@@ -5,10 +5,11 @@ import lombok.experimental.UtilityClass;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class MongoObject {
+public class MongoObject implements Serializable {
 
     @MongoId
     private ObjectId mongoId;

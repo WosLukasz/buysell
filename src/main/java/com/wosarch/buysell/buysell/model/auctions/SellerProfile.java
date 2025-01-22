@@ -4,10 +4,11 @@ import com.wosarch.buysell.buysell.model.common.ContactInformation;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class SellerProfile {
+public class SellerProfile implements Serializable {
 
     @NotNull
     private String firstname;

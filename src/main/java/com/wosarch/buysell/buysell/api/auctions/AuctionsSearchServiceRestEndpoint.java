@@ -1,8 +1,8 @@
 package com.wosarch.buysell.buysell.api.auctions;
 
 import com.wosarch.buysell.buysell.model.auctions.AuctionsSearchService;
-import com.wosarch.buysell.buysell.model.auctions.requests.AuctionsSearchRequest;
-import com.wosarch.buysell.buysell.model.auctions.requests.AuctionsSearchResponse;
+import com.wosarch.buysell.buysell.model.auctions.search.AuctionsSearchRequest;
+import com.wosarch.buysell.buysell.model.auctions.search.AuctionsSearchResponse;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -11,6 +11,7 @@ import com.wosarch.buysell.buysell.repositories.mongo.views.AuctionsViewsReposit
 import com.wosarch.buysell.common.model.attachments.AttachmentWithContent;
 import com.wosarch.buysell.common.model.exception.BuysellException;
 import com.wosarch.buysell.common.model.sequence.SequenceService;
+import com.wosarch.buysell.common.services.elasticsearch.ElasticSearchUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -81,7 +82,7 @@ public class AuctionsServiceImpl implements AuctionsService {
     @Override
     public Auction save(Auction auction) {
         Auction savedAuction = auctionsRepository.save(auction);
-        auctionsElasticSearchRepository.save(savedAuction);
+        auctionsElasticSearchRepository.save(ElasticSearchUtils.prepareToSave(savedAuction));
 
         return savedAuction;
     }

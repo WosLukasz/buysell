@@ -1,4 +1,4 @@
-package com.wosarch.buysell.buysell.model.auctions.requests;
+package com.wosarch.buysell.buysell.model.auctions.search;
 
 import com.wosarch.buysell.buysell.model.auctions.Auction;
 import lombok.Data;

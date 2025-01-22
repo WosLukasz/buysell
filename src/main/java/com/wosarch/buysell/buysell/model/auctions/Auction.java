@@ -73,5 +73,7 @@ public class Auction extends MongoObject {
         public static final String EXPIRY_DATE = "expiryDate";
         public static final String END_DATE = "endDate";
         public static final String FINISH_REASON = "finishReason";
+        public static final String CATEGORY = "category";
+
     }
 }

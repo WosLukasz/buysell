@@ -32,6 +32,11 @@ public class BuySellElasticsearchConfig extends ElasticsearchConfiguration {
                 .build();
     }
 
+    @Override
+    protected boolean writeTypeHints() {
+        return false;
+    }
+
     private static SSLContext buildSSLContext() {
         try {
             return new SSLContextBuilder().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build();

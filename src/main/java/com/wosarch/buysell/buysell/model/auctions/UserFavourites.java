@@ -1,6 +1,6 @@
 package com.wosarch.buysell.buysell.model.auctions;
 
-import com.wosarch.buysell.buysell.model.auctions.requests.AuctionsSearchRequest;
+import com.wosarch.buysell.buysell.model.auctions.search.AuctionsSearchRequest;
 import com.wosarch.buysell.buysell.model.common.MongoObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;

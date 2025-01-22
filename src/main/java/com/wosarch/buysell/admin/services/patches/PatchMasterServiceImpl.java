@@ -4,7 +4,6 @@ import com.wosarch.buysell.admin.model.patches.Patch;
 import com.wosarch.buysell.admin.model.patches.PatchItem;
 import com.wosarch.buysell.admin.model.patches.PatchStatus;
 import com.wosarch.buysell.admin.repositories.patches.PatchesRepository;
-import com.wosarch.buysell.buysell.api.auctions.AuctionsServiceRestEndpoint;
 import com.wosarch.buysell.common.model.appstate.AppStateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
