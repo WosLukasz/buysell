@@ -24,7 +24,7 @@ public class AuctionsTextSearchFilter implements AuctionsSearchFilter {
         QueryVariant titleMatchQueryFirst = new MatchQuery.Builder()
                 .field(Auction.Fields.TITLE)
                 .query(request.getText())
-                .boost(2F)
+                .boost(3F)
                 .build();
 
         QueryVariant descriptionMatchQueryFirst = new MatchQuery.Builder()

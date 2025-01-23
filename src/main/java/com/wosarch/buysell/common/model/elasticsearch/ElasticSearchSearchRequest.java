@@ -13,9 +13,7 @@ public class ElasticSearchSearchRequest {
     @NonNull
     private Integer pageSize;
 
-    @NonNull
     private String sortBy;
 
-    @NonNull
     private SortOrder sortOrder;
 }

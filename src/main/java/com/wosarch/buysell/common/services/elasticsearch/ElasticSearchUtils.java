@@ -64,6 +64,12 @@ public class ElasticSearchUtils {
     }
 
     public static <T extends ElasticSearchSearchRequest> SortOptions prepareSort(T searchRequest) {
+        if (Objects.isNull(searchRequest.getSortBy()) || Objects.isNull(searchRequest.getSortOrder())) {
+            return new SortOptions.Builder()
+                    .score(s -> s.order(SortOrder.Desc))
+                    .build();
+        }
+
         return new SortOptions.Builder()
                 .field(f -> f.field(searchRequest.getSortBy()).order(searchRequest.getSortOrder()))
                 .build();
