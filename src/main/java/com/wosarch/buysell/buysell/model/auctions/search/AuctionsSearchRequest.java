@@ -1,19 +1,16 @@
 package com.wosarch.buysell.buysell.model.auctions.search;
 
+import com.wosarch.buysell.common.model.elasticsearch.ElasticSearchSearchRequest;
 import lombok.Data;
 
 @Data
-public class AuctionsSearchRequest {
+public class AuctionsSearchRequest extends ElasticSearchSearchRequest {
 
     private String text;
 
     private String category;
 
-    private Integer offset;
+    private Double priceFrom;
 
-    private Integer pageSize;
-
-    private String sortBy;
-
-    private String sortOrder;
+    private Double priceTo;
 }

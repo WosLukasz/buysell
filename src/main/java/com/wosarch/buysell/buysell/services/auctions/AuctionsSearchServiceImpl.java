@@ -29,7 +29,7 @@ public class AuctionsSearchServiceImpl implements AuctionsSearchService {
     @Override
     public AuctionsSearchResponse search(AuctionsSearchRequest request) {
         Query searchQuery = prepareSearchQuery(request);
-        SearchRequest searchRequest = ElasticSearchUtils.buildSearchRequest(Auction.COLLECTION_NAME, searchQuery, request.getOffset(), request.getPageSize());
+        SearchRequest searchRequest = ElasticSearchUtils.buildSearchRequest(Auction.COLLECTION_NAME, searchQuery, request);
         SearchResponse<Auction> auctions = searchService.search(searchRequest, Auction.class);
         AuctionsSearchResponse response = new AuctionsSearchResponse();
         response.setAuctions(ElasticSearchUtils.getObjectsList(auctions));

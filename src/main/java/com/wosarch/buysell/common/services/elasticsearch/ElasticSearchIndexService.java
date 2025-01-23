@@ -61,12 +61,12 @@ public class ElasticSearchIndexService {
         try {
             final BooleanResponse indexExists = elasticsearchClient.indices().exists(r -> r.index(indexName));
             if (indexExists.value()) {
-                logger.info("Index {} already exists. Removing...", indexName);
-                elasticsearchClient.indices().delete(d -> d.index(indexName));
+                logger.info("Index {} already exists. Updating...", indexName);
+                elasticsearchClient.indices().putMapping(d -> d.index(indexName));
+            } else {
+                logger.info("Creating new index {} ...", indexName);
+                elasticsearchClient.indices().create(buildCreateIndexRequest(indexName, mappingPath));
             }
-
-            logger.info("Creating new index {} ...", indexName);
-            elasticsearchClient.indices().create(buildCreateIndexRequest(indexName, mappingPath));
         } catch (IOException e) {
             logger.warn("Error during {} index creating", indexName);
             throw new RuntimeException(e);

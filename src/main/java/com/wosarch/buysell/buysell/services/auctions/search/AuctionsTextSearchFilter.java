@@ -1,8 +1,10 @@
 package com.wosarch.buysell.buysell.services.auctions.search;
 
+import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.MatchQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryVariant;
+import com.wosarch.buysell.buysell.model.auctions.Auction;
 import com.wosarch.buysell.buysell.model.auctions.search.AuctionsSearchFilter;
 import com.wosarch.buysell.buysell.model.auctions.search.AuctionsSearchRequest;
 import org.apache.commons.lang3.StringUtils;
@@ -19,12 +21,22 @@ public class AuctionsTextSearchFilter implements AuctionsSearchFilter {
             return Optional.empty();
         }
 
-        QueryVariant matchQueryFirst = new MatchQuery.Builder()
-                .field("title")
-                .field("description")
+        QueryVariant titleMatchQueryFirst = new MatchQuery.Builder()
+                .field(Auction.Fields.TITLE)
+                .query(request.getText())
+                .boost(2F)
+                .build();
+
+        QueryVariant descriptionMatchQueryFirst = new MatchQuery.Builder()
+                .field(Auction.Fields.DESCRIPTION)
                 .query(request.getText())
                 .build();
 
-        return Optional.of(new Query(matchQueryFirst));
+        BoolQuery boolQuery = new BoolQuery.Builder()
+                .should(new Query(titleMatchQueryFirst), new Query(descriptionMatchQueryFirst))
+                .minimumShouldMatch("1")
+                .build();
+
+        return Optional.of(new Query(boolQuery));
     }
 }
