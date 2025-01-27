@@ -3,6 +3,7 @@ package com.wosarch.buysell.buysell.synchronizations.auctionsCleaner;
 import com.wosarch.buysell.buysell.model.auctions.Auction;
 import com.wosarch.buysell.buysell.model.auctions.AuctionAttachmentsService;
 import com.wosarch.buysell.buysell.model.auctions.AuctionStatus;
+import com.wosarch.buysell.buysell.repositories.elastic.auctions.AuctionsElasticSearchRepository;
 import com.wosarch.buysell.buysell.repositories.mongo.auctions.AuctionsRepository;
 import com.wosarch.buysell.buysell.repositories.mongo.historicalauctions.HistoricalAuctionsRepository;
 import com.wosarch.buysell.common.model.mongo.MongoDataCollectorConfig;
@@ -40,6 +41,9 @@ public class CleanerAuctionService {
     private AuctionsRepository auctionsRepository;
 
     @Autowired
+    private AuctionsElasticSearchRepository auctionsElasticSearchRepository;
+
+    @Autowired
     private HistoricalAuctionsRepository historicalAuctionsRepository;
 
     @Autowired
@@ -66,6 +70,7 @@ public class CleanerAuctionService {
                     CleanerAuctionJob task = CleanerAuctionJob.builder()
                             .auction(auctionToClear)
                             .auctionsRepository(auctionsRepository)
+                            .auctionsElasticSearchRepository(auctionsElasticSearchRepository)
                             .historicalAuctionsRepository(historicalAuctionsRepository)
                             .auctionAttachmentsService(auctionAttachmentsService)
                             .logger(logger)

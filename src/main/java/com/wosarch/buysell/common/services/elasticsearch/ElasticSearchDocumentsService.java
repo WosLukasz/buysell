@@ -7,19 +7,18 @@ import org.springframework.context.annotation.ClassPathScanningCandidateComponen
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Mapping;
+import org.springframework.data.elasticsearch.annotations.Setting;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ElasticSearchDocumentsService {
 
     Logger logger = LoggerFactory.getLogger(ElasticSearchDocumentsService.class);
 
-    public Map<String, String> getElasticSearchDocumentsInfo(String basePackage) {
+    public List<Class<?>> getElasticSearchDocumentsClasses(String basePackage) {
+        List<Class<?>> classes = new ArrayList<>();
         final ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
         scanner.addIncludeFilter(new AnnotationTypeFilter(Document.class));
         final Set<BeanDefinition> documentDefinition = scanner.findCandidateComponents(basePackage);
@@ -27,18 +26,13 @@ public class ElasticSearchDocumentsService {
         documentDefinition.forEach(definition -> {
             try {
                 final Class<?> documentClass = Class.forName(definition.getBeanClassName());
-                String indexName = extractIndexName(documentClass);
-                String mappingPath = extractMappingPath(documentClass);
-                if (Objects.nonNull(indexName) && Objects.nonNull(mappingPath)) {
-                    documentsInfo.put(indexName, mappingPath);
-                }
-
+                classes.add(documentClass);
             } catch (ClassNotFoundException e) {
                 logger.error("Error during searching for class {}", e.getMessage(), e);
             }
         });
 
-        return documentsInfo;
+        return classes;
     }
 
     public String extractIndexName(Class<?> clazz) {
@@ -57,5 +51,14 @@ public class ElasticSearchDocumentsService {
         }
 
         return annotation.mappingPath();
+    }
+
+    public String extractSettingsPath(Class<?> clazz) {
+        final Setting annotation = clazz.getAnnotation(Setting.class);
+        if (Objects.isNull(annotation)) {
+            return null;
+        }
+
+        return annotation.settingPath();
     }
 }

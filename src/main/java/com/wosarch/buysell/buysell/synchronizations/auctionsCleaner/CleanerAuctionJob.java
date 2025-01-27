@@ -3,6 +3,7 @@ package com.wosarch.buysell.buysell.synchronizations.auctionsCleaner;
 import com.wosarch.buysell.buysell.model.auctions.Auction;
 import com.wosarch.buysell.buysell.model.auctions.AuctionAttachmentsService;
 import com.wosarch.buysell.buysell.model.auctions.HistoricalAuction;
+import com.wosarch.buysell.buysell.repositories.elastic.auctions.AuctionsElasticSearchRepository;
 import com.wosarch.buysell.buysell.repositories.mongo.auctions.AuctionsRepository;
 import com.wosarch.buysell.buysell.repositories.mongo.historicalauctions.HistoricalAuctionsRepository;
 import lombok.Builder;
@@ -24,6 +25,8 @@ public class CleanerAuctionJob implements Callable<Void> {
     private HistoricalAuctionsRepository historicalAuctionsRepository;
 
     private AuctionAttachmentsService auctionAttachmentsService;
+
+    private AuctionsElasticSearchRepository auctionsElasticSearchRepository;
 
     @Override
     public Void call() throws Exception {

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.elasticsearch.annotations.Mapping;
+import org.springframework.data.elasticsearch.annotations.Setting;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -22,6 +23,7 @@ import java.util.List;
 @Document(Auction.COLLECTION_NAME)
 @org.springframework.data.elasticsearch.annotations.Document(indexName = Auction.COLLECTION_NAME)
 @Mapping(mappingPath = Auction.ELASTIC_SEARCH_MAPPING)
+@Setting(settingPath = Auction.ELASTIC_SEARCH_SETTINGS)
 public class Auction extends MongoObject {
 
     @Transient
@@ -30,6 +32,8 @@ public class Auction extends MongoObject {
     public static final String COLLECTION_NAME = "auctions";
     @Transient
     public static final String ELASTIC_SEARCH_MAPPING = "mappings/auctions.json";
+    @Transient
+    public static final String ELASTIC_SEARCH_SETTINGS = "mappings/auctions_settings.json";
 
     private String signature;
 

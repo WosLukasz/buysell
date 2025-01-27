@@ -5,6 +5,8 @@
     },
     "title": {
       "type": "text",
+      "analyzer": "general_analyzer",
+      "search_analyzer": "general_analyzer",
       "fields": {
         "keyword": {
           "type": "keyword"
@@ -28,7 +30,9 @@
       }
     },
     "description": {
-      "type": "text"
+      "type": "text",
+      "analyzer": "general_analyzer",
+      "search_analyzer": "general_analyzer"
     },
     "category": {
       "type": "text",

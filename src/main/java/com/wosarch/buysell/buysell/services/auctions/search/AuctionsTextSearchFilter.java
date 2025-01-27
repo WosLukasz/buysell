@@ -24,12 +24,14 @@ public class AuctionsTextSearchFilter implements AuctionsSearchFilter {
         QueryVariant titleMatchQueryFirst = new MatchQuery.Builder()
                 .field(Auction.Fields.TITLE)
                 .query(request.getText())
+                .fuzziness("AUTO")
                 .boost(3F)
                 .build();
 
         QueryVariant descriptionMatchQueryFirst = new MatchQuery.Builder()
                 .field(Auction.Fields.DESCRIPTION)
                 .query(request.getText())
+                .fuzziness("AUTO")
                 .build();
 
         BoolQuery boolQuery = new BoolQuery.Builder()
