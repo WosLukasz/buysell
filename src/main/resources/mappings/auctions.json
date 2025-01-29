@@ -200,6 +200,9 @@
           "type": "keyword"
         }
       }
+    },
+    "mongoId": {
+      "type": "keyword"
     }
   }
 }

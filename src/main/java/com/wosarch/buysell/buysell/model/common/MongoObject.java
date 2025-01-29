@@ -2,7 +2,7 @@ package com.wosarch.buysell.buysell.model.common;
 
 import lombok.Data;
 import lombok.experimental.UtilityClass;
-import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.io.Serializable;
@@ -11,8 +11,9 @@ import java.util.Date;
 @Data
 public class MongoObject implements Serializable {
 
+    @Id // Required by ES
     @MongoId
-    private ObjectId mongoId;
+    private String mongoId; // String type because of ES
     private Long version;
     private Date creationDate;
     private String createdBy;

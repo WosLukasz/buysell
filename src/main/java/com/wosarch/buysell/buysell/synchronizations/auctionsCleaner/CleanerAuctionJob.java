@@ -38,6 +38,7 @@ public class CleanerAuctionJob implements Callable<Void> {
     private void moveAuctionToHistoryCollection(Auction auction) {
         HistoricalAuction historicalAuction = createHistoricalAuction(auction);
         historicalAuctionsRepository.save(historicalAuction);
+        auctionsElasticSearchRepository.delete(auction);
         auctionsRepository.delete(auction);
         auctionAttachmentsService.removeAuctionAttachments(auction);
 

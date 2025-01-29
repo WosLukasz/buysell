@@ -90,14 +90,14 @@ public class MongoDataCollector<T extends MongoObject> {
         return mongoTemplate.count(Query.query(filter), clazz);
     }
 
-    private Criteria getFilter(ObjectId lastObjectId) {
+    private Criteria getFilter(String lastObjectId) {
         return Objects.isNull(lastObjectId) ? filter : new Criteria().andOperator(
                 Criteria.where(MongoObject.Fields.OBJECT_ID).gt(lastObjectId),
                 filter
         );
     }
 
-    private ObjectId getLastObjectId(List<T> data) {
+    private String getLastObjectId(List<T> data) {
         if (CollectionUtils.isEmpty(data)) {
             return null;
         }

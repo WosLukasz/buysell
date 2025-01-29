@@ -41,7 +41,7 @@ public class BuysellRepository {
 
     public <T extends MongoObject> T versionedSave(T mongoObject, String collection) {
         addAuditData(mongoObject);
-        ObjectId mongoId = mongoObject.getMongoId();
+        String mongoId = mongoObject.getMongoId();
         Long version = mongoObject.getVersion();
         if (mongoId != null) {
             Query query = query(where(MONGO_OBJECT_FIELD).is(mongoObject.getMongoId()))

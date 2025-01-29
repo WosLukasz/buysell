@@ -56,13 +56,6 @@ public class ElasticSearchUtils {
         return String.format("%s.keyword", field);
     }
 
-    public static <T extends MongoObject> T prepareToSave(T object) {
-        T copy = SerializationUtils.clone(object);
-        copy.setMongoId(null);
-
-        return copy;
-    }
-
     public static <T extends ElasticSearchSearchRequest> SortOptions prepareSort(T searchRequest) {
         if (Objects.isNull(searchRequest.getSortBy()) || Objects.isNull(searchRequest.getSortOrder())) {
             return new SortOptions.Builder()
