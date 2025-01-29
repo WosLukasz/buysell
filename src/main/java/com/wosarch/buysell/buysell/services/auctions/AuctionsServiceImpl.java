@@ -41,6 +41,9 @@ public class AuctionsServiceImpl implements AuctionsService {
     private AuctionAttachmentsService auctionAttachmentsService;
 
     @Autowired
+    private AuctionsRightsService auctionsRightsService;
+
+    @Autowired
     private RequestContextService requestContextService;
 
     @Override
@@ -90,8 +93,8 @@ public class AuctionsServiceImpl implements AuctionsService {
 
     @Override
     public Auction finish(String signature, AuctionFinishRequest request) throws BuysellException {
-        //check rights to this auction (RLS)
         Auction auction = get(signature);
+        auctionsRightsService.validateAuctionAccessibility(auction);
         auction.setStatus(AuctionStatus.CLOSED);
         auction.setFinishReason(request.getReason());
 
@@ -100,8 +103,8 @@ public class AuctionsServiceImpl implements AuctionsService {
 
     @Override
     public Auction refresh(String signature) {
-        //check rights to this auction (RLS)
         Auction auction = get(signature);
+        auctionsRightsService.validateAuctionAccessibility(auction);
         auction.setStatus(AuctionStatus.ACTIVE);
         auction.setLastRefreshmentDate(new Date());
         auction.setExpiryDate(getExpiryDate(auction.getLastRefreshmentDate()));
@@ -120,6 +123,7 @@ public class AuctionsServiceImpl implements AuctionsService {
     @Override
     public Auction removeAuctionAttachments(String signature) throws BuysellException {
         Auction auction = get(signature);
+        auctionsRightsService.validateAuctionAccessibility(auction);
         auctionAttachmentsService.removeAuctionAttachments(auction);
 
         return save(auction);
@@ -134,15 +138,6 @@ public class AuctionsServiceImpl implements AuctionsService {
         auction.getReports().add(prepareReport(request));
 
         return save(auction);
-    }
-
-    private AuctionReport prepareReport(AuctionReportRequest request) {
-        AuctionReport report = new AuctionReport();
-        report.setMessage(request.getMessage());
-        report.setReason(request.getReason());
-        report.setUserId(requestContextService.getCurrentUserId());
-
-        return report;
     }
 
     @Override
@@ -169,5 +164,14 @@ public class AuctionsServiceImpl implements AuctionsService {
         calendar.add(Calendar.DATE, Integer.parseInt(auctionDurationDays));
 
         return calendar.getTime();
+    }
+
+    private AuctionReport prepareReport(AuctionReportRequest request) {
+        AuctionReport report = new AuctionReport();
+        report.setMessage(request.getMessage());
+        report.setReason(request.getReason());
+        report.setUserId(requestContextService.getCurrentUserId());
+
+        return report;
     }
 }
