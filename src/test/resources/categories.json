@@ -1,0 +1,18 @@
+{
+  "code": "ROOT",
+  "children": [
+    {
+      "code": "MOTORING",
+      "children": [
+        {
+          "code": "CARS",
+          "children": []
+        }
+      ]
+    },
+    {
+      "code": "JOBS",
+      "children": []
+    }
+  ]
+}

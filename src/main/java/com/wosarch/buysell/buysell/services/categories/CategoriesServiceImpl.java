@@ -3,7 +3,9 @@ package com.wosarch.buysell.buysell.services.categories;
 import com.wosarch.buysell.buysell.model.categories.CategoriesService;
 import com.wosarch.buysell.buysell.model.categories.Category;
 import com.wosarch.buysell.buysell.repositories.mongo.categories.CategoriesRepository;
+import com.wosarch.buysell.common.model.exception.BuysellException;
 import com.wosarch.buysell.common.model.sequence.SequenceService;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -35,6 +37,9 @@ public class CategoriesServiceImpl implements CategoriesService {
     @Override
     public void parseStructure(String jsonRepresentation) {
         logger.info("Start Processing categories...");
+        if (StringUtils.isEmpty(jsonRepresentation)) {
+            throw new BuysellException("No categories json passed.");
+        }
 
         categoriesRepository.deleteAll();
         final JSONObject root = new JSONObject(jsonRepresentation);
