@@ -12,15 +12,7 @@ import org.springframework.stereotype.Service;
 public class AuctionsRightsServiceImpl implements AuctionsRightsService {
 
     @Autowired
-    private AuctionsService auctionsService;
-
-    @Autowired
     private RequestContextService requestContextService;
-
-    @Override
-    public void validateAuctionAccessibility(String signature) {
-        validateAuctionAccessibility(auctionsService.get(signature));
-    }
 
     @Override
     public void validateAuctionAccessibility(Auction auction) {
