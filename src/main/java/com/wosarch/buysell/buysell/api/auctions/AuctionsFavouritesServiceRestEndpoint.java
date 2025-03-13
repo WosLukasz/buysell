@@ -1,7 +1,7 @@
 package com.wosarch.buysell.buysell.api.auctions;
 
 import com.wosarch.buysell.admin.model.auth.RequestContextService;
-import com.wosarch.buysell.buysell.model.auctions.AuctionsFavouriteService;
+import com.wosarch.buysell.buysell.model.auctions.services.AuctionsFavouriteService;
 import com.wosarch.buysell.buysell.model.auctions.UserFavourites;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

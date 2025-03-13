@@ -17,21 +17,21 @@ import java.util.Optional;
 public class RolesServiceImpl implements RolesService {
 
     @Autowired
-    RolesRepository rolesRepository;
+    private RolesRepository rolesRepository;
 
     @Autowired
-    AuthServerRolesService authServerRolesService;
+    private AuthServerRolesService authServerRolesService;
 
     @Autowired
-    RoleCacheManager roleCacheManager;
+    private RoleCacheManager roleCacheManager;
 
     @Autowired
-    RolesCacheManager rolesCacheManager;
+    private RolesCacheManager rolesCacheManager;
 
     @Override
     @Cacheable("role")
     public Optional<Role> getRole(String code) {
-        return rolesRepository.findById(code);
+        return rolesRepository.findByCode(code);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class RolesServiceImpl implements RolesService {
     @Override
     public void deleteRole(String code) {
         authServerRolesService.removeRole(code);
-        rolesRepository.deleteRole(code);
+        rolesRepository.deleteByCode(code);
     }
 
     @Override

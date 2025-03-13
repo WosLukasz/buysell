@@ -6,7 +6,6 @@ import com.wosarch.buysell.admin.model.dictionaries.DictionaryElement;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class DictionaryBuilderImpl implements DictionaryBuilder {
 
@@ -43,23 +42,6 @@ public class DictionaryBuilderImpl implements DictionaryBuilder {
         DictionaryElement dictionaryElement = DictionaryElement.builder()
                 .code(name)
                 .value(value)
-                .build();
-
-        dictionary.getElements().add(dictionaryElement);
-
-        return this;
-    }
-
-    @Override
-    public DictionaryBuilder addElement(String name, Object value, Map<String, Object> properties) {
-        if (CollectionUtils.isEmpty(dictionary.getElements())) {
-            dictionary.setElements(new ArrayList<>());
-        }
-
-        DictionaryElement dictionaryElement = DictionaryElement.builder()
-                .code(name)
-                .value(value)
-                .properties(properties)
                 .build();
 
         dictionary.getElements().add(dictionaryElement);

@@ -20,7 +20,7 @@ public class RequestContextServiceImpl implements RequestContextService {
     private static final String ANONYMOUS_USER = "anonymousUser";
 
     @Autowired
-    RolesService rolesService;
+    private RolesService rolesService;
 
     @Override
     public boolean currentUserLoggedIn() {

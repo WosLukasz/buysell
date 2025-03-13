@@ -2,9 +2,8 @@ package com.wosarch.buysell.buysell.services.categories;
 
 import com.wosarch.buysell.buysell.model.categories.CategoriesService;
 import com.wosarch.buysell.buysell.model.categories.Category;
-import com.wosarch.buysell.buysell.repositories.mongo.categories.CategoriesRepository;
+import com.wosarch.buysell.buysell.repositories.posgresql.categories.CategoriesRepository;
 import com.wosarch.buysell.common.model.exception.BuysellException;
-import com.wosarch.buysell.common.model.sequence.SequenceService;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,9 +24,6 @@ public class CategoriesServiceImpl implements CategoriesService {
 
     @Autowired
     private CategoriesRepository categoriesRepository;
-
-    @Autowired
-    private SequenceService sequenceService;
 
     @Override
     public List<Category> getAll() {
@@ -58,7 +54,7 @@ public class CategoriesServiceImpl implements CategoriesService {
         // not implemented yet
     }
 
-    private void processCategoryAndChildren(JSONObject categoryJson, String parentId) {
+    private void processCategoryAndChildren(JSONObject categoryJson, Long parentId) {
         String code = categoryJson.getString(CODE_PROP);
         Category savedCategory = saveCategory(code, parentId);
         final JSONArray children = categoryJson.getJSONArray(CHILDREN_PROP);
@@ -73,10 +69,9 @@ public class CategoriesServiceImpl implements CategoriesService {
         }
     }
 
-    private Category saveCategory(String code, String parentId) {
+    private Category saveCategory(String code, Long parentId) {
         logger.info("Save new category {} with parent {}", code, parentId);
         Category category = new Category();
-        category.setId(sequenceService.getNext(Category.SEQUENCE_NAME));
         category.setCode(code);
         category.setParentId(parentId);
 

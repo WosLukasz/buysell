@@ -1,9 +1,9 @@
 package com.wosarch.buysell.buysell.api.attachments;
 
 import com.wosarch.buysell.buysell.api.auctions.AuctionsServiceRestEndpoint;
-import com.wosarch.buysell.common.model.attachments.Attachment;
-import com.wosarch.buysell.common.model.attachments.AttachmentSaveRequest;
-import com.wosarch.buysell.common.model.attachments.AttachmentsService;
+import com.wosarch.buysell.buysell.model.attachments.Attachment;
+import com.wosarch.buysell.buysell.model.attachments.AttachmentSaveRequest;
+import com.wosarch.buysell.buysell.model.attachments.AttachmentsService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

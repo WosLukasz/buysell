@@ -1,9 +1,9 @@
 package com.wosarch.buysell.buysell.synchronizations.auctionsFinish;
 
 import com.wosarch.buysell.buysell.model.auctions.Auction;
-import com.wosarch.buysell.buysell.model.auctions.AuctionFinishReason;
-import com.wosarch.buysell.buysell.model.auctions.AuctionStatus;
-import com.wosarch.buysell.buysell.model.auctions.AuctionsService;
+import com.wosarch.buysell.buysell.model.auctions.enums.AuctionFinishReason;
+import com.wosarch.buysell.buysell.model.auctions.enums.AuctionStatus;
+import com.wosarch.buysell.buysell.model.auctions.services.AuctionsService;
 import lombok.Builder;
 import org.slf4j.Logger;
 

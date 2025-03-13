@@ -1,6 +1,6 @@
 package com.wosarch.buysell.buysell.model.auctions.requests;
 
-import com.wosarch.buysell.buysell.model.auctions.AuctionReportReason;
+import com.wosarch.buysell.buysell.model.auctions.enums.AuctionReportReason;
 import lombok.Data;
 
 @Data

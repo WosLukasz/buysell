@@ -1,8 +1,11 @@
 package com.wosarch.buysell.buysell.model.auctions;
 
+import com.wosarch.buysell.buysell.model.auctions.enums.AuctionFinishReason;
+import com.wosarch.buysell.buysell.model.auctions.enums.AuctionStatus;
 import com.wosarch.buysell.buysell.model.common.Amount;
-import com.wosarch.buysell.common.model.attachments.Attachment;
-import com.wosarch.buysell.buysell.model.common.MongoObject;
+import com.wosarch.buysell.buysell.model.attachments.Attachment;
+import com.wosarch.buysell.buysell.model.common.DatabaseObject;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +14,6 @@ import lombok.experimental.UtilityClass;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.elasticsearch.annotations.Mapping;
 import org.springframework.data.elasticsearch.annotations.Setting;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 import java.util.List;
@@ -20,45 +22,60 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(Auction.COLLECTION_NAME)
-@org.springframework.data.elasticsearch.annotations.Document(indexName = Auction.COLLECTION_NAME)
+@Entity
+@Table(name = Auction.ENTITY_NAME, indexes = {
+        @Index(name = "auction_signature", columnList = "signature", unique = true)
+})
+@org.springframework.data.elasticsearch.annotations.Document(indexName = Auction.ENTITY_NAME)
 @Mapping(mappingPath = Auction.ELASTIC_SEARCH_MAPPING)
 @Setting(settingPath = Auction.ELASTIC_SEARCH_SETTINGS)
-public class Auction extends MongoObject {
+public class Auction extends DatabaseObject {
 
     @Transient
-    public static final String SEQUENCE_NAME = "auctions";
+    public static final String SEQUENCE_NAME = "auctions_seq";
     @Transient
-    public static final String COLLECTION_NAME = "auctions";
+    public static final String ENTITY_NAME = "auctions";
     @Transient
     public static final String ELASTIC_SEARCH_MAPPING = "mappings/auctions.json";
     @Transient
     public static final String ELASTIC_SEARCH_SETTINGS = "mappings/auctions_settings.json";
 
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
+    @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME,  allocationSize=1)
     private String signature;
 
     private String title;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "price_id")
     private Amount price;
 
     private String description;
 
-    private String category;
+    private String category; // should I add associacion ? Maybe later
 
+    @Enumerated(EnumType.STRING)
     private AuctionStatus status;
 
     private Boolean toCheckManually;
 
     private Date statusChangeDate;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "auction_id")
     private List<Attachment> attachments;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "seller_id")
     private SellerProfile seller;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "auction_id")
     private List<AuctionReport> reports;
 
     private String ownerId;
 
+    @Enumerated(EnumType.STRING)
     private AuctionFinishReason finishReason;
 
     private Date startDate;

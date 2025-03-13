@@ -18,7 +18,7 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     @Override
-    public void removeDictionary(String code) {
-        dictionariesRepository.deleteById(code);
+    public void removeDictionary(Long id) {
+        dictionariesRepository.deleteById(id);
     }
 }

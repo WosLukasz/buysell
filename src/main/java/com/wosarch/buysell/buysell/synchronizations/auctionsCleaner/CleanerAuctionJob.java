@@ -1,11 +1,11 @@
 package com.wosarch.buysell.buysell.synchronizations.auctionsCleaner;
 
 import com.wosarch.buysell.buysell.model.auctions.Auction;
-import com.wosarch.buysell.buysell.model.auctions.AuctionAttachmentsService;
+import com.wosarch.buysell.buysell.model.auctions.services.AuctionAttachmentsService;
 import com.wosarch.buysell.buysell.model.auctions.HistoricalAuction;
 import com.wosarch.buysell.buysell.repositories.elastic.auctions.AuctionsElasticSearchRepository;
-import com.wosarch.buysell.buysell.repositories.mongo.auctions.AuctionsRepository;
-import com.wosarch.buysell.buysell.repositories.mongo.historicalauctions.HistoricalAuctionsRepository;
+import com.wosarch.buysell.buysell.repositories.posgresql.auctions.AuctionsRepository;
+import com.wosarch.buysell.buysell.repositories.posgresql.historicalauctions.HistoricalAuctionsRepository;
 import lombok.Builder;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;

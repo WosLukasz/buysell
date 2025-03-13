@@ -1,15 +1,15 @@
 package com.wosarch.buysell.admin.repositories.synchronizations;
 
 import com.wosarch.buysell.admin.model.synchronizations.SynchronizationItem;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface SynchronizationsRepository extends MongoRepository<SynchronizationItem, String>, TemplateSynchronizationsRepository {
+public interface SynchronizationsRepository extends CrudRepository<SynchronizationItem, Long>, TemplateSynchronizationsRepository {
 
-    @Query(value = "{ 'code' : ?0, 'status' : ?1 }")
+    @Query(value = "SELECT * FROM synchronizations WHERE code = ?1 AND status = ?2", nativeQuery = true)
     List<SynchronizationItem> findByCodeAndStatus(String code, String status);
 }

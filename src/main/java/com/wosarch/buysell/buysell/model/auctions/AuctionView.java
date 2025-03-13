@@ -1,15 +1,14 @@
 package com.wosarch.buysell.buysell.model.auctions;
 
 
+import com.wosarch.buysell.buysell.model.common.DatabaseObject;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.UtilityClass;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.util.List;
 
@@ -17,17 +16,17 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(AuctionView.COLLECTION_NAME)
-public class AuctionView {
+@Entity(name = AuctionView.ENTITY_NAME)
+public class AuctionView extends DatabaseObject {
 
     @Transient
-    public static final String COLLECTION_NAME = "views";
+    public static final String ENTITY_NAME = "views";
 
-    @MongoId
-    private ObjectId mongoId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auction_id")
+    private Auction auction;
 
-    private String auctionSignature;
-
+    @ElementCollection // check how it looks like ?
     private List<String> views;
 
     @UtilityClass

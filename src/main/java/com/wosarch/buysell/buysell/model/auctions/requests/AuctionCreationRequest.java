@@ -2,7 +2,7 @@ package com.wosarch.buysell.buysell.model.auctions.requests;
 
 import com.wosarch.buysell.buysell.model.auctions.SellerProfile;
 import com.wosarch.buysell.buysell.model.common.Amount;
-import com.wosarch.buysell.common.model.attachments.Attachment;
+import com.wosarch.buysell.buysell.model.attachments.Attachment;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

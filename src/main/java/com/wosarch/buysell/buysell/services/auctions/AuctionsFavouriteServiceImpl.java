@@ -1,10 +1,10 @@
 package com.wosarch.buysell.buysell.services.auctions;
 
 import com.wosarch.buysell.admin.model.auth.RequestContextService;
-import com.wosarch.buysell.buysell.model.auctions.AuctionsFavouriteService;
-import com.wosarch.buysell.buysell.model.auctions.AuctionsService;
+import com.wosarch.buysell.buysell.model.auctions.services.AuctionsFavouriteService;
+import com.wosarch.buysell.buysell.model.auctions.services.AuctionsService;
 import com.wosarch.buysell.buysell.model.auctions.UserFavourites;
-import com.wosarch.buysell.buysell.repositories.mongo.userfavourites.UserFavouritesRepository;
+import com.wosarch.buysell.buysell.repositories.posgresql.userfavourites.UserFavouritesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;

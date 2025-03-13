@@ -1,16 +1,20 @@
 package com.wosarch.buysell.buysell.synchronizations.auctionsFinish;
 
+import co.elastic.clients.util.TriFunction;
 import com.wosarch.buysell.buysell.model.auctions.Auction;
-import com.wosarch.buysell.buysell.model.auctions.AuctionStatus;
-import com.wosarch.buysell.buysell.model.auctions.AuctionsService;
-import com.wosarch.buysell.common.model.mongo.MongoDataCollectorConfig;
-import com.wosarch.buysell.common.services.mongo.MongoDataCollector;
+import com.wosarch.buysell.buysell.model.auctions.enums.AuctionStatus;
+import com.wosarch.buysell.buysell.model.auctions.services.AuctionsService;
+import com.wosarch.buysell.common.model.mongo.DataCollectorConfig;
+import com.wosarch.buysell.common.services.mongo.DataCollector;
 import com.wosarch.buysell.common.services.parallel.CompletionIterator;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -27,20 +31,20 @@ public class FinishAuctionService {
     private static final Integer PROCESSING_THREADS_POOL_SIZE = 4;
 
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private EntityManager entityManager;
 
     @Autowired
     private AuctionsService auctionsService;
 
     public void processAuctions() throws Exception {
-        MongoDataCollectorConfig config = MongoDataCollectorConfig.builder()
-                .mongoTemplate(mongoTemplate)
+        DataCollectorConfig config = DataCollectorConfig.builder()
+                .entityManager(entityManager)
                 .clazz(Auction.class)
-                .filter(prepareFilter())
+                .predicatesProvider(preparePredicates(new Date()))
                 .pageSize(BATCH_SIZE)
                 .build();
 
-        MongoDataCollector collector = new MongoDataCollector(config);
+        DataCollector collector = new DataCollector(config);
         List<Auction> dataToProcess = collector.getData();
         if (CollectionUtils.isEmpty(dataToProcess)) {
             logger.info("No auctions to finish.");
@@ -69,10 +73,11 @@ public class FinishAuctionService {
         logger.info("All auctions finished");
     }
 
-    private Criteria prepareFilter() {
-        return new Criteria().andOperator(
-                Criteria.where(Auction.Fields.STATUS).is(AuctionStatus.ACTIVE.name()),
-                Criteria.where(Auction.Fields.EXPIRY_DATE).lte(new Date())
-        );
+    private TriFunction<CriteriaBuilder, CriteriaQuery<?>, Root<?>, List<Predicate>> preparePredicates(Date date) {
+        return (CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery, Root<?> root) ->
+                List.of(
+                        criteriaBuilder.equal(root.get(Auction.Fields.STATUS).as(String.class), AuctionStatus.ACTIVE.name()),
+                        criteriaBuilder.lessThanOrEqualTo(root.get(Auction.Fields.EXPIRY_DATE), date)
+                );
     }
 }

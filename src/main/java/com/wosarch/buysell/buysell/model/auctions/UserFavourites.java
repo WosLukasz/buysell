@@ -1,27 +1,30 @@
 package com.wosarch.buysell.buysell.model.auctions;
 
 import com.wosarch.buysell.buysell.model.auctions.search.AuctionsSearchRequest;
-import com.wosarch.buysell.buysell.model.common.MongoObject;
+import com.wosarch.buysell.buysell.model.common.DatabaseObject;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(UserFavourites.COLLECTION_NAME)
-public class UserFavourites extends MongoObject {
+@Entity
+@Table(name = UserFavourites.ENTITY_NAME)
+public class UserFavourites extends DatabaseObject {
 
     @Transient
-    public static final String COLLECTION_NAME = "usersFavourites";
+    public static final String ENTITY_NAME = "usersFavourites";
 
     private String userId;
 
     private List<String> auctions;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "usersFavourite_id")
     private List<AuctionsSearchRequest> filters; // to implement after searching auctions implementation
 }

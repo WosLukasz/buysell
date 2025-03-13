@@ -1,6 +1,6 @@
 package com.wosarch.buysell.buysell.api.auctions;
 
-import com.wosarch.buysell.buysell.model.auctions.AuctionsSearchService;
+import com.wosarch.buysell.buysell.model.auctions.services.AuctionsSearchService;
 import com.wosarch.buysell.buysell.model.auctions.search.AuctionsSearchRequest;
 import com.wosarch.buysell.buysell.model.auctions.search.AuctionsSearchResponse;
 import jakarta.validation.Valid;

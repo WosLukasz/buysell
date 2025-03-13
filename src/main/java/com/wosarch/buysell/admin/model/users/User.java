@@ -1,25 +1,27 @@
 package com.wosarch.buysell.admin.model.users;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(User.COLLECTION_NAME)
+@Entity
+@Table(name = User.ENTITY_NAME)
 public class User {
+
     @Transient
-    public static final String SEQUENCE_NAME = "users";
-    @Transient
-    public static final String COLLECTION_NAME = "users";
+    public static final String ENTITY_NAME = "users";
 
     @Id
+//    @Column(columnDefinition="character varying (100) not null", length=100, nullable=false)
     private String id;
 
     private String firstName;

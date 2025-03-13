@@ -2,8 +2,8 @@ package com.wosarch.buysell.buysell.synchronizations.auctionsActivation;
 
 import com.wosarch.buysell.admin.model.synchronizations.SynchronizationItem;
 import com.wosarch.buysell.buysell.model.auctions.Auction;
-import com.wosarch.buysell.buysell.model.auctions.AuctionStatus;
-import com.wosarch.buysell.buysell.model.auctions.AuctionsService;
+import com.wosarch.buysell.buysell.model.auctions.enums.AuctionStatus;
+import com.wosarch.buysell.buysell.model.auctions.services.AuctionsService;
 import com.wosarch.buysell.buysell.model.common.Amount;
 import com.wosarch.buysell.buysell.repositories.mongo.auctions.AuctionsRepository;
 import org.junit.jupiter.api.BeforeAll;

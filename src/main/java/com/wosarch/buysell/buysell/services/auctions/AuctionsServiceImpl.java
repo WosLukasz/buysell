@@ -2,15 +2,18 @@ package com.wosarch.buysell.buysell.services.auctions;
 
 import com.wosarch.buysell.admin.model.auth.RequestContextService;
 import com.wosarch.buysell.buysell.model.auctions.*;
+import com.wosarch.buysell.buysell.model.auctions.enums.AuctionStatus;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionCreationRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionFinishRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionReportRequest;
-import com.wosarch.buysell.buysell.repositories.mongo.auctions.AuctionsRepository;
+import com.wosarch.buysell.buysell.model.auctions.services.AuctionAttachmentsService;
+import com.wosarch.buysell.buysell.model.auctions.services.AuctionsRightsService;
+import com.wosarch.buysell.buysell.model.auctions.services.AuctionsService;
 import com.wosarch.buysell.buysell.repositories.elastic.auctions.AuctionsElasticSearchRepository;
-import com.wosarch.buysell.buysell.repositories.mongo.views.AuctionsViewsRepository;
-import com.wosarch.buysell.common.model.attachments.AttachmentWithContent;
+import com.wosarch.buysell.buysell.repositories.posgresql.auctions.AuctionsRepository;
+import com.wosarch.buysell.buysell.repositories.posgresql.views.AuctionsViewsRepository;
+import com.wosarch.buysell.buysell.model.attachments.AttachmentWithContent;
 import com.wosarch.buysell.common.model.exception.BuysellException;
-import com.wosarch.buysell.common.model.sequence.SequenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -35,9 +38,6 @@ public class AuctionsServiceImpl implements AuctionsService {
     private AuctionsViewsRepository auctionsViewsRepository;
 
     @Autowired
-    private SequenceService sequenceService;
-
-    @Autowired
     private AuctionAttachmentsService auctionAttachmentsService;
 
     @Autowired
@@ -49,7 +49,6 @@ public class AuctionsServiceImpl implements AuctionsService {
     @Override
     public Auction create(AuctionCreationRequest request) {
         Auction auction = new Auction();
-        auction.setSignature(sequenceService.getNext(Auction.SEQUENCE_NAME));
         auction.setTitle(request.getTitle());
         auction.setPrice(request.getPrice());
         auction.setCategory(request.getCategoryId());

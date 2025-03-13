@@ -1,14 +1,19 @@
 package com.wosarch.buysell.buysell.model.common;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.experimental.UtilityClass;
 
-import java.io.Serializable;
-
 @Data
-public class Amount implements Serializable {
+@Entity
+@Table(name = Amount.ENTITY_NAME)
+public class Amount extends DatabaseObject {
+
+    public static final String ENTITY_NAME = "amounts";
 
     private Double value;
+
     private String currency;
 
     @UtilityClass

@@ -5,10 +5,8 @@ import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
-import com.wosarch.buysell.buysell.model.common.MongoObject;
 import com.wosarch.buysell.common.model.elasticsearch.ElasticSearchSearchRequest;
 import lombok.experimental.UtilityClass;
-import org.apache.commons.lang3.SerializationUtils;
 
 import java.util.Collections;
 import java.util.List;

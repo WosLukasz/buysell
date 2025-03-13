@@ -1,20 +1,23 @@
 package com.wosarch.buysell.buysell.synchronizations.auctionsCleaner;
 
+import co.elastic.clients.util.TriFunction;
 import com.wosarch.buysell.buysell.model.auctions.Auction;
-import com.wosarch.buysell.buysell.model.auctions.AuctionAttachmentsService;
-import com.wosarch.buysell.buysell.model.auctions.AuctionStatus;
+import com.wosarch.buysell.buysell.model.auctions.services.AuctionAttachmentsService;
+import com.wosarch.buysell.buysell.model.auctions.enums.AuctionStatus;
 import com.wosarch.buysell.buysell.repositories.elastic.auctions.AuctionsElasticSearchRepository;
-import com.wosarch.buysell.buysell.repositories.mongo.auctions.AuctionsRepository;
-import com.wosarch.buysell.buysell.repositories.mongo.historicalauctions.HistoricalAuctionsRepository;
-import com.wosarch.buysell.common.model.mongo.MongoDataCollectorConfig;
-import com.wosarch.buysell.common.services.mongo.MongoDataCollector;
+import com.wosarch.buysell.buysell.repositories.posgresql.auctions.AuctionsRepository;
+import com.wosarch.buysell.common.model.mongo.DataCollectorConfig;
+import com.wosarch.buysell.common.services.mongo.DataCollector;
 import com.wosarch.buysell.common.services.parallel.CompletionIterator;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -35,7 +38,7 @@ public class CleanerAuctionService {
     private String trashHoldDays;
 
     @Autowired
-    private MongoTemplate mongoTemplate;
+    private EntityManager entityManager;
 
     @Autowired
     private AuctionsRepository auctionsRepository;
@@ -44,20 +47,17 @@ public class CleanerAuctionService {
     private AuctionsElasticSearchRepository auctionsElasticSearchRepository;
 
     @Autowired
-    private HistoricalAuctionsRepository historicalAuctionsRepository;
-
-    @Autowired
     private AuctionAttachmentsService auctionAttachmentsService;
 
     public void processAuctions() throws Exception {
-        MongoDataCollectorConfig config = MongoDataCollectorConfig.builder()
-                .mongoTemplate(mongoTemplate)
+        DataCollectorConfig config = DataCollectorConfig.builder()
+                .entityManager(entityManager)
                 .clazz(Auction.class)
-                .filter(prepareFilter())
+                .predicatesProvider(preparePredicates(getTrashHoldDate(new Date())))
                 .pageSize(BATCH_SIZE)
                 .build();
 
-        MongoDataCollector collector = new MongoDataCollector(config);
+        DataCollector collector = new DataCollector(config);
         List<Auction> dataToProcess = collector.getData();
         if (CollectionUtils.isEmpty(dataToProcess)) {
             logger.info("No auctions to remove.");
@@ -71,7 +71,6 @@ public class CleanerAuctionService {
                             .auction(auctionToClear)
                             .auctionsRepository(auctionsRepository)
                             .auctionsElasticSearchRepository(auctionsElasticSearchRepository)
-                            .historicalAuctionsRepository(historicalAuctionsRepository)
                             .auctionAttachmentsService(auctionAttachmentsService)
                             .logger(logger)
                             .build();
@@ -89,13 +88,13 @@ public class CleanerAuctionService {
         logger.info("All auctions cleared");
     }
 
-    private Criteria prepareFilter() {
-        Date trashHoldDate = getTrashHoldDate(new Date());
 
-        return new Criteria().andOperator(
-                Criteria.where(Auction.Fields.STATUS).is(AuctionStatus.CLOSED.name()),
-                Criteria.where(Auction.Fields.END_DATE).lte(trashHoldDate)
-        );
+    private TriFunction<CriteriaBuilder, CriteriaQuery<?>, Root<?>, List<Predicate>> preparePredicates(Date trashHoldDate) {
+        return (CriteriaBuilder criteriaBuilder, CriteriaQuery<?> criteriaQuery, Root<?> root) ->
+                List.of(
+                        criteriaBuilder.equal(root.get(Auction.Fields.STATUS).as(String.class), AuctionStatus.CLOSED.name()),
+                        criteriaBuilder.lessThanOrEqualTo(root.get(Auction.Fields.END_DATE), trashHoldDate)
+                );
     }
 
     private Date getTrashHoldDate(Date startDate) {

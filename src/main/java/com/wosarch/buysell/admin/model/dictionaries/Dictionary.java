@@ -1,30 +1,31 @@
 package com.wosarch.buysell.admin.model.dictionaries;
 
+import com.wosarch.buysell.admin.model.common.AdminDatabaseObject;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.UtilityClass;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(Dictionary.COLLECTION_NAME)
-public class Dictionary {
+@Entity
+@Table(name = Dictionary.ENTITY_NAME)
+public class Dictionary extends AdminDatabaseObject {
 
     @Transient
-    public static final String COLLECTION_NAME = "dictionaries";
+    public static final String ENTITY_NAME = "dictionaries";
 
-    @Id
     private String code;
 
     private String valueType;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "dictionary_id")
     private List<DictionaryElement> elements;
 
 

@@ -1,9 +1,9 @@
 package com.wosarch.buysell.buysell.services.auctions;
 
 import com.wosarch.buysell.buysell.model.auctions.Auction;
-import com.wosarch.buysell.buysell.model.auctions.AuctionAttachmentsService;
-import com.wosarch.buysell.common.model.attachments.AttachmentWithContent;
-import com.wosarch.buysell.common.model.attachments.AttachmentsService;
+import com.wosarch.buysell.buysell.model.auctions.services.AuctionAttachmentsService;
+import com.wosarch.buysell.buysell.model.attachments.AttachmentWithContent;
+import com.wosarch.buysell.buysell.model.attachments.AttachmentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

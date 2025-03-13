@@ -4,5 +4,5 @@ public interface DictionaryService {
 
     Dictionary saveDictionary(Dictionary dictionary);
 
-    void removeDictionary(String code);
+    void removeDictionary(Long id);
 }

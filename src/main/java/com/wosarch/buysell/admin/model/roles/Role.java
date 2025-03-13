@@ -1,13 +1,14 @@
 package com.wosarch.buysell.admin.model.roles;
 
+import com.wosarch.buysell.admin.model.common.AdminDatabaseObject;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.UtilityClass;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
@@ -15,12 +16,13 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(Role.COLLECTION_NAME)
-public class Role {
-    @Transient
-    public static final String COLLECTION_NAME = "roles";
+@Entity
+@Table(name = Role.ENTITY_NAME)
+public class Role extends AdminDatabaseObject {
 
-    @Id
+    @Transient
+    public static final String ENTITY_NAME = "roles";
+
     private String code;
 
     private List<String> rights;
