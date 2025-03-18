@@ -11,6 +11,8 @@ import com.wosarch.buysell.buysell.model.auctions.services.AuctionsRightsService
 import com.wosarch.buysell.buysell.model.auctions.services.AuctionsService;
 import com.wosarch.buysell.buysell.repositories.elastic.auctions.AuctionsElasticSearchRepository;
 import com.wosarch.buysell.buysell.repositories.posgresql.auctions.AuctionsRepository;
+import com.wosarch.buysell.buysell.repositories.posgresql.auctionssignaturesequence.AuctionsSignatureSequenceRepository;
+import com.wosarch.buysell.buysell.repositories.posgresql.sellers.SellersRepository;
 import com.wosarch.buysell.buysell.repositories.posgresql.views.AuctionsViewsRepository;
 import com.wosarch.buysell.buysell.model.attachments.AttachmentWithContent;
 import com.wosarch.buysell.common.model.exception.BuysellException;
@@ -38,6 +40,12 @@ public class AuctionsServiceImpl implements AuctionsService {
     private AuctionsViewsRepository auctionsViewsRepository;
 
     @Autowired
+    private SellersRepository sellersRepository;
+
+    @Autowired
+    private AuctionsSignatureSequenceRepository auctionsSignatureSequenceRepository;
+
+    @Autowired
     private AuctionAttachmentsService auctionAttachmentsService;
 
     @Autowired
@@ -47,18 +55,28 @@ public class AuctionsServiceImpl implements AuctionsService {
     private RequestContextService requestContextService;
 
     @Override
+    @Transactional(value = "buySellTransactionManager")
     public Auction create(AuctionCreationRequest request) {
+        String ownerId = requestContextService.getCurrentUserId();
+        SellerProfile seller = request.getSeller();
+        seller.setOwnerId(ownerId);
+        SellerProfile savedSeller = sellersRepository.save(seller);
         Auction auction = new Auction();
+        auction.setSignature(nextSignature());
         auction.setTitle(request.getTitle());
         auction.setPrice(request.getPrice());
         auction.setCategory(request.getCategoryId());
         auction.setStatus(AuctionStatus.QUEUED);
         auction.setDescription(request.getDescription());
-        auction.setSeller(request.getSeller());
-        auction.setOwnerId(requestContextService.getCurrentUserId());
+        auction.setSellerId(savedSeller.getId());
+        auction.setOwnerId(ownerId);
         auction.setAttachments(request.getAttachments());
 
         return save(auction);
+    }
+
+    private String nextSignature() {
+        return auctionsSignatureSequenceRepository.save(new AuctionSignatureSequence()).getSignature().toString();
     }
 
     @Override
@@ -69,6 +87,17 @@ public class AuctionsServiceImpl implements AuctionsService {
         }
 
         return optionalAuction.get();
+    }
+
+    @Override
+    public SellerProfile getSellerProfileByAuctionSignature(String signature) throws BuysellException {
+        Auction auction = get(signature);
+        Optional<SellerProfile> optionalSeller = sellersRepository.findById(auction.getSellerId());
+        if (optionalSeller.isEmpty()) {
+            throw new BuysellException("Auction not found");
+        }
+
+        return optionalSeller.get();
     }
 
     @Override

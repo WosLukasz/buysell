@@ -15,9 +15,6 @@ public class SellerProfile extends DatabaseObject {
 
     public static final String ENTITY_NAME = "vendors";
 
-    @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
-    private List<Auction> auctions;
-
     @NotNull
     private String firstname;
 
@@ -26,6 +23,9 @@ public class SellerProfile extends DatabaseObject {
 
     @NotNull
     private String location;
+
+    @NotNull
+    private String ownerId;
 
     @NotNull
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)

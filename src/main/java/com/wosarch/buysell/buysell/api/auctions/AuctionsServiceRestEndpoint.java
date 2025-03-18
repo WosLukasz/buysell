@@ -38,6 +38,13 @@ public class AuctionsServiceRestEndpoint {
         return new ResponseEntity<>(auctionsService.get(signature), HttpStatus.OK);
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/{signature}/vendor")
+    public ResponseEntity<SellerProfile> getSellerProfileByAuctionSignature(@PathVariable String signature) throws BuysellException {
+        logger.debug("Getting seller profile for auction with signature {}", signature);
+
+        return new ResponseEntity<>(auctionsService.getSellerProfileByAuctionSignature(signature), HttpStatus.OK);
+    }
+
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Auction> create(@RequestBody @Valid AuctionCreationRequest request) {

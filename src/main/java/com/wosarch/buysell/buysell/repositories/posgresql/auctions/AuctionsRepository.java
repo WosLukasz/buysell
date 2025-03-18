@@ -8,6 +8,4 @@ import java.util.Optional;
 
 @Repository
 public interface AuctionsRepository extends CrudRepository<Auction, Long>, TemplateAuctionsRepository {
-
-    Optional<Auction> findBySignature(String signature);
 }

@@ -40,8 +40,6 @@ public class Auction extends DatabaseObject {
     @Transient
     public static final String ELASTIC_SEARCH_SETTINGS = "mappings/auctions_settings.json";
 
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
-    @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME,  allocationSize=1)
     private String signature;
 
     private String title;
@@ -65,9 +63,7 @@ public class Auction extends DatabaseObject {
     @JoinColumn(name = "auction_id")
     private List<Attachment> attachments;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "seller_id")
-    private SellerProfile seller;
+    private Long sellerId;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "auction_id")

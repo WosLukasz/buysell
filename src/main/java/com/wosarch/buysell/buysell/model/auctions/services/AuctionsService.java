@@ -1,6 +1,7 @@
 package com.wosarch.buysell.buysell.model.auctions.services;
 
 import com.wosarch.buysell.buysell.model.auctions.Auction;
+import com.wosarch.buysell.buysell.model.auctions.SellerProfile;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionFinishRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionCreationRequest;
 import com.wosarch.buysell.buysell.model.auctions.requests.AuctionReportRequest;
@@ -15,6 +16,8 @@ public interface AuctionsService {
     Auction create(AuctionCreationRequest request);
 
     Auction get(String signature) throws BuysellException;
+
+    SellerProfile getSellerProfileByAuctionSignature(String signature) throws BuysellException;
 
     Auction nullableGet(String signature);
 
