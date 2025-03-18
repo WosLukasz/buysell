@@ -1,6 +1,5 @@
 package com.wosarch.buysell.buysell.model.auctions.search;
 
-import com.wosarch.buysell.buysell.model.auctions.UserFavourites;
 import com.wosarch.buysell.common.model.elasticsearch.ElasticSearchSearchRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -9,7 +8,7 @@ import org.springframework.data.annotation.Transient;
 
 @Data
 @Entity
-@Table(name = UserFavourites.ENTITY_NAME)
+@Table(name = AuctionsSearchRequest.ENTITY_NAME)
 public class AuctionsSearchRequest extends ElasticSearchSearchRequest {
 
     @Transient

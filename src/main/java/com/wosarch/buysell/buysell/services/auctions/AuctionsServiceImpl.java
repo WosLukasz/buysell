@@ -169,12 +169,12 @@ public class AuctionsServiceImpl implements AuctionsService {
     }
 
     @Override
-    public Integer getViews(String signature) {
+    public Long getViews(String signature) {
         return auctionsViewsRepository.getViews(signature);
     }
 
     @Override
-    public Integer incrementViews(String signature, String remoteAddress) {
+    public Long incrementViews(String signature, String remoteAddress) {
         return auctionsViewsRepository.incrementViews(signature, remoteAddress);
     }
 

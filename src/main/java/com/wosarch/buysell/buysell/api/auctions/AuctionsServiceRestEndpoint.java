@@ -85,14 +85,14 @@ public class AuctionsServiceRestEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{signature}/views")
-    public ResponseEntity<Integer> getViews(@PathVariable String signature) {
+    public ResponseEntity<Long> getViews(@PathVariable String signature) {
         logger.debug("Getting auction views with signature {}", signature);
 
         return new ResponseEntity<>(auctionsService.getViews(signature), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/{signature}/views/increment")
-    public ResponseEntity<Integer> incrementViews(@PathVariable String signature, HttpServletRequest request) {
+    public ResponseEntity<Long> incrementViews(@PathVariable String signature, HttpServletRequest request) {
         return new ResponseEntity<>(auctionsService.incrementViews(signature, request.getRemoteAddr()), HttpStatus.OK);
     }
 }

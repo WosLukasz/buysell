@@ -33,9 +33,9 @@ public interface AuctionsService {
 
     Auction report(String signature, AuctionReportRequest request) throws BuysellException;
 
-    Integer getViews(String signature);
+    Long getViews(String signature);
 
-    Integer incrementViews(String signature, String remoteAddress);
+    Long incrementViews(String signature, String remoteAddress);
 
     boolean auctionActive(String auctionSignature);
 
