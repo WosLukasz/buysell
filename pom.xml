@@ -90,6 +90,11 @@
 			<artifactId>postgresql</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.javers</groupId>
+			<artifactId>javers-spring-boot-starter-sql</artifactId>
+			<version>7.8.0</version>
+		</dependency>
 
 <!--		ELASTICSEARCH-->
 		<dependency>
