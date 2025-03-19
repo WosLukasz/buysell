@@ -1,13 +1,8 @@
 package com.wosarch.buysell.admin.model.common;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.experimental.UtilityClass;
-import jakarta.persistence.Id;
-import org.springframework.data.annotation.Version;
 
 import java.io.Serializable;
 

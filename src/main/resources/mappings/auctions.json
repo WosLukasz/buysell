@@ -1,5 +1,8 @@
 {
   "properties": {
+    "id": {
+      "type": "keyword"
+    },
     "signature": {
       "type": "keyword"
     },
@@ -59,7 +62,7 @@
     "attachments": {
       "type": "nested",
       "properties": {
-        "id": {
+        "etag": {
           "type": "keyword"
         },
         "path": {
@@ -79,55 +82,8 @@
         }
       }
     },
-    "seller": {
-      "type": "nested",
-      "properties": {
-        "firstname": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword"
-            }
-          }
-        },
-        "name": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword"
-            }
-          }
-        },
-        "location": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword"
-            }
-          }
-        },
-        "contactInformation": {
-          "type": "nested",
-          "properties": {
-            "type": {
-              "type": "text",
-              "fields": {
-                "keyword": {
-                  "type": "keyword"
-                }
-              }
-            },
-            "value": {
-              "type": "text",
-              "fields": {
-                "keyword": {
-                  "type": "keyword"
-                }
-              }
-            }
-          }
-        }
-      }
+    "sellerId": {
+      "type": "keyword"
     },
     "reports": {
       "type": "nested",
@@ -200,9 +156,6 @@
           "type": "keyword"
         }
       }
-    },
-    "mongoId": {
-      "type": "keyword"
     }
   }
 }
