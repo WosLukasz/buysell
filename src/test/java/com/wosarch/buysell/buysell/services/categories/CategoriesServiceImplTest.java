@@ -1,9 +1,8 @@
 package com.wosarch.buysell.buysell.services.categories;
 
 import com.wosarch.buysell.buysell.model.categories.Category;
-import com.wosarch.buysell.buysell.repositories.mongo.categories.CategoriesRepository;
+import com.wosarch.buysell.buysell.repositories.posgresql.categories.CategoriesRepository;
 import com.wosarch.buysell.common.model.exception.BuysellException;
-import com.wosarch.buysell.common.model.sequence.SequenceService;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,10 +16,9 @@ import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,9 +32,6 @@ public class CategoriesServiceImplTest {
     @Mock
     private CategoriesRepository categoriesRepository;
 
-    @Mock
-    private SequenceService sequenceService;
-
     @Captor
     private ArgumentCaptor<Category> captor;
 
@@ -47,12 +42,15 @@ public class CategoriesServiceImplTest {
 
     @Test
     public void shouldParseStructureAndAddCategories() throws IOException {
-        AtomicInteger sequence = new AtomicInteger();
+        AtomicLong sequence = new AtomicLong();
         String categoriesStructure = IOUtils.toString(this.getClass().getResourceAsStream(CATEGORIES_JSON_FILE_PATH), "UTF-8");
-        when(sequenceService.getNext(eq(Category.SEQUENCE_NAME)))
-                .thenAnswer(arg -> String.valueOf(sequence.incrementAndGet()));
         when(categoriesRepository.save(any(Category.class)))
-                .thenAnswer(arg -> arg.getArgument(0));
+                .thenAnswer(arg -> {
+                    Category savedCategory = arg.getArgument(0);
+                    savedCategory.setId(sequence.incrementAndGet());
+
+                    return savedCategory;
+                });
 
         categoriesService.parseStructure(categoriesStructure);
 
@@ -61,17 +59,17 @@ public class CategoriesServiceImplTest {
         List<Category> allValues = captor.getAllValues();
         assertFalse(CollectionUtils.isEmpty(allValues));
         assertEquals(4, allValues.size());
-        assertEquals("1", allValues.getFirst().getId());
+        assertEquals(1L, allValues.getFirst().getId());
         assertNull(allValues.getFirst().getParentId());
         assertEquals("ROOT", allValues.getFirst().getCode());
-        assertEquals("2", allValues.get(1).getId());
-        assertEquals("1", allValues.get(1).getParentId());
+        assertEquals(2L, allValues.get(1).getId());
+        assertEquals(1L, allValues.get(1).getParentId());
         assertEquals("MOTORING", allValues.get(1).getCode());
-        assertEquals("3", allValues.get(2).getId());
-        assertEquals("2", allValues.get(2).getParentId());
+        assertEquals(3L, allValues.get(2).getId());
+        assertEquals(2L, allValues.get(2).getParentId());
         assertEquals("CARS", allValues.get(2).getCode());
-        assertEquals("4", allValues.get(2).getId());
-        assertEquals("1", allValues.get(2).getParentId());
-        assertEquals("JOBS", allValues.get(2).getCode());
+        assertEquals(4L, allValues.get(3).getId());
+        assertEquals(1L, allValues.get(3).getParentId());
+        assertEquals("JOBS", allValues.get(3).getCode());
     }
 }

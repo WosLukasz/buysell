@@ -5,12 +5,12 @@ import com.wosarch.buysell.buysell.model.auctions.Auction;
 import com.wosarch.buysell.buysell.model.auctions.enums.AuctionStatus;
 import com.wosarch.buysell.buysell.model.auctions.services.AuctionsService;
 import com.wosarch.buysell.buysell.model.common.Amount;
-import com.wosarch.buysell.buysell.repositories.mongo.auctions.AuctionsRepository;
+import com.wosarch.buysell.buysell.repositories.posgresql.auctions.AuctionsRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
+import org.springframework.boot.test.autoconfigure.data.jdbc.AutoConfigureDataJdbc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -20,7 +20,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@AutoConfigureDataMongo
+@AutoConfigureDataJdbc
 @ExtendWith(SpringExtension.class)
 public class ActivationAuctionsSynchronizationServiceImplTest {
 
