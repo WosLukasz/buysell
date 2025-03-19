@@ -1,23 +1,19 @@
 package com.wosarch.buysell.admin.model.dictionaries;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wosarch.buysell.admin.model.common.AdminDatabaseObject;
 import com.wosarch.buysell.common.services.postgres.ObjectConverter;
 import jakarta.persistence.*;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.Transient;
 
-import java.io.IOException;
-
 @Data
-@Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = DictionaryElement.ENTITY_NAME)
 public class DictionaryElement extends AdminDatabaseObject {
 

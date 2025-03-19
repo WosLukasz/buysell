@@ -1,16 +1,12 @@
 package com.wosarch.buysell.buysell.model.common;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.Embeddable;
 import lombok.Data;
 import lombok.experimental.UtilityClass;
 
 @Data
-@Entity
-@Table(name = Amount.ENTITY_NAME)
-public class Amount extends DatabaseObject {
-
-    public static final String ENTITY_NAME = "amounts";
+@Embeddable
+public class Amount {
 
     private Double value;
 

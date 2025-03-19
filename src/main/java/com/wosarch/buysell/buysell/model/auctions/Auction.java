@@ -32,8 +32,6 @@ import java.util.List;
 public class Auction extends DatabaseObject {
 
     @Transient
-    public static final String SEQUENCE_NAME = "auctions_seq";
-    @Transient
     public static final String ENTITY_NAME = "auctions";
     @Transient
     public static final String ELASTIC_SEARCH_MAPPING = "mappings/auctions.json";
@@ -44,8 +42,11 @@ public class Auction extends DatabaseObject {
 
     private String title;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "price_id")
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride( name = "value", column = @Column(name = "price_value")),
+            @AttributeOverride( name = "currency", column = @Column(name = "price_currency"))
+    })
     private Amount price;
 
     private String description;

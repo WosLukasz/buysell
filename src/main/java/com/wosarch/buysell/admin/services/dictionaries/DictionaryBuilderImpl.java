@@ -39,12 +39,7 @@ public class DictionaryBuilderImpl implements DictionaryBuilder {
             dictionary.setElements(new ArrayList<>());
         }
 
-        DictionaryElement dictionaryElement = DictionaryElement.builder()
-                .code(name)
-                .value(value)
-                .build();
-
-        dictionary.getElements().add(dictionaryElement);
+        dictionary.getElements().add(new DictionaryElement(name, value));
 
         return this;
     }
