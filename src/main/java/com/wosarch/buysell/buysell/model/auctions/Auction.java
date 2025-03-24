@@ -51,7 +51,7 @@ public class Auction extends DatabaseObject {
 
     private String description;
 
-    private String category; // should I add associacion ? Maybe later
+    private String category; // associacion ? Probably not
 
     @Enumerated(EnumType.STRING)
     private AuctionStatus status;
@@ -64,13 +64,13 @@ public class Auction extends DatabaseObject {
     @JoinColumn(name = "auction_id")
     private List<Attachment> attachments;
 
-    private Long sellerId;
+    private Long sellerId;  // associacion ?
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "auction_id")
     private List<AuctionReport> reports;
 
-    private String ownerId;
+    private String ownerId; // associacion ?
 
     @Enumerated(EnumType.STRING)
     private AuctionFinishReason finishReason;

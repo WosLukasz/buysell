@@ -16,8 +16,8 @@ public class AuctionSignatureSequence {
     public static final String SEQUENCE_NAME = "auctions_seq";
 
     @Id
-    @SequenceGenerator(name = ENTITY_NAME, sequenceName = SEQUENCE_NAME)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = ENTITY_NAME)
+    @SequenceGenerator(name = ENTITY_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
     private Long signature;
 
 }
