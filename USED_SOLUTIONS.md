@@ -1,3 +1,0 @@
-1. Mongodb mongoTemplate vs mongoRepository - https://stackoverflow.com/questions/17008947/whats-the-difference-between-spring-datas-mongotemplate-and-mongorepository
-2. Minio - free amazon s3 solution just to store auctions images and fetch it directly from frontend (upload can be done only by java but download is public)
-3. Keycloak - easy OAuth authorization and authentication. Handles users creation and third party authorization.

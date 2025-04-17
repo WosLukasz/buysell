@@ -1,0 +1,1 @@
+INSERT INTO testtt (id) VALUES ('1')

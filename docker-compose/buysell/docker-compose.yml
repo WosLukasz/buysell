@@ -1,0 +1,150 @@
+version: '2.2'
+
+# TODO:
+#       1. Podzielic kod na mikroserwisy
+#         - zmienic typ uwirerzytelniania z PIKCE  na klienta. Nie potrzebujemy tam kontekstu usera
+#       2. Dodać komunikację
+#       3. Dodać dokumentację do rest api
+#       4. Budowanie obrazu + docker-compose - każdy z mikro + configserver jako osobny kontener. Jedne zależne od innych z healthcheckami
+#       5. Profile TEST, UAT, PROD
+#       6. Config server z configiem w github
+
+services:
+  mongodb-primary:
+    hostname: mongodb-primary
+    image: docker.io/bitnami/mongodb:8.0
+    ports:
+      - 30001:30001
+    environment:
+      - MONGODB_REPLICA_SET_NAME=replicasetName
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_ROOT_USER=root
+      - MONGODB_ROOT_PASSWORD=rootpass
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+      - MONGODB_ADVERTISED_HOSTNAME=localhost
+      - MONGODB_PORT_NUMBER=30001
+      - MONGODB_ADVERTISED_PORT_NUMBER=30001
+    volumes:
+      - ./../mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - mongodb-data:/data/db
+
+  mongodb-secondary:
+    hostname: mongodb-secondary
+    image: docker.io/bitnami/mongodb:8.0
+    ports:
+      - 30002:30002
+    depends_on:
+      - mongodb-primary
+    environment:
+      - MONGODB_REPLICA_SET_NAME=replicasetName
+      - MONGODB_REPLICA_SET_MODE=secondary
+      - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
+      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=rootpass
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+      - MONGODB_ADVERTISED_HOSTNAME=localhost
+      - MONGODB_PORT_NUMBER=30002
+      - MONGODB_ADVERTISED_PORT_NUMBER=30002
+      - MONGODB_INITIAL_PRIMARY_PORT_NUMBER=30001
+
+  mongodb-arbiter:
+    hostname: mongodb-arbiter
+    image: docker.io/bitnami/mongodb:8.0
+    ports:
+      - 30003:30003
+    depends_on:
+      - mongodb-primary
+    environment:
+      - MONGODB_REPLICA_SET_NAME=replicasetName
+      - MONGODB_REPLICA_SET_MODE=arbiter
+      - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
+      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=rootpass
+      - MONGODB_REPLICA_SET_KEY=replicasetkey123
+      - MONGODB_ADVERTISED_HOSTNAME=localhost
+      - MONGODB_PORT_NUMBER=30003
+      - MONGODB_ADVERTISED_PORT_NUMBER=30003
+      - MONGODB_INITIAL_PRIMARY_PORT_NUMBER=30001
+
+  postgres:
+    image: docker.io/bitnami/postgresql:17
+    ports:
+      - "3100:5432"
+    environment:
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=postgres
+      - POSTGRESQL_DATABASE=postgres
+    volumes:
+      #      - 'postgres_data:/bitnami/postgresql'
+      - './../postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:x'
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@domain.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+
+  elasticsearch:
+    image: docker.io/bitnami/elasticsearch:8
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+    environment:
+      - ELASTICSEARCH_PASSWORD=esPassword
+    volumes:
+      - 'elasticsearch_data:/bitnami/elasticsearch/data'
+
+  minio:
+    image: docker.io/bitnami/minio:latest
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      - MINIO_ROOT_USER=root
+      - MINIO_ROOT_PASSWORD=rootpass
+      - MINIO_DEFAULT_BUCKETS=buysell
+    volumes:
+      - 'minio_data:/bitnami/minio/data'
+
+  postgresql:
+    image: docker.io/bitnami/postgresql:17
+    environment:
+      - POSTGRESQL_USERNAME=keycloak
+      - POSTGRESQL_PASSWORD=keycloak_pwd
+      - POSTGRESQL_DATABASE=keycloak
+    volumes:
+      - 'postgresql_data:/bitnami/postgresql'
+
+  #https://hub.docker.com/r/bitnami/keycloak
+  keycloak:
+    image: docker.io/bitnami/keycloak:25.0.6
+    ports:
+      - "8180:8080"
+    environment:
+      - KEYCLOAK_CREATE_ADMIN_USER=true
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KEYCLOAK_DATABASE_VENDOR=postgresql
+      - KEYCLOAK_DATABASE_HOST=postgresql
+      - KEYCLOAK_DATABASE_PORT=5432
+      - KEYCLOAK_DATABASE_NAME=keycloak
+      - KEYCLOAK_DATABASE_USER=keycloak
+      - KEYCLOAK_DATABASE_PASSWORD=keycloak_pwd
+      - KEYCLOAK_EXTRA_ARGS=--import-realm
+    depends_on:
+      - postgresql
+    volumes:
+      - ./../keycloak/realms:/opt/bitnami/keycloak/data/import
+#      - './mynewtheme:/opt/bitnami/keycloak/themes/mynewtheme'
+
+volumes:
+  mongodb-data:
+    driver: local
+  postgres_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  minio_data:
+    driver: local
+  postgresql_data:
+    driver: local
