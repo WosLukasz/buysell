@@ -18,22 +18,3 @@ db.createCollection('usersFavourites')
 db.createCollection('usersFavourites_HI')
 db.createCollection('categories')
 db.createCollection('categories_HI')
-
-///////////////////////////////////////////////////////
-
-// CREATING buysell_admin DATABASE
-db = db.getSiblingDB('buysell_admin')
-
-// creating users
-db.createUser({
-  user: 'buysell_admin',
-  pwd: 'buysell_admin',
-  roles: [{ role: 'readWrite', db: 'buysell_admin' }],
-});
-
-// creating collections
-db.createCollection('users')
-db.createCollection('roles')
-db.createCollection('patches')
-db.createCollection('dictionaries')
-db.createCollection('synchronizations')

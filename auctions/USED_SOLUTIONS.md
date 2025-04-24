@@ -1,0 +1,2 @@
+1. Mongodb mongoTemplate vs mongoRepository - https://stackoverflow.com/questions/17008947/whats-the-difference-between-spring-datas-mongotemplate-and-mongorepository
+2. Keycloak - easy OAuth authorization and authentication. Handles users creation and third party authorization.

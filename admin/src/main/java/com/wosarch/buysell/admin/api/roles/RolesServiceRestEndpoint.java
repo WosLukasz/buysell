@@ -1,7 +1,13 @@
 package com.wosarch.buysell.admin.api.roles;
 
+import com.wosarch.buysell.admin.model.exception.ErrorResponse;
 import com.wosarch.buysell.admin.model.roles.Role;
 import com.wosarch.buysell.admin.model.roles.RolesService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +26,7 @@ import java.util.List;
         description = "REST APIs in buysell to FETCH roles buysell"
 )
 @RestController
-@RequestMapping("/roles")
+@RequestMapping("/admin/roles")
 public class RolesServiceRestEndpoint {
 
     Logger logger = LoggerFactory.getLogger(RolesServiceRestEndpoint.class);
@@ -28,6 +34,24 @@ public class RolesServiceRestEndpoint {
     @Autowired
     private RolesService rolesService;
 
+    @Operation(
+            summary = "Fetch all Roles REST API",
+            description = "REST API to fetch all Roles"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            )
+    }
+    )
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Role>> getAllRoles() {

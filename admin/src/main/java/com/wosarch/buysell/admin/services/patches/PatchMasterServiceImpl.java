@@ -4,6 +4,7 @@ import com.wosarch.buysell.admin.model.appstate.AppStateService;
 import com.wosarch.buysell.admin.model.patches.Patch;
 import com.wosarch.buysell.admin.model.patches.PatchItem;
 import com.wosarch.buysell.admin.model.patches.PatchStatus;
+import com.wosarch.buysell.admin.model.patches.PatchesService;
 import com.wosarch.buysell.admin.repositories.patches.PatchesRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,10 +23,10 @@ public class PatchMasterServiceImpl {
     Logger logger = LoggerFactory.getLogger(PatchMasterServiceImpl.class);
 
     @Autowired
-    PatchesRepository patchesRepository;
+    private PatchesService patchesService;
 
     @Autowired
-    AppStateService appStateService;
+    private AppStateService appStateService;
 
     @Autowired
     private List<Patch> patches;
@@ -35,7 +36,7 @@ public class PatchMasterServiceImpl {
         appStateService.setMaintenanceMode();
 
         try {
-            List<String> finishedPatches = patchesRepository.getPatchesIdsByStatus(PatchStatus.SUCCESS);
+            List<String> finishedPatches = patchesService.getPatchesIdsByStatus(PatchStatus.SUCCESS);
             patches.stream()
                     .filter(patch -> !finishedPatches.contains(patch.getPatchId()))
                     .sorted(Comparator.comparing(Patch::getPatchId))
@@ -66,20 +67,20 @@ public class PatchMasterServiceImpl {
         patchItem.setId(patchId);
         patchItem.setStatus(PatchStatus.IN_PROGRESS);
 
-        return patchesRepository.save(patchItem);
+        return patchesService.save(patchItem);
     }
 
     private PatchItem savePatchError(PatchItem patchItem) {
         patchItem.setStatus(PatchStatus.FAILED);
         patchItem.setInstallationDate(new Date());
 
-        return patchesRepository.save(patchItem);
+        return patchesService.save(patchItem);
     }
 
     private PatchItem savePatchSuccess(PatchItem patchItem) {
         patchItem.setStatus(PatchStatus.SUCCESS);
         patchItem.setInstallationDate(new Date());
 
-        return patchesRepository.save(patchItem);
+        return patchesService.save(patchItem);
     }
 }

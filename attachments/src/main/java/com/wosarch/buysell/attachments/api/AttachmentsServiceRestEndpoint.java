@@ -87,7 +87,7 @@ public class AttachmentsServiceRestEndpoint {
             )
     }
     )
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()") // called directly from frontend
     @RequestMapping(method = RequestMethod.POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<Attachment> addAttachment(@ModelAttribute @Valid AttachmentSaveRequest request) throws IOException {
         logger.debug("Adding new attachment");
