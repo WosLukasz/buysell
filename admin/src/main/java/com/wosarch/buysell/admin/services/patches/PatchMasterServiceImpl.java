@@ -5,7 +5,6 @@ import com.wosarch.buysell.admin.model.patches.Patch;
 import com.wosarch.buysell.admin.model.patches.PatchItem;
 import com.wosarch.buysell.admin.model.patches.PatchStatus;
 import com.wosarch.buysell.admin.model.patches.PatchesService;
-import com.wosarch.buysell.admin.repositories.patches.PatchesRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.wosarch.buysell.buysell.services.categories;
+package com.wosarch.buysell.auctions.buysell.services.categories;
 
 import com.wosarch.buysell.auctions.buysell.model.categories.Category;
 import com.wosarch.buysell.auctions.buysell.repositories.mongo.categories.CategoriesRepository;
@@ -71,8 +71,8 @@ public class CategoriesServiceImplTest {
         assertEquals("3", allValues.get(2).getId());
         assertEquals("2", allValues.get(2).getParentId());
         assertEquals("CARS", allValues.get(2).getCode());
-        assertEquals("4", allValues.get(2).getId());
-        assertEquals("1", allValues.get(2).getParentId());
-        assertEquals("JOBS", allValues.get(2).getCode());
+        assertEquals("4", allValues.get(3).getId());
+        assertEquals("1", allValues.get(3).getParentId());
+        assertEquals("JOBS", allValues.get(3).getCode());
     }
 }

@@ -1,0 +1,8 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: "auctions"
+  config:
+    import: "configserver:http://localhost:8071"

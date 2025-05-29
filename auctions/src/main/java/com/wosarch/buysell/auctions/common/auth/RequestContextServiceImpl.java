@@ -1,7 +1,7 @@
 package com.wosarch.buysell.auctions.common.auth;
 
 import com.wosarch.buysell.auctions.common.model.auth.RequestContextService;
-import com.wosarch.buysell.auctions.admin.model.roles.RolesService;
+import com.wosarch.buysell.auctions.restclient.admin.api.roles.RolesClient;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -20,7 +20,7 @@ public class RequestContextServiceImpl implements RequestContextService {
     private static final String ANONYMOUS_USER = "anonymousUser";
 
     @Autowired
-    RolesService rolesService;
+    private RolesClient rolesClient;
 
     @Override
     public boolean currentUserLoggedIn() {
@@ -97,13 +97,7 @@ public class RequestContextServiceImpl implements RequestContextService {
 
     @Override
     public List<String> getCurrentUserRights() {
-        List<String> currentRoles = getCurrentUserRoles();
-
-        return rolesService.getAllRoles().stream()
-                .filter(role -> currentRoles.contains(role.getCode()))
-                .flatMap(role -> role.getRights().stream())
-                .distinct()
-                .toList();
+        return rolesClient.getCurrentUserRights();
     }
 
     @Override

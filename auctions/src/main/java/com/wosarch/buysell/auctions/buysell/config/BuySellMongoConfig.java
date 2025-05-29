@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @Configuration
-@EnableMongoRepositories(basePackages = "com.wosarch.buysell.buysell.repositories.mongo", mongoTemplateRef = "buysellMongoTemplate")
+@EnableMongoRepositories(basePackages = "com.wosarch.buysell.auctions.buysell.repositories.mongo", mongoTemplateRef = "buysellMongoTemplate")
 @EnableConfigurationProperties
 public class BuySellMongoConfig extends AbstractMongoClientConfiguration {
 

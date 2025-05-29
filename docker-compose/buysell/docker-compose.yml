@@ -2,14 +2,43 @@ version: '2.2'
 
 # TODO:
 #       1. Podzielic kod na mikroserwisy
-#         - zmienic typ uwirerzytelniania z PIKCE  na klienta. Nie potrzebujemy tam kontekstu usera
-#       2. Dodać komunikację
+#         - zmienic typ uwirerzytelniania z PIKCE  na klienta w attachments. Nie potrzebujemy tam kontekstu usera - chyba jednak potrzeba bo user dodaje plik bezpośrednio do attachmentServera. Chyba, że to zmienimy.
+#         - ogarnac do konca auctions
+#       2. Dodać komunikację - chyba później bo jeszcze nie było w kursie a potem komunikacja będzie kolejką
 #       3. Dodać dokumentację do rest api
 #       4. Budowanie obrazu + docker-compose - każdy z mikro + configserver jako osobny kontener. Jedne zależne od innych z healthcheckami
 #       5. Profile TEST, UAT, PROD
 #       6. Config server z configiem w github
 
 services:
+
+#  auctions:
+#    build: ../auctions
+#    container_name: auctions
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - admin
+#      - attachments
+#      - mongodb-primary
+#
+#  attachments:
+#    build: ../attachments
+#    container_name: attachments
+#    ports:
+#      - "8081:801"
+#    depends_on:
+#      - admin
+#      - minio
+#
+#  admin:
+#    build: ../admin
+#    container_name: admin
+#    ports:
+#      - "8082:8082"
+#    depends_on:
+#      - postgres
+
   mongodb-primary:
     hostname: mongodb-primary
     image: docker.io/bitnami/mongodb:8.0

@@ -1,4 +1,4 @@
-package com.wosarch.buysell;
+package com.wosarch.buysell.attachments;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

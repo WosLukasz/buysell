@@ -1,10 +1,10 @@
-package com.wosarch.buysell;
+package com.wosarch.buysell.configserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AuctionsApplicationTests {
+class ConfigserverApplicationTests {
 
 	@Test
 	void contextLoads() {

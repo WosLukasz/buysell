@@ -1,4 +1,4 @@
-package com.wosarch.buysell.buysell.synchronizations.auctionsActivation;
+package com.wosarch.buysell.auctions.buysell.synchronizations.auctionsActivation;
 
 import com.wosarch.buysell.auctions.common.model.synchronizations.SynchronizationItem;
 import com.wosarch.buysell.auctions.buysell.model.auctions.Auction;

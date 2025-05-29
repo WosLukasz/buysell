@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,8 +63,8 @@ public class AttachmentsServiceRestEndpoint {
     }
     )
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(method = RequestMethod.GET, path = "/{name}")
-    public ResponseEntity<AttachmentWithContent> getAttachment(@PathVariable String name) throws IOException {
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<AttachmentWithContent> getAttachment(@RequestParam(name = "path") String name) throws IOException {
         logger.debug("Get attachment {}", name);
 
         return new ResponseEntity<>(attachmentsService.getAttachmentWithContent(name), HttpStatus.OK);

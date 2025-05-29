@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PatchClient {
 
-    List<String> getPatchesIdsByStatus(PatchStatus status)
+    List<String> getPatchesIdsByStatus(PatchStatus status);
 
     PatchItem savePatch(PatchItem patchItem);
 

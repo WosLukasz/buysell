@@ -11,7 +11,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 import javax.net.ssl.SSLContext;
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "com.wosarch.buysell.buysell.repositories.elastic")
+@EnableElasticsearchRepositories(basePackages = "com.wosarch.buysell.auctions.buysell.repositories.elastic")
 public class BuySellElasticsearchConfig extends ElasticsearchConfiguration {
 
     @Value( "${elasticSearch.buysell.uri}" )
