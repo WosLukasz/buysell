@@ -1,14 +1,10 @@
 package com.wosarch.buysell.auctions.buysell.config;
 
-import org.apache.http.conn.ssl.TrustAllStrategy;
-import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
-
-import javax.net.ssl.SSLContext;
 
 @Configuration
 @EnableElasticsearchRepositories(basePackages = "com.wosarch.buysell.auctions.buysell.repositories.elastic")
@@ -37,11 +33,11 @@ public class BuySellElasticsearchConfig extends ElasticsearchConfiguration {
         return false;
     }
 
-    private static SSLContext buildSSLContext() {
-        try {
-            return new SSLContextBuilder().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    private static SSLContext buildSSLContext() {
+//        try {
+//            return new SSLContextBuilder().loadTrustMaterial(null, TrustAllStrategy.INSTANCE).build();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 }
