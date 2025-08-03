@@ -25,7 +25,7 @@ import java.util.List;
         description = "REST APIs for Users managing for buysell"
 )
 @RestController
-@RequestMapping("/admin/users")
+@RequestMapping("/users")
 public class UsersServiceRestEndpoint {
 
     Logger logger = LoggerFactory.getLogger(UsersServiceRestEndpoint.class);

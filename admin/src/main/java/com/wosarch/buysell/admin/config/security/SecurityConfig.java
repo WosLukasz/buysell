@@ -29,9 +29,7 @@ import java.util.Collections;
 public class SecurityConfig {
 
     String[] PUBLIC_API_ENDPOINTS_PATTERNS = new String[]{
-            "/auctions-search",
-            "/auctions/*/views/increment"
-//            "/admin/patches/signatures-by-status"
+//            "/patches/signatures-by-status"
     };
 
     @Bean

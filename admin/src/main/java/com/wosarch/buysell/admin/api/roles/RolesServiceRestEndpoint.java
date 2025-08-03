@@ -26,7 +26,7 @@ import java.util.List;
         description = "REST APIs in buysell to FETCH roles buysell"
 )
 @RestController
-@RequestMapping("/admin/roles")
+@RequestMapping("/roles")
 public class RolesServiceRestEndpoint {
 
     Logger logger = LoggerFactory.getLogger(RolesServiceRestEndpoint.class);

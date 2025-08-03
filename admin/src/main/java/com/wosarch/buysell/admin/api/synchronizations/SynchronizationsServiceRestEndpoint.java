@@ -24,7 +24,7 @@ import java.util.List;
         description = "REST APIs for Synchronizations managing for buysell"
 )
 @RestController
-@RequestMapping("/admin/synchronizations")
+@RequestMapping("/synchronizations")
 public class SynchronizationsServiceRestEndpoint {
 
     Logger logger = LoggerFactory.getLogger(SynchronizationsServiceRestEndpoint.class);

@@ -1,0 +1,42 @@
+package com.wosarch.buysell.gatewayserver;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
+import org.springframework.context.annotation.Bean;
+
+import java.time.LocalDateTime;
+
+@SpringBootApplication
+
+public class GatewayserverApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(GatewayserverApplication.class, args);
+	}
+
+	@Bean
+	public RouteLocator buysellRouteConfig(RouteLocatorBuilder routeLocatorBuilder) {
+		return routeLocatorBuilder.routes()
+				.route(p -> p
+						.path("/admin/**")
+						.filters( f -> f.rewritePath("/admin/(?<segment>.*)","/${segment}")
+								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+						.uri("lb://ADMIN"))
+//				.route(p -> p // do nothing for attachments
+//						.path("/attachments/**")
+//						.filters( f -> f.rewritePath("/attachments/(?<segment>.*)","/attachments/${segment}")
+//								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+//						.uri("lb://ATTACHMENTS"))
+//				.route(p -> p // do nothing for auctions
+//						.path("/auctions/**")
+//						.filters( f -> f.rewritePath("/auctions/(?<segment>.*)","/${segment}")
+//								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+//						.uri("lb://AUCTIONS"))
+						.build();
+
+
+	}
+
+}
