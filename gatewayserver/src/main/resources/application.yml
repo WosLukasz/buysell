@@ -27,3 +27,11 @@ info:
     name: "gatewayserver"
     description: "gatewayserver desc"
     version: "1.0.0"
+
+
+logging:
+  level:
+    com:
+      wosarch:
+        buysell:
+          gatewayserver: DEBUG
