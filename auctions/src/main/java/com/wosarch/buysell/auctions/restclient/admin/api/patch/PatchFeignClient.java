@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(value = "admin", path = "/patches")
+@FeignClient(value = "admin", path = "/patches", fallback = PatchFeignFallback.class)
 public interface PatchFeignClient {
 
     @RequestMapping(path = "/signatures-by-status", method = RequestMethod.GET)

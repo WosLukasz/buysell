@@ -3,14 +3,12 @@ package com.wosarch.buysell.auctions.restclient.admin.api.patch;
 import com.wosarch.buysell.auctions.buysell.model.common.CommunicationException;
 import com.wosarch.buysell.auctions.common.model.patches.PatchItem;
 import com.wosarch.buysell.auctions.common.model.patches.PatchStatus;
-import com.wosarch.buysell.auctions.common.services.patches.PatchMasterServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 

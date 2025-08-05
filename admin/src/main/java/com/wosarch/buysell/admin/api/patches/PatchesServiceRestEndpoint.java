@@ -51,7 +51,7 @@ public class PatchesServiceRestEndpoint {
             )
     }
     )
-    @PreAuthorize("isAuthenticated()")
+//    @PreAuthorize("isAuthenticated()")
     @RequestMapping(path = "/signatures-by-status", method = RequestMethod.GET)
     public ResponseEntity<List<String>> getPatchesIdsByStatus(@RequestParam("status") PatchStatus status) {
         return new ResponseEntity<>(patchesService.getPatchesIdsByStatus(status), HttpStatus.OK);
