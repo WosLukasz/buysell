@@ -9,6 +9,9 @@ spring:
         locator:
           enabled: false
           lowerCaseServiceId: true
+    httpclient: # global timeouts if some service is not using circut breaker
+      connect-timeout: 1000
+      response-timeout: 2s
 
 management:
   endpoints:

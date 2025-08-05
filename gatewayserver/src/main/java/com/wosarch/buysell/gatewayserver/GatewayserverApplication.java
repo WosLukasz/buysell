@@ -8,24 +8,31 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
 
+import static org.springframework.cloud.gateway.support.RouteMetadataUtils.CONNECT_TIMEOUT_ATTR;
+import static org.springframework.cloud.gateway.support.RouteMetadataUtils.RESPONSE_TIMEOUT_ATTR;
+
 @SpringBootApplication
 
 public class GatewayserverApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(GatewayserverApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(GatewayserverApplication.class, args);
+    }
 
-	@Bean
-	public RouteLocator buysellRouteConfig(RouteLocatorBuilder routeLocatorBuilder) {
-		return routeLocatorBuilder.routes()
-				.route(p -> p
-						.path("/admin/**")
-						.filters( f -> f.rewritePath("/admin/(?<segment>.*)","/${segment}")
-								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
-								.circuitBreaker(config -> config.setName("adminCircuitBreaker")
-									.setFallbackUri("forward:/contactSupport")))
-						.uri("lb://ADMIN"))
+    @Bean
+    public RouteLocator buysellRouteConfig(RouteLocatorBuilder routeLocatorBuilder) {
+        return routeLocatorBuilder.routes()
+                .route(p -> p
+                        .path("/admin/**")
+                        .filters(f -> f.rewritePath("/admin/(?<segment>.*)", "/${segment}")
+                                .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+                                .circuitBreaker(config -> config.setName("adminCircuitBreaker")
+                                        .setFallbackUri("forward:/contactSupport")))
+                        .metadata(RESPONSE_TIMEOUT_ATTR, 2000)
+                        .metadata(CONNECT_TIMEOUT_ATTR, 1000)
+                        .uri("lb://ADMIN")
+                )
+
 //				.route(p -> p // do nothing for attachments
 //						.path("/attachments/**")
 //						.filters( f -> f.rewritePath("/attachments/(?<segment>.*)","/attachments/${segment}")
@@ -36,9 +43,9 @@ public class GatewayserverApplication {
 //						.filters( f -> f.rewritePath("/auctions/(?<segment>.*)","/${segment}")
 //								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
 //						.uri("lb://AUCTIONS"))
-						.build();
+                .build();
 
 
-	}
+    }
 
 }
