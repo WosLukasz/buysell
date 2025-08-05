@@ -22,7 +22,9 @@ public class GatewayserverApplication {
 				.route(p -> p
 						.path("/admin/**")
 						.filters( f -> f.rewritePath("/admin/(?<segment>.*)","/${segment}")
-								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
+								.circuitBreaker(config -> config.setName("adminCircuitBreaker")
+									.setFallbackUri("forward:/contactSupport")))
 						.uri("lb://ADMIN"))
 //				.route(p -> p // do nothing for attachments
 //						.path("/attachments/**")
