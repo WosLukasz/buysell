@@ -12,6 +12,12 @@ spring:
     httpclient: # global timeouts if some service is not using circut breaker
       connect-timeout: 1000
       response-timeout: 2s
+  data:
+    redis:
+      connect-timeout: 2s
+      host: localhost
+      port: 6379
+      timeout: 1s
 
 management:
   endpoints:

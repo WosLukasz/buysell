@@ -166,6 +166,11 @@ services:
       - ./../keycloak/realms:/opt/bitnami/keycloak/data/import
 #      - './mynewtheme:/opt/bitnami/keycloak/themes/mynewtheme'
 
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
 volumes:
   mongodb-data:
     driver: local
