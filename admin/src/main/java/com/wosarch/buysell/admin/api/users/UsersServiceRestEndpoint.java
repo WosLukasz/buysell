@@ -2,8 +2,10 @@ package com.wosarch.buysell.admin.api.users;
 
 import com.wosarch.buysell.admin.model.auth.RequestContextService;
 import com.wosarch.buysell.admin.model.exception.ErrorResponse;
+import com.wosarch.buysell.admin.model.patches.PatchStatus;
 import com.wosarch.buysell.admin.model.users.User;
 import com.wosarch.buysell.admin.model.users.UsersService;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @Tag(
@@ -81,11 +84,19 @@ public class UsersServiceRestEndpoint {
     }
     )
     @PreAuthorize("isAuthenticated()")
+    @Retry(name = "getCurrentUserRoles",fallbackMethod = "getCurrentUserRolesFallback")
     @RequestMapping(method = RequestMethod.GET, path = "/current/roles")
     public ResponseEntity<List<String>> getCurrentUserRoles() {
         logger.debug("Getting current user's roles");
 
         return new ResponseEntity<>(requestContextService.getCurrentUserRoles(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<String>> getCurrentUserRolesFallback(Throwable throwable) {
+        logger.debug("getPatchesIdsByStatusFallback() method Invoked");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Collections.emptyList());
     }
 
     @Operation(
