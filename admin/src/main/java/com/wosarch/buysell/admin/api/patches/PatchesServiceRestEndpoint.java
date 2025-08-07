@@ -4,6 +4,7 @@ import com.wosarch.buysell.admin.model.exception.ErrorResponse;
 import com.wosarch.buysell.admin.model.patches.PatchItem;
 import com.wosarch.buysell.admin.model.patches.PatchStatus;
 import com.wosarch.buysell.admin.model.patches.PatchesService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -52,6 +53,7 @@ public class PatchesServiceRestEndpoint {
     }
     )
 //    @PreAuthorize("isAuthenticated()")
+    @RateLimiter(name="getPatchesIdsByStatus") // , fallbackMethod = getPatchesIdsByStatusFallback
     @RequestMapping(path = "/signatures-by-status", method = RequestMethod.GET)
     public ResponseEntity<List<String>> getPatchesIdsByStatus(@RequestParam("status") PatchStatus status) {
         return new ResponseEntity<>(patchesService.getPatchesIdsByStatus(status), HttpStatus.OK);
