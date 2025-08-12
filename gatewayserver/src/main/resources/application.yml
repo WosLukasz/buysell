@@ -18,6 +18,11 @@ spring:
       host: localhost
       port: 6379
       timeout: 1s
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: "http://localhost:8180/realms/buysell/protocol/openid-connect/certs"
 
 management:
   endpoints:

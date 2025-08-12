@@ -17,7 +17,6 @@ import static org.springframework.cloud.gateway.support.RouteMetadataUtils.CONNE
 import static org.springframework.cloud.gateway.support.RouteMetadataUtils.RESPONSE_TIMEOUT_ATTR;
 
 @SpringBootApplication
-
 public class GatewayserverApplication {
 
     public static void main(String[] args) {
@@ -37,22 +36,22 @@ public class GatewayserverApplication {
                                         .setMethods(HttpMethod.GET)
                                         .setBackoff(Duration.ofMillis(100), Duration.ofMillis(1000), 2, true))
                                 .requestRateLimiter(config -> config.setRateLimiter(redisRateLimiter())
-                                        .setKeyResolver(userKeyResolver())))
+                                        .setKeyResolver(userKeyResolver()))
+                        )
                         .metadata(RESPONSE_TIMEOUT_ATTR, 2000)
                         .metadata(CONNECT_TIMEOUT_ATTR, 1000)
                         .uri("lb://ADMIN")
                 )
-
-//				.route(p -> p // do nothing for attachments
-//						.path("/attachments/**")
-//						.filters( f -> f.rewritePath("/attachments/(?<segment>.*)","/attachments/${segment}")
-//								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
-//						.uri("lb://ATTACHMENTS"))
-//				.route(p -> p // do nothing for auctions
-//						.path("/auctions/**")
-//						.filters( f -> f.rewritePath("/auctions/(?<segment>.*)","/${segment}")
-//								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
-//						.uri("lb://AUCTIONS"))
+				.route(p -> p // do nothing for attachments
+						.path("/attachments/**")
+						.filters( f -> f.rewritePath("/attachments/(?<segment>.*)","/attachments/${segment}")
+								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+						.uri("lb://ATTACHMENTS"))
+				.route(p -> p // do nothing for auctions
+						.path("/auctions/**")
+						.filters( f -> f.rewritePath("/auctions/(?<segment>.*)","/${segment}")
+								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
+						.uri("lb://AUCTIONS"))
                 .build();
     }
 
