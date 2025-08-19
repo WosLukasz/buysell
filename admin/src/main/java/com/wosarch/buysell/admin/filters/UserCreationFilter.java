@@ -30,10 +30,8 @@ public class UserCreationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (requestContextService.currentUserLoggedIn()) {
-            logger.info("Start creating new user profile");
             Authentication authentication = requestContextService.getCurrentUserContext();
             usersService.createLocalUserIfNotExists(new LocalUserCreationRequest(authentication.getName()));
-            logger.info("New user profile created");
         }
 
         filterChain.doFilter(request, response);

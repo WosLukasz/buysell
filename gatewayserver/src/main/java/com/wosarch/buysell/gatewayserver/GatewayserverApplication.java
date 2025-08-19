@@ -49,7 +49,7 @@ public class GatewayserverApplication {
 						.uri("lb://ATTACHMENTS"))
 				.route(p -> p // do nothing for auctions
 						.path("/auctions/**")
-						.filters( f -> f.rewritePath("/auctions/(?<segment>.*)","/${segment}")
+						.filters( f -> f.rewritePath("/auctions/(?<segment>.*)","/auctions/${segment}")
 								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
 						.uri("lb://AUCTIONS"))
                 .build();
