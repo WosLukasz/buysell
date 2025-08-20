@@ -1,4 +1,4 @@
-package com.wosarch.buysell.auctions.restclient.admin.api.patch;
+package com.wosarch.buysell.auctions.restclient.admin.patch;
 
 import com.wosarch.buysell.auctions.common.model.patches.PatchItem;
 import com.wosarch.buysell.auctions.common.model.patches.PatchStatus;

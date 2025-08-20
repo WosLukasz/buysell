@@ -53,7 +53,6 @@ public class PatchesServiceRestEndpoint {
     }
     )
     @PreAuthorize("isAuthenticated()")
-//    @PreAuthorize("permitAll()")
 //    @RateLimiter(name="getPatchesIdsByStatus", fallbackMethod = getPatchesIdsByStatusFallback)
     @RequestMapping(path = "/signatures-by-status", method = RequestMethod.GET)
     public ResponseEntity<List<String>> getPatchesIdsByStatus(@RequestParam("status") PatchStatus status) {

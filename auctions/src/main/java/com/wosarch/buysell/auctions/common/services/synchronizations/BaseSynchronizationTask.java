@@ -3,7 +3,7 @@ package com.wosarch.buysell.auctions.common.services.synchronizations;
 import com.wosarch.buysell.auctions.common.model.synchronizations.SynchronizationItem;
 import com.wosarch.buysell.auctions.common.model.synchronizations.SynchronizationStatus;
 import com.wosarch.buysell.auctions.common.model.synchronizations.SynchronizationTask;
-import com.wosarch.buysell.auctions.restclient.admin.api.synchronization.SynchronizationClient;
+import com.wosarch.buysell.auctions.restclient.admin.synchronization.SynchronizationClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

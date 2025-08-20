@@ -1,6 +1,6 @@
 package com.wosarch.buysell.auctions.buysell.model.auctions.requests;
 
-import com.wosarch.buysell.auctions.restclient.attachments.model.AttachmentSaveRequest;
+import com.wosarch.buysell.auctions.common.model.attachment.AttachmentSaveRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

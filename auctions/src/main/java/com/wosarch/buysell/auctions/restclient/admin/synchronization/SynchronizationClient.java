@@ -1,4 +1,4 @@
-package com.wosarch.buysell.auctions.restclient.admin.api.synchronization;
+package com.wosarch.buysell.auctions.restclient.admin.synchronization;
 
 import com.wosarch.buysell.auctions.common.model.synchronizations.SynchronizationItem;
 
@@ -8,5 +8,5 @@ public interface SynchronizationClient {
 
     SynchronizationItem saveSynchronization(SynchronizationItem synchronizationItem);
 
-    List<SynchronizationItem> findByCodeAndStatus(String code, String name);
+    List<SynchronizationItem> findByCodeAndStatus(String code, String status);
 }

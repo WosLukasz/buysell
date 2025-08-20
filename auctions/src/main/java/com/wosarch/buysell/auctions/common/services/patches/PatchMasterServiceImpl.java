@@ -4,7 +4,7 @@ import com.wosarch.buysell.auctions.common.model.patches.Patch;
 import com.wosarch.buysell.auctions.common.model.patches.PatchItem;
 import com.wosarch.buysell.auctions.common.model.patches.PatchStatus;
 import com.wosarch.buysell.auctions.common.model.appstate.AppStateService;
-import com.wosarch.buysell.auctions.restclient.admin.api.patch.PatchClient;
+import com.wosarch.buysell.auctions.restclient.admin.patch.PatchClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

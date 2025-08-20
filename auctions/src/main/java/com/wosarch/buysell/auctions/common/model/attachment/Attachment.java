@@ -1,4 +1,4 @@
-package com.wosarch.buysell.auctions.restclient.attachments.model;
+package com.wosarch.buysell.auctions.common.model.attachment;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

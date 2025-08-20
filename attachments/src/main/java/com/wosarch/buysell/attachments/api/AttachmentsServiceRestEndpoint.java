@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @Tag(
         name = "REST APIs for Attachments managing for buysell",
@@ -63,7 +63,7 @@ public class AttachmentsServiceRestEndpoint {
     }
     )
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET) // add rls here
     public ResponseEntity<AttachmentWithContent> getAttachment(@RequestParam(name = "path") String name) throws IOException {
         logger.debug("Get attachment {}", name);
 
@@ -122,11 +122,46 @@ public class AttachmentsServiceRestEndpoint {
     }
     )
     @PreAuthorize("isAuthenticated()")
-    @RequestMapping(method = RequestMethod.DELETE)
+    @RequestMapping(method = RequestMethod.DELETE) // add rls here
     public ResponseEntity<Boolean> removeAttachment(@RequestBody Attachment attachment) {
         logger.debug("Removing attachments with etag {} and path {}", attachment.getEtag(), attachment.getPath());
 
         attachmentsService.removeAttachment(attachment);
+
+        return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
+    }
+
+    @Operation(
+            summary = "Remove Attachments REST API",
+            description = "REST API to remove Attachments with content"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status OK"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "HTTP Status Not Found",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    )
+            )
+    }
+    )
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(method = RequestMethod.DELETE, path = "/remove-many") // add rls here
+    public ResponseEntity<Boolean> removeAttachments(@RequestBody List<Attachment> attachments) {
+        logger.debug("Removing attachments");
+
+        attachmentsService.removeAttachments(attachments);
 
         return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
     }

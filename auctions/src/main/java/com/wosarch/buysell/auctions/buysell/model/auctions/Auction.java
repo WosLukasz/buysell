@@ -1,7 +1,7 @@
 package com.wosarch.buysell.auctions.buysell.model.auctions;
 
 import com.wosarch.buysell.auctions.buysell.model.common.Amount;
-import com.wosarch.buysell.auctions.restclient.attachments.model.Attachment;
+import com.wosarch.buysell.auctions.common.model.attachment.Attachment;
 import com.wosarch.buysell.auctions.buysell.model.common.MongoObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

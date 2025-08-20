@@ -1,4 +1,4 @@
-package com.wosarch.buysell.auctions.restclient.admin.api.patch;
+package com.wosarch.buysell.auctions.restclient.admin.patch;
 
 import com.wosarch.buysell.auctions.buysell.model.common.CommunicationException;
 import com.wosarch.buysell.auctions.common.model.patches.PatchItem;
