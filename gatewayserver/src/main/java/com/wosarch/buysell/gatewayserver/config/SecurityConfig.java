@@ -35,7 +35,7 @@ public class SecurityConfig {
     private static final String[] PUBLIC_API_ENDPOINTS_PATTERNS = new String[] {
             "/buysell-api/admin/public/**",
             "/buysell-api/attachments/public/**",
-            "/buysell-api/auctions/public/**",
+            "/buysell-api/auctions/public/**"
     };
 
     @Value("${buySell.cors.allowedOrigins.fontEnd}")
@@ -55,9 +55,9 @@ public class SecurityConfig {
 
     private Customizer<ServerHttpSecurity.AuthorizeExchangeSpec> getAuthorizeExchange() {
         return exchanges -> exchanges
-                .pathMatchers("/admin/**").permitAll()
-                .pathMatchers("/attachments/**").permitAll()
-                .pathMatchers("/auctions/**").permitAll()
+                .pathMatchers("/buysell-api/admin/**").permitAll()
+                .pathMatchers("/buysell-api/attachments/**").permitAll()
+                .pathMatchers("/buysell-api/auctions/**").permitAll()
                 .pathMatchers("/**").permitAll();
     }
 

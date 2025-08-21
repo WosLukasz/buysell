@@ -43,7 +43,7 @@ public class GatewayserverApplication {
                 )
 				.route(p -> p
 						.path("/buysell-api/attachments/**")
-						.filters( f -> f.rewritePath("/buysell-api/attachments/(?<segment>.*)","/attachments/${segment}")
+						.filters( f -> f.rewritePath("/buysell-api/attachments/(?<segment>.*)","/${segment}")
 								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
 						.uri("lb://ATTACHMENTS"))
 				.route(p -> p
