@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -15,7 +16,11 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
+import org.springframework.security.web.server.csrf.CsrfWebFilter;
 import org.springframework.security.web.server.csrf.ServerCsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.server.util.matcher.AndServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import reactor.core.publisher.Mono;
@@ -26,6 +31,12 @@ import java.util.Collections;
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
+
+    private static final String[] PUBLIC_API_ENDPOINTS_PATTERNS = new String[] {
+            "/buysell-api/admin/public/**",
+            "/buysell-api/attachments/public/**",
+            "/buysell-api/auctions/public/**",
+    };
 
     @Value("${buySell.cors.allowedOrigins.fontEnd}")
     private String frontEndUrl;
@@ -92,7 +103,18 @@ public class SecurityConfig {
     private Customizer<ServerHttpSecurity.CsrfSpec> configureCsrf() {
         return csrfConfig -> csrfConfig
                 .csrfTokenRequestHandler(new ServerCsrfTokenRequestAttributeHandler())
+                .requireCsrfProtectionMatcher(getCsrfRequestMatcher())
                 .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse());
+    }
+
+    private AndServerWebExchangeMatcher getCsrfRequestMatcher() {
+        return new AndServerWebExchangeMatcher(
+                CsrfWebFilter.DEFAULT_CSRF_MATCHER,
+                new NegatedServerWebExchangeMatcher(ServerWebExchangeMatchers.pathMatchers(HttpMethod.POST, PUBLIC_API_ENDPOINTS_PATTERNS)),
+                new NegatedServerWebExchangeMatcher(ServerWebExchangeMatchers.pathMatchers(HttpMethod.DELETE, PUBLIC_API_ENDPOINTS_PATTERNS)),
+                new NegatedServerWebExchangeMatcher(ServerWebExchangeMatchers.pathMatchers(HttpMethod.PUT, PUBLIC_API_ENDPOINTS_PATTERNS)),
+                new NegatedServerWebExchangeMatcher(ServerWebExchangeMatchers.pathMatchers(HttpMethod.PATCH, PUBLIC_API_ENDPOINTS_PATTERNS))
+        );
     }
 
 }

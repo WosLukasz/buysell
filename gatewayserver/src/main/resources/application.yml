@@ -45,6 +45,11 @@ info:
 
 logging:
   level:
+    org:
+      springframework:
+        web:
+          filter:
+            CommonsRequestLoggingFilter: DEBUG
     com:
       wosarch:
         buysell:

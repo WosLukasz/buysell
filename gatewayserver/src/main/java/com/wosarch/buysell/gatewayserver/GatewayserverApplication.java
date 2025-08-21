@@ -26,8 +26,8 @@ public class GatewayserverApplication {
     public RouteLocator buysellRouteConfig(RouteLocatorBuilder routeLocatorBuilder) {
         return routeLocatorBuilder.routes()
                 .route(p -> p
-                        .path("/admin/**")
-                        .filters(f -> f.rewritePath("/admin/(?<segment>.*)", "/${segment}")
+                        .path("/buysell-api/admin/**")
+                        .filters(f -> f.rewritePath("/buysell-api/admin/(?<segment>.*)", "/${segment}")
                                 .addResponseHeader("X-Response-Time", LocalDateTime.now().toString())
                                 .circuitBreaker(config -> config.setName("adminCircuitBreaker")
                                         .setFallbackUri("forward:/contactSupport"))
@@ -41,14 +41,14 @@ public class GatewayserverApplication {
                         .metadata(CONNECT_TIMEOUT_ATTR, 1000)
                         .uri("lb://ADMIN")
                 )
-				.route(p -> p // do nothing for attachments
-						.path("/attachments/**")
-						.filters( f -> f.rewritePath("/attachments/(?<segment>.*)","/attachments/${segment}")
+				.route(p -> p
+						.path("/buysell-api/attachments/**")
+						.filters( f -> f.rewritePath("/buysell-api/attachments/(?<segment>.*)","/attachments/${segment}")
 								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
 						.uri("lb://ATTACHMENTS"))
-				.route(p -> p // do nothing for auctions
-						.path("/auctions/**")
-						.filters( f -> f.rewritePath("/auctions/(?<segment>.*)","/auctions/${segment}")
+				.route(p -> p
+						.path("/buysell-api/auctions/**")
+						.filters( f -> f.rewritePath("/buysell-api/auctions/(?<segment>.*)","/${segment}")
 								.addResponseHeader("X-Response-Time", LocalDateTime.now().toString()))
 						.uri("lb://AUCTIONS"))
                 .build();

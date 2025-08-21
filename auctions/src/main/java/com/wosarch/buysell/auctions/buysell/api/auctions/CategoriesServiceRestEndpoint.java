@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/public/categories")
 public class CategoriesServiceRestEndpoint {
 
     Logger logger = LoggerFactory.getLogger(CategoriesServiceRestEndpoint.class);
