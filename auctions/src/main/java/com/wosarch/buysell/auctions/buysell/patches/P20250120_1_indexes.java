@@ -24,7 +24,11 @@ public class P20250120_1_indexes implements Patch {
     public void run() {
         logger.info("[{}] Starts...", getPatchId());
 
-        elasticSearchIndexService.upsertAllIndexes();
+        try {
+            elasticSearchIndexService.upsertAllIndexes();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         logger.info("[{}] Finished...", getPatchId());
     }
