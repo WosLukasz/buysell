@@ -32,4 +32,6 @@ public interface AuctionsService {
     boolean auctionActive(String auctionSignature);
 
     Date getExpiryDate(Date startDate);
+
+    Auction activate(String signature);
 }

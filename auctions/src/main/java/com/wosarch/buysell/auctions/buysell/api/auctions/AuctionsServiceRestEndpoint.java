@@ -81,4 +81,12 @@ public class AuctionsServiceRestEndpoint {
 
         return new ResponseEntity<>(auctionsService.refresh(signature), HttpStatus.OK);
     }
+
+    @PreAuthorize("permitAll()") // tech account role only
+    @RequestMapping(method = RequestMethod.POST, path = "/{signature}/activate")
+    public ResponseEntity<Auction> activate(@PathVariable String signature) throws BuysellException {
+        logger.debug("Activating auction with signature {}", signature);
+
+        return new ResponseEntity<>(auctionsService.activate(signature), HttpStatus.OK);
+    }
 }

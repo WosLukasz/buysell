@@ -1,5 +1,6 @@
 package com.wosarch.buysell.auctions.buysell.services.auctions;
 
+import com.wosarch.buysell.auctions.buysell.synchronizations.auctionsActivation.ActivationAuctionJob;
 import com.wosarch.buysell.auctions.common.model.auth.RequestContextService;
 import com.wosarch.buysell.auctions.buysell.model.auctions.*;
 import com.wosarch.buysell.auctions.buysell.model.auctions.requests.AuctionCreationRequest;
@@ -10,6 +11,8 @@ import com.wosarch.buysell.auctions.buysell.repositories.elastic.auctions.Auctio
 import com.wosarch.buysell.auctions.buysell.repositories.mongo.views.AuctionsViewsRepository;
 import com.wosarch.buysell.auctions.common.model.exception.BuysellException;
 import com.wosarch.buysell.auctions.common.model.sequence.SequenceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,8 @@ import java.util.*;
 
 @Service
 public class AuctionsServiceImpl implements AuctionsService {
+
+    Logger logger = LoggerFactory.getLogger(AuctionsServiceImpl.class);
 
     @Value("${buySell.config.auctionDurationDays}")
     private String auctionDurationDays;
@@ -156,6 +161,24 @@ public class AuctionsServiceImpl implements AuctionsService {
         calendar.add(Calendar.DATE, Integer.parseInt(auctionDurationDays));
 
         return calendar.getTime();
+    }
+
+    @Override
+    public Auction activate(String signature) {
+        ActivationAuctionJob task = ActivationAuctionJob.builder()
+                .auction(get(signature))
+                .auctionsService(this)
+                .logger(logger)
+                .build();
+
+        try {
+            task.call();
+        } catch (Exception e) {
+            logger.error("Something went wrong during activating auction {}", signature);
+            throw new RuntimeException(e);
+        }
+
+        return get(signature);
     }
 
     private AuctionReport prepareReport(AuctionReportRequest request) {

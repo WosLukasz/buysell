@@ -23,5 +23,6 @@ public class MongoObject implements Serializable {
     @UtilityClass
     public static class Fields {
         public static final String OBJECT_ID = "_id";
+        public static final String ELASTICSEARCH_OBJECT_ID = "mongoId";
     }
 }

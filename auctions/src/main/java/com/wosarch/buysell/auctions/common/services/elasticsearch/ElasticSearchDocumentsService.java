@@ -61,4 +61,13 @@ public class ElasticSearchDocumentsService {
 
         return annotation.settingPath();
     }
+
+    public String extractMongoCollection(Class<?> clazz) {
+        final org.springframework.data.mongodb.core.mapping.Document annotation = clazz.getAnnotation(org.springframework.data.mongodb.core.mapping.Document.class);
+        if (Objects.isNull(annotation)) {
+            return null;
+        }
+
+        return annotation.collection();
+    }
 }

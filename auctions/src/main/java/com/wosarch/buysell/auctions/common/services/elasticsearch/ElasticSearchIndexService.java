@@ -30,12 +30,16 @@ public class ElasticSearchIndexService {
     @Autowired
     private ElasticSearchDocumentsService elasticSearchDocumentsService;
 
-    public void upsertAllIndexes() {
+    @Autowired
+    private ElasticSearchDataService elasticSearchDataService;
+
+    public void upsertAllIndexes() throws Exception {
         logger.info("Upserting all indexes ...");
 
         final List<Class<?>> elasticSearchDocuments = elasticSearchDocumentsService.getElasticSearchDocumentsClasses(DEFAULT_BASE_PACKAGE);
         for (Class<?> clazz : elasticSearchDocuments) {
             upsertIndex(clazz);
+            elasticSearchDataService.reloadIndex(clazz);
         }
 
         logger.info("Finised upserting all indexes ...");

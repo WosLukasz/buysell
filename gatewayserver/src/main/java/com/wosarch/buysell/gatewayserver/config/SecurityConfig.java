@@ -102,8 +102,8 @@ public class SecurityConfig {
 
     private Customizer<ServerHttpSecurity.CsrfSpec> configureCsrf() {
         return csrfConfig -> csrfConfig
-                .csrfTokenRequestHandler(new ServerCsrfTokenRequestAttributeHandler())
                 .requireCsrfProtectionMatcher(getCsrfRequestMatcher())
+                .csrfTokenRequestHandler(new ServerCsrfTokenRequestAttributeHandler())
                 .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse());
     }
 

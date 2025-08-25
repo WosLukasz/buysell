@@ -24,7 +24,7 @@ import java.io.IOException;
         description = "REST APIs in buysell to CREATE, FETCH AND DELETE attachments to bucket buysell"
 )
 @RestController
-@RequestMapping("/attachments/public")
+@RequestMapping("/public")
 public class AttachmentsPublicServiceRestEndpoint {
 
     Logger logger = LoggerFactory.getLogger(AttachmentsPublicServiceRestEndpoint.class);
