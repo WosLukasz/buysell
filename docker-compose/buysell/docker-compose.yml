@@ -1,44 +1,6 @@
 version: '2.2'
 
-# TODO:
-#       1. Podzielic kod na mikroserwisy
-#         - zmienic typ uwirerzytelniania z PIKCE  na klienta w attachments. Nie potrzebujemy tam kontekstu usera - chyba jednak potrzeba bo user dodaje plik bezpośrednio do attachmentServera. Chyba, że to zmienimy.
-#         - ogarnac do konca auctions
-#       2. Dodać komunikację - chyba później bo jeszcze nie było w kursie a potem komunikacja będzie kolejką
-#       3. Dodać dokumentację do rest api
-#       4. Budowanie obrazu + docker-compose - każdy z mikro + configserver jako osobny kontener. Jedne zależne od innych z healthcheckami
-#       5. Profile TEST, UAT, PROD
-#       6. Config server z configiem w github
-
 services:
-
-#  auctions:
-#    build: ../auctions
-#    container_name: auctions
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - admin
-#      - attachments
-#      - mongodb-primary
-#
-#  attachments:
-#    build: ../attachments
-#    container_name: attachments
-#    ports:
-#      - "8081:801"
-#    depends_on:
-#      - admin
-#      - minio
-#
-#  admin:
-#    build: ../admin
-#    container_name: admin
-#    ports:
-#      - "8082:8082"
-#    depends_on:
-#      - postgres
-
   mongodb-primary:
     hostname: mongodb-primary
     image: docker.io/bitnami/mongodb:8.0
@@ -50,12 +12,15 @@ services:
       - MONGODB_ROOT_USER=root
       - MONGODB_ROOT_PASSWORD=rootpass
       - MONGODB_REPLICA_SET_KEY=replicasetkey123
-      - MONGODB_ADVERTISED_HOSTNAME=localhost
+#      - MONGODB_ADVERTISED_HOSTNAME=localhost # UNCOMMENT WHEN STARTING APP ON LOCALHOST (KNOWN BITNAMI BUG)
       - MONGODB_PORT_NUMBER=30001
       - MONGODB_ADVERTISED_PORT_NUMBER=30001
     volumes:
       - ./../mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       - mongodb-data:/data/db
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 
   mongodb-secondary:
     hostname: mongodb-secondary
@@ -70,10 +35,13 @@ services:
       - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
       - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=rootpass
       - MONGODB_REPLICA_SET_KEY=replicasetkey123
-      - MONGODB_ADVERTISED_HOSTNAME=localhost
+#      - MONGODB_ADVERTISED_HOSTNAME=localhost # UNCOMMENT WHEN STARTING APP ON LOCALHOST (KNOWN BITNAMI BUG)
       - MONGODB_PORT_NUMBER=30002
       - MONGODB_ADVERTISED_PORT_NUMBER=30002
       - MONGODB_INITIAL_PRIMARY_PORT_NUMBER=30001
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 
   mongodb-arbiter:
     hostname: mongodb-arbiter
@@ -88,15 +56,18 @@ services:
       - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
       - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=rootpass
       - MONGODB_REPLICA_SET_KEY=replicasetkey123
-      - MONGODB_ADVERTISED_HOSTNAME=localhost
+#      - MONGODB_ADVERTISED_HOSTNAME=localhost # UNCOMMENT WHEN STARTING APP ON LOCALHOST (KNOWN BITNAMI BUG)
       - MONGODB_PORT_NUMBER=30003
       - MONGODB_ADVERTISED_PORT_NUMBER=30003
       - MONGODB_INITIAL_PRIMARY_PORT_NUMBER=30001
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 
   postgres:
     image: docker.io/bitnami/postgresql:17
     ports:
-      - "3100:5432"
+      - "5433:5432"
     environment:
       - POSTGRESQL_USERNAME=postgres
       - POSTGRESQL_PASSWORD=postgres
@@ -104,6 +75,9 @@ services:
     volumes:
       #      - 'postgres_data:/bitnami/postgresql'
       - './../postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:x'
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 
   pgadmin:
     image: dpage/pgadmin4
@@ -112,6 +86,9 @@ services:
     environment:
       - PGADMIN_DEFAULT_EMAIL=user@domain.com
       - PGADMIN_DEFAULT_PASSWORD=admin
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 
   elasticsearch:
     image: docker.io/bitnami/elasticsearch:8
@@ -122,6 +99,9 @@ services:
       - ELASTICSEARCH_PASSWORD=esPassword
     volumes:
       - 'elasticsearch_data:/bitnami/elasticsearch/data'
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 
   minio:
     image: docker.io/bitnami/minio:latest
@@ -134,6 +114,9 @@ services:
       - MINIO_DEFAULT_BUCKETS=buysell
     volumes:
       - 'minio_data:/bitnami/minio/data'
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 
   postgresql:
     image: docker.io/bitnami/postgresql:17
@@ -143,6 +126,9 @@ services:
       - POSTGRESQL_DATABASE=keycloak
     volumes:
       - 'postgresql_data:/bitnami/postgresql'
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 
   #https://hub.docker.com/r/bitnami/keycloak
   keycloak:
@@ -165,11 +151,21 @@ services:
     volumes:
       - ./../keycloak/realms:/opt/bitnami/keycloak/data/import
 #      - './mynewtheme:/opt/bitnami/keycloak/themes/mynewtheme'
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
 
   redis:
     image: redis
     ports:
       - "6379:6379"
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+networks:
+  buysell:
+    driver: "bridge"
 
 volumes:
   mongodb-data:

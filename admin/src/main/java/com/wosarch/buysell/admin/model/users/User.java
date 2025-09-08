@@ -1,5 +1,6 @@
 package com.wosarch.buysell.admin.model.users;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class User {
 //    @Column(columnDefinition="character varying (100) not null", length=100, nullable=false)
     private String id;
 
+    @Column(name="firstname")
     private String firstName;
 
     private String name;

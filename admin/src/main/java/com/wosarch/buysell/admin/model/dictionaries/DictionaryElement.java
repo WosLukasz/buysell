@@ -18,7 +18,7 @@ import org.springframework.data.annotation.Transient;
 public class DictionaryElement extends AdminDatabaseObject {
 
     @Transient
-    public static final String ENTITY_NAME = "dictionariesElements";
+    public static final String ENTITY_NAME = "dictionarieselements";
 
     private String code;
 

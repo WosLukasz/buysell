@@ -2,7 +2,7 @@ spring:
   application:
     name: "gatewayserver"
   config:
-    import: "configserver:http://localhost:8071"
+    import: "optional:configserver:http://localhost:8071"
   cloud:
     gateway:
       discovery:
@@ -35,6 +35,9 @@ management:
   info:
     env:
       enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 info:
   app:

@@ -22,6 +22,7 @@ public class Dictionary extends AdminDatabaseObject {
 
     private String code;
 
+    @Column(name="valuetype")
     private String valueType;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)

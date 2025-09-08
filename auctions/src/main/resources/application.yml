@@ -5,7 +5,7 @@ spring:
   application:
     name: "auctions"
   config:
-    import: "configserver:http://localhost:8071"
+    import: "optional:configserver:http://localhost:8071"
   cloud:
     openfeign:
       circuitbreaker:
@@ -16,12 +16,23 @@ management:
     web:
       exposure:
         include: "*"
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
   endpoint:
     shutdown:
       access: unrestricted
+    health:
+      probes:
+        enabled: true
   info:
     env:
       enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 eureka:
   instance:

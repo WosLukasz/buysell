@@ -1,10 +1,7 @@
 package com.wosarch.buysell.admin.model.synchronizations;
 
 import com.wosarch.buysell.admin.model.common.AdminDatabaseObject;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,8 +19,10 @@ public class SynchronizationItem extends AdminDatabaseObject {
     @Transient
     public static final String ENTITY_NAME = "synchronizations";
 
+    @Column(name="startdate")
     private Date startDate;
 
+    @Column(name="enddate")
     private Date endDate;
 
     @Enumerated(EnumType.STRING)

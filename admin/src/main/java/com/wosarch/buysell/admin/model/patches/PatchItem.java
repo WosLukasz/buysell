@@ -25,6 +25,7 @@ public class PatchItem {
     @Enumerated(EnumType.STRING)
     private PatchStatus status;
 
+    @Column(name="installationdate")
     private Date installationDate;
 
     @UtilityClass

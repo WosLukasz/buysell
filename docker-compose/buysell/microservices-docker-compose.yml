@@ -1,0 +1,150 @@
+services:
+  configserver:
+    image: "buysell/configserver:0.0.1-SNAPSHOT"
+    container_name: configserver
+    ports:
+      - "8071:8071"
+    healthcheck:
+      test: "curl --fail localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
+    environment:
+      OTEL_SERVICE_NAME: "configserver"
+
+  eurekaserver:
+    image: "buysell/eurekaserver:0.0.1-SNAPSHOT"
+    container_name: eurekaserver
+    ports:
+      - "8070:8070"
+    depends_on:
+      configserver:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+    environment:
+      SPRING_APPLICATION_NAME: "eurekaserver"
+      OTEL_SERVICE_NAME: "eurekaserver"
+
+#  dodac wszystkie polaczenia do baz itp... do env
+
+  admin:
+    image: buysell/admin:0.0.1-SNAPSHOT
+    container_name: admin
+    ports:
+      - "8082:8082"
+    depends_on:
+      configserver:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8082/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+    environment:
+      SPRING_APPLICATION_NAME: "admin"
+      OTEL_SERVICE_NAME: "admin"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/buysell_admin"
+      SPRING_DATASOURCE_USERNAME: "buysell_admin"
+      SPRING_DATASOURCE_PASSWORD: "buysell_admin"
+      SPRING_BUYSELL_ADMIN_DATASOURCE_JDBC_URL: "jdbc:postgresql://postgres:5432/buysell_admin"
+      SPRING_BUYSELL_ADMIN_DATASOURCE_USERNAME: "buysell_admin"
+      SPRING_BUYSELL_ADMIN_DATASOURCE_PASSWORD: "buysell_admin"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: "validate"
+
+  attachments:
+    image: buysell/attachments:0.0.1-SNAPSHOT
+    container_name: attachments
+    ports:
+      - "8081:8081"
+    depends_on:
+      configserver:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8081/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    environment:
+      SPRING_APPLICATION_NAME: "attachments"
+      OTEL_SERVICE_NAME: "attachments"
+      MINIO_DEFAULTBUCKET: "buysell"
+      MINIO_SECRETKEY: "YU0NnGwHOOOXbggvybcV4F5G4Pa1aSbf2zjMO0gN"
+      MINIO_ENDPOINT: "http://minio:9000"
+      MINIO_ACCESSKEY: "E6yd6BKVy0nUNJYB48Fe"
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+  auctions:
+    image: buysell/auctions:0.0.1-SNAPSHOT
+    container_name: auctions
+    ports:
+      - "8080:8080"
+    depends_on:
+      configserver:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+      admin:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    environment:
+      SPRING_APPLICATION_NAME: "auctions"
+      OTEL_SERVICE_NAME: "auctions"
+      ELASTICSEARCH_BUYSELL_URI: "elasticsearch:9200"
+      ELASTICSEARCH_BUYSELL_USER: "elastic"
+      ELASTICSEARCH_BUYSELL_PASSWORD: "esPassword"
+      MONGODB_BUYSELL_URI: "mongodb://buysell:buysell@mongodb-primary:30001,mongodb-secondary:30002,mongodb-arbiter:30003/buysell?replicaSet=replicasetName&retryWrites=false"
+      MONGODB_BUYSELL_DATABASE: "buysell"
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+  gatewayserver:
+    image: "buysell/gatewayserver:0.0.1-SNAPSHOT"
+    container_name: gatewayserver
+    ports:
+      - "8072:8072"
+    depends_on:
+      admin:
+        condition: service_healthy
+      attachments:
+        condition: service_healthy
+      auctions:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "gatewayserver"
+      OTEL_SERVICE_NAME: "gatewayserver"
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+networks:
+  buysell:
+    driver: "bridge"
