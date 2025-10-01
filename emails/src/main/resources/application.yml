@@ -1,15 +1,11 @@
 server:
-  port: 8080
+  port: 8088
 
 spring:
   application:
-    name: "auctions"
+    name: "emails"
   config:
     import: "optional:configserver:http://localhost:8071"
-  cloud:
-    openfeign:
-      circuitbreaker:
-        enabled: false
   kafka:
     bootstrap-servers: "127.0.0.1:9092"
 
@@ -47,21 +43,6 @@ eureka:
 
 info:
   app:
-    name: "auctions"
-    description: "auctions desc"
+    name: "emails"
+    description: "emails desc"
     version: "1.0.0"
-
-resilience4j.circuitbreaker:
-  configs:
-    default:
-      slidingWindowSize: 10
-      permittedNumberOfCallsInHalfOpenState: 2
-      failureRateThreshold: 50
-      waitDurationInOpenState: 10000
-
-resilience4j.ratelimiter:
-  configs:
-    default:
-      timeoutDuration: 1000
-      limitRefreshPeriod: 5000
-      limitForPeriod: 1

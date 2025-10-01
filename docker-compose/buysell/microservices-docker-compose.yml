@@ -116,12 +116,37 @@ services:
       start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "auctions"
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
       OTEL_SERVICE_NAME: "auctions"
       ELASTICSEARCH_BUYSELL_URI: "elasticsearch:9200"
       ELASTICSEARCH_BUYSELL_USER: "elastic"
       ELASTICSEARCH_BUYSELL_PASSWORD: "esPassword"
       MONGODB_BUYSELL_URI: "mongodb://buysell:buysell@mongodb-primary:30001,mongodb-secondary:30002,mongodb-arbiter:30003/buysell?replicaSet=replicasetName&retryWrites=false"
       MONGODB_BUYSELL_DATABASE: "buysell"
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+  emails:
+    image: buysell/emails:0.0.1-SNAPSHOT
+    container_name: emails
+    ports:
+      - "8088:8088"
+    depends_on:
+      configserver:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    environment:
+      SPRING_APPLICATION_NAME: "emails"
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+      OTEL_SERVICE_NAME: "emails"
     extends:
       file: common-config.yml
       service: microservice-eureka-config
