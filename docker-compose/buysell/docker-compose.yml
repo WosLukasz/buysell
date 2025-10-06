@@ -192,6 +192,15 @@ services:
       file: common-config.yml
       service: network-deploy-service
 
+  # Web UI → http://localhost:8025
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    restart: always
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
   redis:
     image: redis
     ports:
