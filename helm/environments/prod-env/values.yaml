@@ -1,0 +1,16 @@
+global:
+  configMapName: buysellprod-configmap
+  activeProfile: prod
+  openTelemetryJavaAgent: "-javaagent:/app/libs/opentelemetry-javaagent-2.11.0.jar"
+  otelExporterEndPoint: http://tempo:4318
+  otelMetricsExporter: none
+  otelLogsExporter: none
+  configServerURL: "configserver:http://configserver:8071/"
+  keyCloakURL: "http://keycloak:8080/realms/buysell/protocol/openid-connect/certs"
+  keyCloakRealm: "buysell"
+  keyCloakResource: "buysell_admin"
+  keyCloakServerURL: "http://keycloak:8080"
+  keyCloakSecret: "**********"
+  keyCloakURIPrefix: "http://keycloak:8080/realms/buysell/protocol/openid-connect"
+  eurekaServerURL: "http://eurekaserver:8070/eureka/"
+  kafkaBrokerURL: "kafka:9092"

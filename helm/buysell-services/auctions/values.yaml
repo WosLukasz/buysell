@@ -1,0 +1,28 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deploymentName: auctions-deployment
+serviceName: auctions
+appLabel: auctions
+appName: auctions
+
+replicaCount: 1
+
+image:
+  repository: buysell/auctions
+  tag: 0.0.1-SNAPSHOT
+
+containerPort: 8080
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+appname_enabled: true
+profile_enabled: true
+config_enabled: true
+eureka_enabled: true
+resouceserver_enabled: true
+otel_enabled: true
+kafka_enabled: false

@@ -37,8 +37,6 @@ services:
       SPRING_APPLICATION_NAME: "eurekaserver"
       OTEL_SERVICE_NAME: "eurekaserver"
 
-#  dodac wszystkie polaczenia do baz itp... do env
-
   admin:
     image: buysell/admin:0.0.1-SNAPSHOT
     container_name: admin
