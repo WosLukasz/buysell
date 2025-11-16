@@ -23,12 +23,11 @@ public class AuctionsPriceSearchFilter implements AuctionsSearchFilter {
             return Optional.empty();
         }
 
-        JsonData minValue = Objects.isNull(request.getPriceFrom()) ? null : JsonData.of(request.getPriceFrom());
-        JsonData maxValue = Objects.isNull(request.getPriceTo()) ? null : JsonData.of(request.getPriceTo());
         RangeQuery rangeQuery = new RangeQuery.Builder()
-                .field(ElasticSearchUtils.dots(Auction.Fields.PRICE, Amount.Fields.VALUE))
-                .gte(minValue)
-                .lte(maxValue)
+                .number(number ->
+                        number.field(ElasticSearchUtils.dots(Auction.Fields.PRICE, Amount.Fields.VALUE))
+                                .gte(request.getPriceFrom())
+                                .lte(request.getPriceTo()))
                 .build();
 
         NestedQuery nestedQuery = new NestedQuery.Builder()

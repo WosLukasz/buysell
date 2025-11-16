@@ -2,6 +2,7 @@ package com.wosarch.buysell.attachments.model.attachments;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,5 +21,9 @@ public class AttachmentSaveRequest extends Attachment {
 
     public AttachmentSaveRequest(Attachment attachment) {
         super(attachment);
+    }
+
+    public AttachmentSaveRequest() {
+        super();
     }
 }

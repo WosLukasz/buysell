@@ -41,7 +41,7 @@ public class AuctionsFavouritesServiceRestEndpoint {
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.POST, path = "/{signature}")
-    public ResponseEntity<UserFavourites> addAsFavourite(@PathVariable String signature) {
+    public ResponseEntity<UserFavourites> addAsFavourite(@PathVariable("signature") String signature) {
         logger.debug("Adding auction {} to favourites to user {}", signature, requestContextService.getCurrentUserId());
 
         return new ResponseEntity<>(auctionsFavouriteService.addAuctionToFavourites(signature), HttpStatus.OK);
@@ -49,7 +49,7 @@ public class AuctionsFavouritesServiceRestEndpoint {
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.DELETE, path = "/{signature}")
-    public ResponseEntity<UserFavourites> removeFromFavourite(@PathVariable String signature) {
+    public ResponseEntity<UserFavourites> removeFromFavourite(@PathVariable("signature") String signature) {
         logger.debug("Removing auction {} from favourites to user {}", signature, requestContextService.getCurrentUserId());
 
         return new ResponseEntity<>(auctionsFavouriteService.removeAuctionFromFavourites(signature), HttpStatus.OK);

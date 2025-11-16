@@ -27,7 +27,7 @@ public class AuctionsPublicServiceRestEndpoint {
 
     @PreAuthorize("permitAll()")
     @RequestMapping(method = RequestMethod.GET, path = "/{signature}")
-    public ResponseEntity<Auction> get(@PathVariable String signature) throws BuysellException {
+    public ResponseEntity<Auction> get(@PathVariable("signature") String signature) throws BuysellException {
         logger.debug("Getting auction with signature {}", signature);
 
         return new ResponseEntity<>(auctionsService.get(signature), HttpStatus.OK);
@@ -35,7 +35,7 @@ public class AuctionsPublicServiceRestEndpoint {
 
     @PreAuthorize("permitAll()")
     @RequestMapping(method = RequestMethod.GET, path = "/{signature}/views")
-    public ResponseEntity<Integer> getViews(@PathVariable String signature) {
+    public ResponseEntity<Integer> getViews(@PathVariable("signature") String signature) {
         logger.debug("Getting auction views with signature {}", signature);
 
         return new ResponseEntity<>(auctionsService.getViews(signature), HttpStatus.OK);
@@ -43,7 +43,7 @@ public class AuctionsPublicServiceRestEndpoint {
 
     @PreAuthorize("permitAll()")
     @RequestMapping(method = RequestMethod.PUT, path = "/{signature}/views/increment")
-    public ResponseEntity<Integer> incrementViews(@PathVariable String signature, HttpServletRequest request) {
+    public ResponseEntity<Integer> incrementViews(@PathVariable("signature") String signature, HttpServletRequest request) {
         return new ResponseEntity<>(auctionsService.incrementViews(signature, request.getRemoteAddr()), HttpStatus.OK);
     }
 }

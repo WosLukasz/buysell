@@ -96,6 +96,9 @@ public class AttachmentsServiceRestEndpoint {
         return new ResponseEntity<>(attachmentsService.saveAttachment(request), HttpStatus.OK);
     }
 
+    // Leci blad java.lang.IllegalStateException: Cannot resolve parameter names for constructor public com.wosarch.buysell.attachments.model.attachments.AttachmentSaveRequest(com.wosarch.buysell.attachments.model.attachments.Attachment)
+    // wyklikac na frontach !!!!!
+
     @Operation(
             summary = "Remove Attachment REST API",
             description = "REST API to remove Attachment with content"

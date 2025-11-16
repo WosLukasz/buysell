@@ -30,24 +30,10 @@ public class AuctionsServiceRestEndpoint {
 
     @PreAuthorize("permitAll()")
     @RequestMapping(method = RequestMethod.GET, path = "/{signature}")
-    public ResponseEntity<Auction> get(@PathVariable String signature) throws BuysellException {
+    public ResponseEntity<Auction> get(@PathVariable("signature") String signature) throws BuysellException {
         logger.debug("Getting auction with signature {}", signature);
 
         return new ResponseEntity<>(auctionsService.get(signature), HttpStatus.OK);
-    }
-
-    @PreAuthorize("permitAll()")
-    @RequestMapping(method = RequestMethod.GET, path = "/{signature}/views")
-    public ResponseEntity<Integer> getViews(@PathVariable String signature) {
-        logger.debug("Getting auction views with signature {}", signature);
-
-        return new ResponseEntity<>(auctionsService.getViews(signature), HttpStatus.OK);
-    }
-
-    @PreAuthorize("permitAll()")
-    @RequestMapping(method = RequestMethod.PUT, path = "/{signature}/views/increment")
-    public ResponseEntity<Integer> incrementViews(@PathVariable String signature, HttpServletRequest request) {
-        return new ResponseEntity<>(auctionsService.incrementViews(signature, request.getRemoteAddr()), HttpStatus.OK);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -68,7 +54,7 @@ public class AuctionsServiceRestEndpoint {
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.PUT, path = "/{signature}/finish")
-    public ResponseEntity<Auction> finish(@PathVariable String signature, @RequestBody AuctionFinishRequest request) throws BuysellException {
+    public ResponseEntity<Auction> finish(@PathVariable("signature") String signature, @RequestBody AuctionFinishRequest request) throws BuysellException {
         logger.debug("Finishing auction with signature {}", signature);
 
         return new ResponseEntity<>(auctionsService.finish(signature, request), HttpStatus.OK);
@@ -76,7 +62,7 @@ public class AuctionsServiceRestEndpoint {
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(method = RequestMethod.PUT, path = "/{signature}/refresh")
-    public ResponseEntity<Auction> refresh(@PathVariable String signature) {
+    public ResponseEntity<Auction> refresh(@PathVariable("signature") String signature) {
         logger.debug("Refreshing auction with signature {}", signature);
 
         return new ResponseEntity<>(auctionsService.refresh(signature), HttpStatus.OK);
@@ -84,7 +70,7 @@ public class AuctionsServiceRestEndpoint {
 
     @PreAuthorize("permitAll()") // tech account role only
     @RequestMapping(method = RequestMethod.POST, path = "/{signature}/activate")
-    public ResponseEntity<Auction> activate(@PathVariable String signature) throws BuysellException {
+    public ResponseEntity<Auction> activate(@PathVariable("signature") String signature) throws BuysellException {
         logger.debug("Activating auction with signature {}", signature);
 
         return new ResponseEntity<>(auctionsService.activate(signature), HttpStatus.OK);
