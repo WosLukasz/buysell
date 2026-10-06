@@ -3,7 +3,7 @@ version: '2.2'
 services:
   mongodb-primary:
     hostname: mongodb-primary
-    image: docker.io/bitnami/mongodb:8.0
+    image: docker.io/soldevelo/mongodb:8.0
     ports:
       - 30001:30001
     environment:
@@ -24,7 +24,7 @@ services:
 
   mongodb-secondary:
     hostname: mongodb-secondary
-    image: docker.io/bitnami/mongodb:8.0
+    image: docker.io/soldevelo/mongodb:8.0
     ports:
       - 30002:30002
     depends_on:
@@ -45,7 +45,7 @@ services:
 
   mongodb-arbiter:
     hostname: mongodb-arbiter
-    image: docker.io/bitnami/mongodb:8.0
+    image: docker.io/soldevelo/mongodb:8.0
     ports:
       - 30003:30003
     depends_on:
@@ -65,7 +65,7 @@ services:
       service: network-deploy-service
 
   postgres:
-    image: docker.io/bitnami/postgresql:17
+    image: docker.io/soldevelo/postgresql:17
     ports:
       - "5433:5432"
     environment:
@@ -104,7 +104,7 @@ services:
       service: network-deploy-service
 
   minio:
-    image: docker.io/bitnami/minio:latest
+    image: docker.io/soldevelo/minio:latest
     ports:
       - '9000:9000'
       - '9001:9001'
@@ -119,7 +119,7 @@ services:
       service: network-deploy-service
 
   postgresql:
-    image: docker.io/bitnami/postgresql:17
+    image: docker.io/soldevelo/postgresql:17
     environment:
       - POSTGRESQL_USERNAME=keycloak
       - POSTGRESQL_PASSWORD=keycloak_pwd
@@ -156,7 +156,7 @@ services:
       service: network-deploy-service
 
   kafka:
-    image: docker.io/bitnami/kafka:latest
+    image: docker.io/soldevelo/kafka:latest
     container_name: kafka
     ports:
       - "9092:9092"
